@@ -1,5 +1,5 @@
 import knex from "../knex";
-import { Model, snakeCaseMappers, ModelOptions } from "objection";
+import { Model, snakeCaseMappers } from "objection";
 
 import { hasDate, hasEmbeddedJson } from "../util/db";
 import CoreProtectUser from "./CoreProtectUser";
