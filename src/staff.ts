@@ -73,6 +73,7 @@ router.get("/survey-responses", async (ctx) => {
                         <tr>
                             <th>ID</th>
                             <th>Created</th>
+                            <th>Username</th>
                             <th>Survey ID</th>
                             <th>Response</th>
                         </tr>
@@ -83,15 +84,19 @@ router.get("/survey-responses", async (ctx) => {
         </html>
     `);
 
-    const submissions = await SurveySubmission.query();
+    const submissions = await SurveySubmission.query().withGraphFetched("[coreProtectUser, survey]");
 
     const tbody = $(".backend-table tbody");
 
     for (const submission of submissions) {
         const row = $("<tr>");
 
+        let anonymous = submission.survey?.anonymous;
+        if (anonymous == null) anonymous = true;
+
         row.append($("<td>").text(submission.id.toString()));
         row.append($("<td>").text(submission.time.toISOString()));
+        row.append($("<td>").text(anonymous ? "[ANONYMOUS]" : submission.coreProtectUser.user));
         row.append($("<td>").text(submission.surveyId));
         const pre = $("<pre>").text(JSON.stringify(submission.responses, undefined, "  "));
         row.append($("<td>").append(pre));

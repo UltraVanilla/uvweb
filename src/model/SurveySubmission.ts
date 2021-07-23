@@ -2,6 +2,7 @@ import knex from "../knex";
 import { Model, snakeCaseMappers } from "objection";
 
 import { hasDate, hasEmbeddedJson } from "../util/db";
+import Survey from "./Survey";
 import CoreProtectUser from "./CoreProtectUser";
 
 @hasDate("time")
@@ -18,6 +19,7 @@ export default class SurveySubmission extends Model {
     responses!: { [questionId: string]: string };
 
     coreProtectUser!: CoreProtectUser;
+    survey!: Survey;
 
     static relationMappings = {
         coreProtectUser: {
@@ -26,6 +28,14 @@ export default class SurveySubmission extends Model {
             join: {
                 from: "co_user.rowid",
                 to: "survey_submissions.coreprotect_uid",
+            },
+        },
+        survey: {
+            relation: Model.BelongsToOneRelation,
+            modelClass: `${__dirname}/Survey`,
+            join: {
+                from: "surveys.survey_id",
+                to: "survey_submissions.survey_id",
             },
         },
     };
