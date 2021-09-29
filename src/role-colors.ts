@@ -3,6 +3,7 @@ const roleColors: { [name: string]: { color: string; name: string } } = {
     dev: { color: "rgb(14, 216, 78)", name: "Dev" },
     admin: { color: "rgb(199, 33, 33)", name: "Admin" },
     moderator: { color: "rgb(42, 168, 255)", name: "Moderator" },
+    mod: { color: "rgb(42, 168, 255)", name: "Mod" },
     intern: { color: "rgb(138, 113, 137)", name: "intern" },
 };
 
