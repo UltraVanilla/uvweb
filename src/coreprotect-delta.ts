@@ -1,16 +1,16 @@
 import { parse } from "date-fns";
 
 function parseData(data: string): LogEntry[] {
-    const startPos = data.match(/\[main\/INFO\]: \[CHAT\] ------ Current Lag ------/)?.index || 0;
+    const startPos = data.match(/\[Render thread\/INFO\]: \[CHAT\] ------ Current Lag ------/)?.index || 0;
 
     data = data.slice(startPos);
 
     const uncombinedLogs = data.split("\n").filter((str) => {
         return (
-            str.match(/^\[.*\] \[main\/INFO\]: \[CHAT\] §7\d*\.?\d*/) ||
-            str.match(/^\[.*\] \[main\/INFO\]: \[CHAT\] §f        [ ]+   §/) ||
-            str.match(/^\[.*\] \[main\/INFO\]: \[CHAT\] §f----- Container Transactions §f----- §7\((.*)\)/) ||
-            str.match(/^\[.*\] \[main\/INFO\]: \[CHAT\] §f-----$/)
+            str.match(/^\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*/) ||
+            str.match(/^\[.*\] \[Render thread\/INFO\]: \[CHAT\] §f        [ ]+   §/) ||
+            str.match(/^\[.*\] \[Render thread\/INFO\]: \[CHAT\] §f----- Container Transactions §f----- \((.*)\)/) ||
+            str.match(/^\[.*\] \[Render thread\/INFO\]: \[CHAT\] §f-----$/)
         );
     });
 
@@ -28,7 +28,7 @@ function parseData(data: string): LogEntry[] {
         // scan forward to next line
         if (
             uncombinedLogs[i + 1] &&
-            uncombinedLogs[i + 1].match(/\[.*\] \[main\/INFO\]: \[CHAT\] §f [ ]+  §/) != null
+            uncombinedLogs[i + 1].match(/\[.*\] \[Render thread\/INFO\]: \[CHAT\] §f [ ]+  §/) != null
         ) {
             newLine += "\n" + uncombinedLogs[i + 1];
             skipped = true;
@@ -40,42 +40,39 @@ function parseData(data: string): LogEntry[] {
     let lastCoords: undefined | string;
     logs = logs.map((line) => {
         const matches = line.match(
-            /^\[.*\] \[main\/INFO\]: \[CHAT\] §f----- Container Transactions §f----- §7\((.*)\)/,
+            /^\[.*\] \[Render thread\/INFO\]: \[CHAT\] §f----- Container Transactions §f----- \((.*)\)/,
         );
 
         if (line.match(/\n/) != null) {
             lastCoords = undefined;
             return line;
         }
-        if (line.match(/^\[.*\] \[main\/INFO\]: \[CHAT\] §f-----$/)) {
+        if (line.match(/^\[.*\] \[Render thread\/INFO\]: \[CHAT\] §f-----$/)) {
             lastCoords = undefined;
             return "";
         }
 
         const outputLines = [];
         if (matches != null && matches[1] != null) {
-            lastCoords = `[00:00:00] [main/INFO]: [CHAT] §f                 §7^ §7§o(${matches[1]}/unknown)`;
+            lastCoords = `[00:00:00] [Render thread/INFO]: [CHAT] §f                 ^ §o(${matches[1]}/unknown)`;
         } else outputLines.push(line);
 
         if (lastCoords != null) outputLines.push(lastCoords);
 
-        //console.log(line);
         return outputLines.join("\n");
     });
-
-    console.log(logs);
 
     // in case there is a stray coordinate line, prevent it from choking the parsing
     logs = logs
         .reverse()
-        .filter((log) => log.match(/^\[.*\] \[main\/INFO\]: \[CHAT\] §f [ ]+  §/) == null && log !== "");
+        .filter((log) => log.match(/^\[.*\] \[Render thread\/INFO\]: \[CHAT\] §f [ ]+  §/) == null && log !== "");
 
     let timeTweak = 0;
     const logs2 = logs.map((text) => {
         const timeOfCommand = parse(text.match(/\[([\d:]+)\]/)![1], "HH:mm:ss", new Date());
 
-        const timeAgo = parseFloat(text.match(/\[.*\] \[main\/INFO\]: \[CHAT\] §7(\d*\.?\d*)/)![1]);
-        const timeAgoUnit = text.match(/\[.*\] \[main\/INFO\]: \[CHAT\] §7\d*\.?\d*\/(.)/)![1];
+        const timeAgo = parseFloat(text.match(/\[.*\] \[Render thread\/INFO\]: \[CHAT\] (\d*\.?\d*)/)![1]);
+        const timeAgoUnit = text.match(/\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/(.)/)![1];
 
         // add a millisecond every time we scan the next log, to separate entries that fall within
         // same margin of error
@@ -104,12 +101,14 @@ function parseData(data: string): LogEntry[] {
 
         const timestamp = new Date(newTime);
 
-        const isRolledBack = text.match(/\[.*\] \[main\/INFO\]: \[CHAT\] §7\d*\.?\d*\/. ago §f- §m/) != null;
-        const username = text.match(/\[.*\] \[main\/INFO\]: \[CHAT\] §7\d*\.?\d*\/. ago ?§f ?- (§m)?(.*):? §f/)![2];
+        const isRolledBack = text.match(/\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago §f- §m/) != null;
+        const username = text.match(
+            /\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago ?§f ?- (§m)?(.*):?§f /,
+        )![2];
         let action: string;
         try {
             action = text.match(
-                /\[.*\] \[main\/INFO\]: \[CHAT\] §7\d*\.?\d*\/. ago §f- .* §f(§m)?(added|removed|dropped|picked up|placed|broke|clicked|killed)/,
+                /\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago §f- .* §f(§m)?(added|removed|dropped|picked up|placed|broke|clicked|killed)/,
             )![2];
         } catch (err) {
             // sign has a totally different formatting, too much a pain in the ass to detect
@@ -128,11 +127,11 @@ function parseData(data: string): LogEntry[] {
 
             const qty = parseInt(
                 text.match(
-                    /\[.*\] \[main\/INFO\]: \[CHAT\] §7\d*\.?\d*\/. ago §f- .* §f(§m)?(added|removed|dropped|picked up) x(\d+)/,
+                    /\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago §f- .* §f(§m)?(added|removed|dropped|picked up) x(\d+)/,
                 )![3],
             );
             const subject = text.match(
-                /\[.*\] \[main\/INFO\]: \[CHAT\] §7\d*\.?\d*\/. ago §f- .* §f(§m)?(added|removed|dropped|picked up) x\d+ (§m)?(.*)§f/,
+                /\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago §f- .* §f(§m)?(added|removed|dropped|picked up) x\d+ (§m)?(.*)§f/,
             )![4];
 
             const net = direction === "+" ? qty : -qty;
@@ -149,7 +148,7 @@ function parseData(data: string): LogEntry[] {
 
         if (action === "clicked" || action === "broke" || action === "placed") {
             const subject = text.match(
-                /\[.*\] \[main\/INFO\]: \[CHAT\] §7\d*\.?\d*\/. ago §f- .* §f(§m)?(clicked|broke|placed) (.*)§f/,
+                /\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago §f- .* §f(§m)?(clicked|broke|placed) (.*)§f/,
             )![3];
 
             let direction: "+" | "-" | undefined = undefined;
@@ -165,7 +164,7 @@ function parseData(data: string): LogEntry[] {
         let location;
         if (secondLine) {
             const coords = text.match(
-                /\[.*\] \[main\/INFO\]: \[CHAT\] §f        [ ]+   §.*\(x(-?\d+)\/y(-?\d+)\/z(-?\d+)\/(.*)\)/,
+                /\[.*\] \[Render thread\/INFO\]: \[CHAT\] §f        [ ]+   §.*\(x(-?\d+)\/y(-?\d+)\/z(-?\d+)\/(.*)\)/,
             )!;
             location = {
                 x: parseInt(coords[1]),
