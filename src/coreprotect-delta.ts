@@ -7,12 +7,14 @@ function parseData(data: string): LogEntry[] {
 
     const uncombinedLogs = data.split("\n").filter((str) => {
         return (
-            str.match(/^\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*/) ||
+            str.match(/^\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d+\.?\d+.*ago/) ||
             str.match(/^\[.*\] \[Render thread\/INFO\]: \[CHAT\] §f        [ ]+   §/) ||
-            str.match(/^\[.*\] \[Render thread\/INFO\]: \[CHAT\] §f----- Container Transactions §f----- \((.*)\)/) ||
+            str.match(/^\[.*\] \[Render thread\/INFO\]: \[CHAT\] §f----- Container Transactions§f ----- \((.*)\)/) ||
             str.match(/^\[.*\] \[Render thread\/INFO\]: \[CHAT\] §f-----$/)
         );
     });
+
+    console.log(uncombinedLogs);
 
     let logs: string[] = [];
 
@@ -37,10 +39,12 @@ function parseData(data: string): LogEntry[] {
         logs.push(newLine);
     });
 
+    console.log(logs);
+
     let lastCoords: undefined | string;
     logs = logs.map((line) => {
         const matches = line.match(
-            /^\[.*\] \[Render thread\/INFO\]: \[CHAT\] §f----- Container Transactions §f----- \((.*)\)/,
+            /^\[.*\] \[Render thread\/INFO\]: \[CHAT\] §f----- Container Transactions§f ----- \((.*)\)/,
         );
 
         if (line.match(/\n/) != null) {
@@ -54,7 +58,7 @@ function parseData(data: string): LogEntry[] {
 
         const outputLines = [];
         if (matches != null && matches[1] != null) {
-            lastCoords = `[00:00:00] [Render thread/INFO]: [CHAT] §f                 ^ §o(${matches[1]}/unknown)`;
+            lastCoords = `[00:00:00] [Render thread/INFO]: [CHAT] §f                 §7^ §o(${matches[1]}/unknown)`;
         } else outputLines.push(line);
 
         if (lastCoords != null) outputLines.push(lastCoords);
@@ -163,8 +167,9 @@ function parseData(data: string): LogEntry[] {
         const secondLine = text.match(/.*\n(.*)/);
         let location;
         if (secondLine) {
+            console.log(text);
             const coords = text.match(
-                /\[.*\] \[Render thread\/INFO\]: \[CHAT\] §f        [ ]+   §.*\(x(-?\d+)\/y(-?\d+)\/z(-?\d+)\/(.*)\)/,
+                /\[.*\] \[Render thread\/INFO\]: \[CHAT\] §f        [ ]+  §7.*\(x(-?\d+)\/y(-?\d+)\/z(-?\d+)\/([a-z_]+)\)/,
             )!;
             location = {
                 x: parseInt(coords[1]),
