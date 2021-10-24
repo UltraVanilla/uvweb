@@ -106,13 +106,14 @@ function parseData(data: string): LogEntry[] {
         const timestamp = new Date(newTime);
 
         const isRolledBack = text.match(/\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago §f- §m/) != null;
+        console.log(text);
         const username = text.match(
-            /\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago ?§f ?- (§m)?(.*):?§f /,
+            /\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago ?§f ?- (§m)?([^§ ]*):?§f/,
         )![2];
         let action: string;
         try {
             action = text.match(
-                /\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago §f- .* §f(§m)?(added|removed|dropped|picked up|placed|broke|clicked|killed)/,
+                /\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago §f- .*§f(§m)? ?(added|removed|dropped|picked up|placed|broke|clicked|killed)/,
             )![2];
         } catch (err) {
             // sign has a totally different formatting, too much a pain in the ass to detect
@@ -129,13 +130,14 @@ function parseData(data: string): LogEntry[] {
                 direction = "-";
             }
 
+            console.log(text);
             const qty = parseInt(
                 text.match(
-                    /\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago §f- .* §f(§m)?(added|removed|dropped|picked up) x(\d+)/,
+                    /\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago §f- .*§f(§m)? ?(added|removed|dropped|picked up) x(\d+)/,
                 )![3],
             );
             const subject = text.match(
-                /\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago §f- .* §f(§m)?(added|removed|dropped|picked up) x\d+ (§m)?(.*)§f/,
+                /\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago §f- .*§f(§m)? ?(added|removed|dropped|picked up) x\d+ (§m)?(.*)§f/,
             )![4];
 
             const net = direction === "+" ? qty : -qty;
