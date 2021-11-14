@@ -68,6 +68,10 @@
         </form>
         <script>
 
+if (navigator.userAgent.includes("AppleWebKit")) {
+    document.body.innerHTML = "";
+    alert("This page does not work on Safari, please try a different browser.");
+}
 
 const options = {
     1: {
