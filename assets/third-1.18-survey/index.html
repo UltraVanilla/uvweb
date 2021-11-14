@@ -1,0 +1,281 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Survey</title>
+        <link href="/assets/ultravanilla.css" rel="stylesheet">
+        <style>
+            body, html {
+                margin: 0;
+                padding: 0;
+            }
+            body > * {
+                padding-left: 5%;
+                padding-right: 5%
+            }
+            .width-background {
+                background-color: #1c1c1c;
+            }
+            .width-background img {
+                margin-left: auto;
+                margin-right: auto;
+                display: block;
+                max-width: 100%;
+            }
+            body {
+                font-size: 1.5em;
+            }
+            .logo {
+                background-color: #1c1c1c;
+            }
+            .logo img {
+                width: 8%;
+                background-color: #1c1c1c;
+                display: block;
+                max-width: 100%;
+            }
+            input {
+                font-size: 1.0em;
+            }
+            .splide__slide img {
+                width: 100%;
+                height: auto;
+            }
+            .option {
+                background-color: #efefef;
+                padding: 10px;
+                margin-top: 15px;
+                margin-bottom: 15px;
+            }
+        </style>
+        <meta property="og:image" content="/assets/416.png">
+        <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.3.1/dist/js/splide.min.js" integrity="sha256-U0EYlyQ29ndToXSkVnSaHiJxoqDMLZ4h/ed21cw2Aj4=" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="/js/jquery-3.5.1.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.3.1/dist/css/splide.min.css" integrity="sha256-vnIcA0IxxVO/dQ6l9ZAl6i8HhSMouOB9zG0R+HsQaA4=" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="logo"><img src="/assets/416.png"></div>
+        <h1>Third 1.18 survey</h1>
+        <form action="/survey-submit/third-118" method="post">
+            <p><label for="form-username">Username:</label>
+            <input type="text" id="form-username" name="username" placeholder="Herobrine" required></p>
+            <p>When 1.18 comes around, we will add a teleport to a specific location to develop a new community area. Where should it be? Choose wisely.</p>
+            <p>Screenshots have been sorted randomly.</p>
+            <div class="options"></div>
+            <p><input type="submit" value="Submit"></p>
+            <p>You may use /token and resubmit this form with the same username to update your response.</p>
+        </form>
+        <script>
+
+
+const options = {
+    1: {
+        description: "",
+        screenshots: [
+            "a.jpg",
+            "2021-11-10_22.48.56.jpg",
+            "2021-11-10_22.49.17.jpg",
+            "2021-11-13_23.03.06.jpg",
+            "2021-11-13_23.03.20.jpg",
+            "2021-11-13_23.04.06.jpg",
+            "2021-11-13_23.04.55.jpg",
+            "2021-11-13_23.06.26.jpg",
+            "2021-11-13_23.07.02.jpg",
+            "2021-11-13_23.08.59.jpg",
+            "2021-11-13_23.10.52.jpg",
+            "2021-11-13_23.11.17.jpg",
+            "2021-11-13_23.12.29.jpg",
+            "2021-11-13_23.12.39.jpg",
+            "2021-11-13_23.13.54.jpg",
+            "2021-11-13_23.14.44.jpg",
+        ],
+    },
+    2: {
+        description: "",
+        screenshots: [
+            "2021-11-10_22.58.40.jpg",
+            "2021-11-10_23.00.41.jpg",
+            "2021-11-13_23.23.08.jpg",
+            "2021-11-13_23.25.51.jpg",
+            "2021-11-13_23.25.55.jpg",
+            "2021-11-13_23.26.11.jpg",
+            "2021-11-13_23.26.32.jpg",
+            "2021-11-13_23.26.41.jpg",
+            "2021-11-13_23.27.00.jpg",
+            "2021-11-13_23.27.21.jpg",
+            "2021-11-13_23.28.54.jpg",
+            "2021-11-13_23.30.01.jpg",
+            "2021-11-13_23.32.20.jpg",
+            "2021-11-13_23.32.49.jpg",
+            "2021-11-13_23.34.38.jpg",
+        ],
+    },
+    //execute in minecraft:overworld run tp @s -1890878.04 126.42 -1894512.23 -144.28 9.30
+    3: {
+        description: "",
+        screenshots: [
+            "2021-11-11_21.55.48.jpg",
+            "2021-11-11_21.56.06.jpg",
+            "2021-11-11_21.58.19.jpg",
+            "2021-11-11_21.58.59.jpg",
+            "2021-11-11_22.01.27.jpg",
+            "2021-11-11_22.01.49.jpg",
+            "2021-11-11_22.02.49.jpg",
+            "2021-11-11_22.04.36.jpg",
+            "2021-11-11_22.06.56.jpg",
+            "2021-11-11_22.07.17.jpg",
+            "2021-11-11_22.07.58.jpg",
+            "2021-11-11_22.08.56.jpg",
+            "2021-11-14_00.08.46.jpg",
+            "2021-11-14_00.08.58.jpg",
+            "2021-11-14_00.09.13.jpg",
+            "2021-11-14_00.09.47.jpg",
+            "2021-11-14_00.11.55.jpg",
+            "2021-11-14_00.12.10.jpg",
+            "2021-11-14_00.12.25.jpg",
+            "2021-11-14_00.12.32.jpg",
+            "2021-11-14_00.13.10.jpg",
+            "2021-11-14_00.15.26.jpg",
+            "2021-11-11_12.42.05.jpg",
+            "2021-11-11_12.42.43.jpg",
+            "2021-11-14_01.38.04.jpg",
+            "2021-11-14_01.38.13.jpg",
+            "2021-11-14_01.39.38.jpg",
+            "2021-11-14_01.40.31.jpg",
+            "2021-11-14_01.41.10.jpg",
+            "2021-11-14_01.48.02.jpg",
+            "2021-11-14_01.51.12.jpg",
+        ],
+    },
+    //execute in minecraft:overworld run tp @s -1888651.11 14.88 -1888230.17 -232.32 11.10
+    4: {
+        description: "",
+        screenshots: [
+            "2021-11-14_01.02.45.jpg",
+            "2021-11-14_01.03.06.jpg",
+            "2021-11-14_01.03.11.jpg",
+            "2021-11-14_01.03.14.jpg",
+            "2021-11-14_01.04.27.jpg",
+            "2021-11-14_01.05.01.jpg",
+            "2021-11-14_01.05.21.jpg",
+            "2021-11-14_01.05.28.jpg",
+            "2021-11-14_01.05.38.jpg",
+            "2021-11-14_01.06.48.jpg",
+            "2021-11-14_01.13.56.jpg",
+            "2021-11-14_01.14.31.jpg",
+            "2021-11-14_01.15.32.jpg",
+            "2021-11-14_01.18.06.jpg",
+            "2021-11-14_01.23.28.jpg",
+            "2021-11-14_01.23.40.jpg",
+            "2021-11-14_01.25.31.jpg",
+            "2021-11-14_01.29.41.jpg",
+            "2021-11-14_01.27.47.jpg",
+        ],
+    },
+    //execute in minecraft:overworld run tp @s -1899042.24 -4.23 -1898573.95 -1072.94 20.40
+    5: {
+        description: "Note: there are pretty much no Lush Caves in this area. Most of the interest is on the surface. However, it's got the coolest system of underwater submerged caves, and a village.",
+        screenshots: [
+            "2021-11-14_02.04.43.jpg",
+            "2021-11-14_02.04.52.jpg",
+            "2021-11-14_02.05.57.jpg",
+            "2021-11-14_02.07.41.jpg",
+            "2021-11-14_02.08.04.jpg",
+            "2021-11-14_02.08.21.jpg",
+            "2021-11-14_02.08.46.jpg",
+            "2021-11-14_02.10.31.jpg",
+            "2021-11-14_02.20.04.jpg",
+            "2021-11-14_02.25.47.jpg",
+            "2021-11-14_02.25.23.jpg",
+            "2021-11-14_02.25.47.jpg",
+            "2021-11-14_02.27.14.jpg",
+            "2021-11-14_02.28.16.jpg",
+            "2021-11-14_02.28.34.jpg",
+            "2021-11-14_02.29.13.jpg",
+            "2021-11-14_02.33.18.jpg",
+            "2021-11-14_02.35.38.jpg",
+            "2021-11-14_02.43.12.jpg"
+        ],
+    },
+};
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    
+    return array;
+}
+
+
+const optionsContainer = document.getElementsByClassName("options")[0]
+
+for (const [name, option] of shuffleArray(Object.entries(options))) {
+
+    const { screenshots, description } = option;
+
+    const id = `option-${name}`;
+
+    const optionDiv = $("<div/>", { class: "option" });
+    const splideElem = $("<div/>", { class: "splide", id })
+    const splideTrack = $("<div/>", { class: "splide__track" })
+    const splideList = $("<ul/>", { class: "splide__list" })
+
+    optionDiv.append($(`<h2>Option ${name}</h2>`));
+
+    if (typeof description === "string" && description.length > 0) optionDiv.append($(`<p/>`).text(description));
+
+    optionDiv.append($("<p>Use the slider below to assign a score for this location</p>"));
+    optionDiv.append($(`<p>Your rating for <strong>option ${name}</strong>: <span class='rating'>50</span>/100</p>`));
+    const ratingSlider = $("<input/>", { type: "range", name: id, min: 0, max: 100, value: 50 });
+    optionDiv.append(ratingSlider);
+    optionDiv.append(splideElem);
+    splideElem.append(splideTrack);
+    splideTrack.append(splideList);
+
+
+    ratingSlider.on("input", () => {
+        const sliderVal = parseInt(ratingSlider.val())
+        optionDiv.find(".rating").text(sliderVal);
+
+    })
+
+    for (const screenshot of shuffleArray(screenshots)) {
+        const img = $("<img/>", { src: `option-${name}/${screenshot}` });
+        const li = $("<li/>", { class: "splide__slide" });
+        li.append(img);
+        splideList.append(li);
+    }
+
+    $(optionsContainer).append(optionDiv);
+
+    const splide = new Splide(`#${id}`, {
+        type: "loop",
+        padding: "5rem",
+        autoplay: true,
+        perPage: 2,
+        pauseOnHover: false,
+        pauseOnFocus: false,
+    });
+
+    splide.mount();
+
+    function scale() {
+        const width = $(window).width();
+        
+        if (width < 1200) {
+            splide.options = { perPage: 1 };
+        } else {
+            splide.options = { perPage: 2 };
+        }
+    }
+
+    window.addEventListener("resize", scale);
+    scale();
+}
+
+        </script>
+    </body>
+</html>
