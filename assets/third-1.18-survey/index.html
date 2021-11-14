@@ -68,7 +68,8 @@
         </form>
         <script>
 
-if (navigator.userAgent.includes("AppleWebKit")) {
+
+if (/(iPhone|iPod|iPad).*AppleWebKit/i.test(navigator.userAgent)) {
     document.body.innerHTML = "";
     alert("This page does not work on Safari, please try a different browser.");
 }
