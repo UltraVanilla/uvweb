@@ -704,6 +704,15 @@ window.addEventListener("load", function () {
             });
         });
 
+        $(".tools-jump-to-outpost").click(() => {
+            dynmap.panToLocation({
+                world: dynmap.worlds.world,
+                x: -1890757,
+                y: 64,
+                z: -1894551,
+            });
+        });
+
         $(".tools-go-to-coordinates").click(async () => {
             const contents = $(
                 <form>
