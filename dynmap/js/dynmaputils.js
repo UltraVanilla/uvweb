@@ -266,7 +266,6 @@ var DynmapTileLayer = L.TileLayer.extend({
 			return hash;
 		}
 
-		console.log(izoom)
 		var hash = hashCode([x, y, izoom].join(",")) & 0b11;
 
 		return {
