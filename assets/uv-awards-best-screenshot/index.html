@@ -38,7 +38,7 @@
             input {
                 font-size: 1.0em;
             }
-            .splide__slide img {
+            .option img {
                 width: 100%;
                 height: auto;
             }
@@ -50,17 +50,16 @@
             }
         </style>
         <meta property="og:image" content="/assets/416.png">
-        <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.3.1/dist/js/splide.min.js" integrity="sha256-U0EYlyQ29ndToXSkVnSaHiJxoqDMLZ4h/ed21cw2Aj4=" crossorigin="anonymous"></script>
         <script type="text/javascript" src="/js/jquery-3.5.1.js"></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.3.1/dist/css/splide.min.css" integrity="sha256-vnIcA0IxxVO/dQ6l9ZAl6i8HhSMouOB9zG0R+HsQaA4=" crossorigin="anonymous">
     </head>
     <body>
         <div class="logo"><img src="/assets/416.png"></div>
-        <h1>UV Awards - Best Community Project</h1>
-        <form action="/survey-submit/community-project" method="post">
+        <h1>UV Awards - Best Screenshot</h1>
+        <form action="/survey-submit/screenshot" method="post">
             <p><label for="form-username">Username:</label>
             <input type="text" id="form-username" name="username" placeholder="Herobrine" required></p>
-            <p>On 31st December, the first UltraVanilla Awards Show will be held in Alliance City at 19:00 UTC. Pick your favorite entries for the Best Community Project category below.</p>
+            <p>On 31st December, the first UltraVanilla Awards Show will be held in Alliance City at 19:00 UTC.
+            <p>Pick your favorite entries for the Best Screenshot category below.</p>
             <p>Choose wisely!</p>
             <div class="options"></div>
             <p><input type="submit" value="Submit"></p>
@@ -76,33 +75,99 @@ if (/(iPhone|iPod|iPad).*AppleWebKit/i.test(navigator.userAgent)) {
 
 const options = {
     1: {
-        description: "Mesa biome exposed to cave system.",
+        title: "",
         screenshots: [
-            "a.jpg",
+            "akoot.png",
         ],
     },
     2: {
-        description: "Range of jagged peaks with interesting cave system and meadow area.",
+        title: "",
         screenshots: [
-            "2021-11-10_22.58.40.jpg",
+            "beeper.png",
         ],
     },
     3: {
-        description: "Contains pretty much all of the 1.18 biomes. Its got a range of frozen peaks, a giant spruce taiga valley, a massive lush cave system, a bunch of dripstone caves, nearby jagged peaks, grove biomes, meadows, a mini ice spikes biome, a mountain village, and a coastline of sheer cliffs.",
+        title: "",
         screenshots: [
-            "2021-11-11_21.55.48.jpg",
+            "ecks.png",
         ],
     },
     4: {
-        description: "Varied taiga area with a deep flat-floor cave and large valley.",
+        title: "",
         screenshots: [
-            "2021-11-14_01.02.45.jpg",
+            "eitan.png",
         ],
     },
     5: {
-        description: "There are pretty much no Lush Caves in this area. Most of the interest is on the surface. However, it's got a cool system of underwater submerged caves, and a village.",
+        title: "",
         screenshots: [
-            "2021-11-14_02.04.43.jpg",
+            "ezek.png",
+        ],
+    },
+    6: {
+        title: "",
+        screenshots: [
+            "herm.png",
+        ],
+    },
+    7: {
+        title: "",
+        screenshots: [
+            "joe.png",
+        ],
+    },
+    8: {
+        title: "",
+        screenshots: [
+            "KG.png",
+        ],
+    },
+    9: {
+        title: "",
+        screenshots: [
+            "moose.png",
+        ],
+    },
+    10: {
+        title: "",
+        screenshots: [
+            "pipe.png",
+        ],
+    },
+    11: {
+        title: "",
+        screenshots: [
+            "secondlord.png",
+        ],
+    },
+    12: {
+        title: "",
+        screenshots: [
+            "smoke.png",
+        ],
+    },
+    13: {
+        title: "",
+        screenshots: [
+            "sop.png",
+        ],
+    },
+    14: {
+        title: "",
+        screenshots: [
+            "space.png",
+        ],
+    },
+    15: {
+        title: "",
+        screenshots: [
+            "steve.png",
+        ],
+    },
+    16: {
+        title: "",
+        screenshots: [
+            "wind.png",
         ],
     },
 };
@@ -112,7 +177,7 @@ function shuffleArray(array) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
-    
+
     return array;
 }
 
@@ -121,62 +186,33 @@ const optionsContainer = document.getElementsByClassName("options")[0]
 
 for (const [name, option] of shuffleArray(Object.entries(options))) {
 
-    const { screenshots, description } = option;
+    const { screenshots, title } = option;
 
     const id = `option-${name}`;
 
     const optionDiv = $("<div/>", { class: "option" });
-    const splideElem = $("<div/>", { class: "splide", id })
-    const splideTrack = $("<div/>", { class: "splide__track" })
-    const splideList = $("<ul/>", { class: "splide__list" })
 
-    optionDiv.append($(`<h2>Option ${name}</h2>`));
+    optionDiv.append($(`<h2>${title}</h2>`));
 
-    if (typeof description === "string" && description.length > 0) optionDiv.append($(`<p/>`).text(description));
-
-    optionDiv.append($("<p>Use the slider below to assign a score for this location</p>"));
-    optionDiv.append($(`<p>Your rating for <strong>option ${name}</strong>: <span class='rating'>50</span>/100</p>`));
+    optionDiv.append($("<p>Use the slider below to assign a score for this entry</p>"));
+    optionDiv.append($(`<p>Your rating</strong>: <span class='rating'>50</span>/100</p>`));
     const ratingSlider = $("<input/>", { type: "range", name: id, min: 0, max: 100, value: 50 });
     optionDiv.append(ratingSlider);
-    optionDiv.append(splideElem);
-    splideElem.append(splideTrack);
-    splideTrack.append(splideList);
-
 
     ratingSlider.on("input", () => {
         const sliderVal = parseInt(ratingSlider.val())
         optionDiv.find(".rating").text(sliderVal);
-
     })
 
     for (const screenshot of shuffleArray(screenshots)) {
         const img = $("<img/>", { src: `option-${name}/${screenshot}` });
-        const li = $("<li/>", { class: "splide__slide" });
-        li.append(img);
-        splideList.append(li);
+        optionDiv.append(img);
     }
 
     $(optionsContainer).append(optionDiv);
 
-    const splide = new Splide(`#${id}`, {
-        type: "loop",
-        padding: "5rem",
-        autoplay: true,
-        perPage: 2,
-        pauseOnHover: false,
-        pauseOnFocus: false,
-    });
-
-    splide.mount();
-
     function scale() {
         const width = $(window).width();
-        
-        if (width < 1200) {
-            splide.options = { perPage: 1 };
-        } else {
-            splide.options = { perPage: 2 };
-        }
     }
 
     window.addEventListener("resize", scale);

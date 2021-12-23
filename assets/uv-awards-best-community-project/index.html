@@ -38,9 +38,9 @@
             input {
                 font-size: 1.0em;
             }
-            .option img {
-                width: 500px;
-                height: auto;
+            .splide__slide img {
+                width: auto;
+                height: 400px;
             }
             .option {
                 background-color: #efefef;
@@ -50,16 +50,18 @@
             }
         </style>
         <meta property="og:image" content="/assets/416.png">
+        <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.3.1/dist/js/splide.min.js" integrity="sha256-U0EYlyQ29ndToXSkVnSaHiJxoqDMLZ4h/ed21cw2Aj4=" crossorigin="anonymous"></script>
         <script type="text/javascript" src="/js/jquery-3.5.1.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.3.1/dist/css/splide.min.css" integrity="sha256-vnIcA0IxxVO/dQ6l9ZAl6i8HhSMouOB9zG0R+HsQaA4=" crossorigin="anonymous">
     </head>
     <body>
         <div class="logo"><img src="/assets/416.png"></div>
-        <h1>UV Awards - Best Mapart</h1>
-        <form action="/survey-submit/mapart" method="post">
+        <h1>UV Awards - Best Community Project</h1>
+        <form action="/survey-submit/community-project" method="post">
             <p><label for="form-username">Username:</label>
             <input type="text" id="form-username" name="username" placeholder="Herobrine" required></p>
-            <p>On 31st December, the first UltraVanilla Awards Show will be held in Alliance City at 19:00 UTC.
-            <p>Pick your favorite entries for the Best Mapart category below.</p>
+            <p>On 31st December, the first UltraVanilla Awards Show will be held in Alliance City at 19:00 UTC.</p>
+            <p>Pick your favorite entries for the Best Community Project category below. Screenshots courtesy of the UV community!<p>
             <p>Choose wisely!</p>
             <div class="options"></div>
             <p><input type="submit" value="Submit"></p>
@@ -75,63 +77,103 @@ if (/(iPhone|iPod|iPad).*AppleWebKit/i.test(navigator.userAgent)) {
 
 const options = {
     1: {
-        title: "I <3 Ur Mom",
+        title: "Community Auctions",
         screenshots: [
-            "2021-12-13_18.09.35.png",
+            "auction1.png",
+            "auction2.png",
+            "auction3.png",
+            "auction4.png",
+            "auction5.png",
         ],
     },
     2: {
-        title: "Lego Racers 2",
+        title: "Library of Terni",
         screenshots: [
-            "2021-12-13_18.56.20.png",
+            "library1.png",
+            "library2.png",
+            "library3.png",
+            "library4.png",
+            "library5.png",
         ],
     },
     3: {
-        title: "Karl Marx",
+        title: "Mapart Gallery",
         screenshots: [
-            "2021-12-13_18.58.33.png",
+            "mapart1.png",
+            "mapart2.png",
+            "mapart3.png",
+            "mapart4.png",
+            "mapart5.png",
         ],
     },
     4: {
-        title: "Empire State",
+        title: "The Resource Pack Project",
         screenshots: [
-            "2021-12-13_19.17.10.png",
+            "pack1.png",
+            "pack2.png",
+            "pack3.png",
+            "pack4.png",
+            "pack5.png",
         ],
     },
     5: {
-        title: "Big Chungus",
+        title: "Screenshot & Build Competitions",
         screenshots: [
-            "2021-12-13_19.22.28.png",
+            "comp1.png",
+            "comp2.png",
+            "comp3.png",
+            "comp4.png",
+            "comp5.png",
         ],
     },
     6: {
-        title: "UltraVanilla Times",
+        title: "Seasonal Spawn Decor",
         screenshots: [
-            "2021-12-13_18.09.07.png",
+            "spawn1.png",
+            "spawn2.png",
+            "spawn3.png",
+            "spawn4.png",
+            "spawn5.png",
         ],
     },
     7: {
-        title: "Squid Dab",
+        title: "SLDO Dungeon",
         screenshots: [
-            "2021-12-13_18.02.28.png",
+            "sldo1.png",
+            "sldo2.png",
+            "sldo3.png",
+            "sldo4.png",
+            "sldo5.png",
         ],
     },
     8: {
-        title: "Nob",
+        title: "UV Farming Guild",
         screenshots: [
-            "2021-12-13_17.59.25.png",
+            "uvfg1.png",
+            "uvfg2.png",
+            "uvfg3.png",
+            "uvfg4.png",
+            "uvfg5.png",
         ],
     },
     9: {
-        title: "The Last Jedi",
+        title: "UV Music Pack",
         screenshots: [
-            "2021-12-13_17.59.13.png",
+            "music1.png",
+            "music2.png",
+            "music3.png",
+            "music4.png",
+            "music5.png",
         ],
     },
     10: {
-        title: "UBAR",
+        title: "USUV HQ",
         screenshots: [
-            "2021-12-13_18.09.19.png",
+            "usuv1.png",
+            "usuv2.png",
+            "usuv3.png",
+            "usuv4.png",
+            "usuv5.png",
         ],
     },
 };
@@ -155,6 +197,9 @@ for (const [name, option] of shuffleArray(Object.entries(options))) {
     const id = `option-${name}`;
 
     const optionDiv = $("<div/>", { class: "option" });
+    const splideElem = $("<div/>", { class: "splide", id })
+    const splideTrack = $("<div/>", { class: "splide__track" })
+    const splideList = $("<ul/>", { class: "splide__list" })
 
     optionDiv.append($(`<h2>${title}</h2>`));
 
@@ -162,21 +207,45 @@ for (const [name, option] of shuffleArray(Object.entries(options))) {
     optionDiv.append($(`<p>Your rating for <strong>${title}</strong>: <span class='rating'>50</span>/100</p>`));
     const ratingSlider = $("<input/>", { type: "range", name: id, min: 0, max: 100, value: 50 });
     optionDiv.append(ratingSlider);
+    optionDiv.append(splideElem);
+    splideElem.append(splideTrack);
+    splideTrack.append(splideList);
+
 
     ratingSlider.on("input", () => {
         const sliderVal = parseInt(ratingSlider.val())
         optionDiv.find(".rating").text(sliderVal);
+
     })
 
     for (const screenshot of shuffleArray(screenshots)) {
         const img = $("<img/>", { src: `option-${name}/${screenshot}` });
-        optionDiv.append(img);
+        const li = $("<li/>", { class: "splide__slide" });
+        li.append(img);
+        splideList.append(li);
     }
 
     $(optionsContainer).append(optionDiv);
 
+    const splide = new Splide(`#${id}`, {
+        type: "loop",
+        padding: "5rem",
+        autoplay: true,
+        perPage: 2,
+        pauseOnHover: false,
+        pauseOnFocus: false,
+    });
+
+    splide.mount();
+
     function scale() {
         const width = $(window).width();
+
+        if (width < 1200) {
+            splide.options = { perPage: 1 };
+        } else {
+            splide.options = { perPage: 2 };
+        }
     }
 
     window.addEventListener("resize", scale);
