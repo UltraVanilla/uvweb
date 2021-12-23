@@ -1,0 +1,103 @@
+diff --git a/DynmapCore/src/main/resources/extracted/web/js/chat.js b/DynmapCore/src/main/resources/extracted/web/js/chat.js
+index 14a8501c..60fc95e2 100644
+--- a/DynmapCore/src/main/resources/extracted/web/js/chat.js
++++ b/DynmapCore/src/main/resources/extracted/web/js/chat.js
+@@ -4,13 +4,17 @@ componentconstructors['chat'] = function(dynmap, configuration) {
+ 	
+ 	if(dynmap.getBoolParameterByName("hidechat"))
+ 		return;
++
++	const seen = new Set();
+ 		
+ 	// Provides 'chat'-events by monitoring the world-updates.
+ 	$(dynmap).bind('worldupdate', function(event, update) {
+ 		swtch(update.type, {
+ 			chat: function() {
+-				$(dynmap).trigger('chat', [{source: update.source, name: update.playerName, text: update.message, account: update.account,
+-                channel: update.channel}]);
++				const event = {source: update.source, name: update.playerName, text: update.message, account: update.account, channel: update.channel};
++				const json = JSON.stringify(event);
++				if (!seen.has(json)) $(dynmap).trigger("chat", [event]);
++				seen.add(json);
+ 			}
+ 		});
+ 	});
+diff --git a/DynmapCore/src/main/resources/extracted/web/js/dynmaputils.js b/DynmapCore/src/main/resources/extracted/web/js/dynmaputils.js
+index 8884a422..63da83e5 100644
+--- a/DynmapCore/src/main/resources/extracted/web/js/dynmaputils.js
++++ b/DynmapCore/src/main/resources/extracted/web/js/dynmaputils.js
+@@ -207,13 +207,18 @@ var DynmapTileLayer = L.TileLayer.extend({
+ 	},
+ 
+ 	_tickLoadQueue: function() {
+-		if (this._loadingTiles.length > 4) {
++		if (this._loadingTiles.length > 12) {
+ 			return;
+ 		}
+ 
++		if (this._loadingTiles.length !== 0) {
++			$(dynmap).trigger("load-from-center");
++		}
++
+ 		var next = this._loadQueue.shift();
+ 
+ 		if (!next) {
++			$(dynmap).trigger("tile-queue-loaded");
+ 			return;
+ 		}
+ 
+@@ -250,6 +255,19 @@ var DynmapTileLayer = L.TileLayer.extend({
+ 			x = scale * coords.x,
+ 			y = scale * coords.y;
+ 
++		function hashCode(input) {
++			let hash = 0, i, chr;
++			if (input.length === 0) return hash;
++			for (i = 0; i < input.length; i++) {
++				chr = input.charCodeAt(i);
++				hash = (hash << 5) - hash + chr;
++				hash |= 0;
++			}
++			return hash;
++		}
++
++		var hash = hashCode([x, y, izoom].join(",")) & 0b11;
++
+ 		return {
+ 			prefix: this.options.prefix,
+ 			nightday: (this.options.nightandday && this.options.dynmap.serverday) ? '_day' : '',
+@@ -259,7 +277,8 @@ var DynmapTileLayer = L.TileLayer.extend({
+ 			zoomprefix: (zoomoutlevel==0)?"":(this.zoomprefix(zoomoutlevel)+"_"),
+ 			x: x,
+ 			y: y,
+-			fmt: this.options['image-format'] || 'png'
++			fmt: this.options['image-format'] || 'png',
++			hash: hash,
+ 		};
+ 	}
+ });
+diff --git a/DynmapCore/src/main/resources/extracted/web/js/hdmap.js b/DynmapCore/src/main/resources/extracted/web/js/hdmap.js
+index ecd9b208..6dcab77e 100644
+--- a/DynmapCore/src/main/resources/extracted/web/js/hdmap.js
++++ b/DynmapCore/src/main/resources/extracted/web/js/hdmap.js
+@@ -42,7 +42,7 @@ var HDMapType = DynmapTileLayer.extend({
+ 		// Y is inverted for HD-map.
+ 		info.y = -info.y;
+ 		info.scaledy = info.y >> 5;
+-		return namedReplace('{prefix}{nightday}/{scaledx}_{scaledy}/{zoom}{x}_{y}.{fmt}', info);
++		return namedReplace("{prefix}{nightday}/{hash}/{zoom}{x}_{y}.{fmt}", info);
+ 	},
+ 	zoomprefix: function(amount) {
+ 		// amount == 0 -> ''
+diff --git a/DynmapCore/src/main/resources/extracted/web/js/map.js b/DynmapCore/src/main/resources/extracted/web/js/map.js
+index 0bbcd9f7..8c426376 100644
+--- a/DynmapCore/src/main/resources/extracted/web/js/map.js
++++ b/DynmapCore/src/main/resources/extracted/web/js/map.js
+@@ -647,7 +647,6 @@ DynMap.prototype = {
+ 					me.lasttimestamp = update.timestamp;
+ 				}
+ 				if(me.options.confighash != update.confighash) {
+-				    window.location = me.getLink();
+ 					return;
+ 				}
+ 				me.playerfield.text(me.options['msg-players'] + " [" + update.currentcount + "/" + me.options.maxcount + "]");

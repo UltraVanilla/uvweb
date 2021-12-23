@@ -57,6 +57,8 @@ export default async (ctx: Koa.BaseContext): Promise<void> => {
     // we use cheerio to modify the page in-transit
     const $ = cheerio.load(body);
 
+    // allow caching
+    /* 
     $("script").each((i, elem) => {
         const src = $(elem).attr("src");
         if (src == null) return;
@@ -67,6 +69,7 @@ export default async (ctx: Koa.BaseContext): Promise<void> => {
         if (href == null) return;
         $(elem).attr("href", href.split("?")[0]);
     });
+    */
 
     const newContainer = $("<div class=box>");
 
@@ -81,7 +84,7 @@ export default async (ctx: Koa.BaseContext): Promise<void> => {
             <div class='header-part server-info'>
                 <strong class='server-info-label'>server address: </strong> play.ultravanilla.world</div>
             <div class='header-part server-info server-info-version'>
-                <strong class='server-info-label'>version: </strong> 1.17<span style='color:#979797'>.1</div></div>
+                <strong class='server-info-label'>version: </strong> 1.18<span style='color:#979797'>.1</div></div>
         </span>
     `).appendTo(newHeader);
 
@@ -116,6 +119,7 @@ export default async (ctx: Koa.BaseContext): Promise<void> => {
                     <button class="tools-button tools-nether-portal" data-toggle="nether-portal">Go through nether portal</button>
                     <button class="tools-button tools-jump-to-old-spawn" data-toggle="jump-to-old-spawn">Jump to Old Spawn</button>
                     <button class="tools-button tools-jump-to-new-spawn" data-toggle="jump-to-new-spawn">Jump to Spawn</button>
+                    <button class="tools-button tools-jump-to-outpost" data-toggle="jump-to-outpost">Jump to 1.18 Outpost</button>
                     <div class="toggles">
                         <div data-toggle="enable-header"><label for='header-checkbox'>Enable header? </label><input type='checkbox' id='header-checkbox' class='header-checkbox' checked></div>
                         <div data-toggle="enable-crosshair"><label for='crosshair-checkbox'>Enable crosshair? </label><input type='checkbox' id='crosshair-checkbox' class='crosshair-checkbox'></div>
