@@ -23,7 +23,7 @@ index 14a8501c..60fc95e2 100644
  		});
  	});
 diff --git a/DynmapCore/src/main/resources/extracted/web/js/dynmaputils.js b/DynmapCore/src/main/resources/extracted/web/js/dynmaputils.js
-index 8884a422..63da83e5 100644
+index 8884a422..f268350f 100644
 --- a/DynmapCore/src/main/resources/extracted/web/js/dynmaputils.js
 +++ b/DynmapCore/src/main/resources/extracted/web/js/dynmaputils.js
 @@ -207,13 +207,18 @@ var DynmapTileLayer = L.TileLayer.extend({
@@ -47,10 +47,61 @@ index 8884a422..63da83e5 100644
  		}
  
 diff --git a/DynmapCore/src/main/resources/extracted/web/js/map.js b/DynmapCore/src/main/resources/extracted/web/js/map.js
-index 0bbcd9f7..8c426376 100644
+index 0bbcd9f7..a7d37d3b 100644
 --- a/DynmapCore/src/main/resources/extracted/web/js/map.js
 +++ b/DynmapCore/src/main/resources/extracted/web/js/map.js
-@@ -647,7 +647,6 @@ DynMap.prototype = {
+@@ -99,33 +99,23 @@ DynMap.prototype = {
+ 			});
+ 			me.defaultworld = me.defaultworld || world;
+ 		});
+-		var urlarg = me.getParameterByName('worldname');
+-		if(urlarg == "")
+-			urlarg = me.options.defaultworld || "";
+-		if(urlarg != "") {
+-		    me.defaultworld = me.worlds[urlarg] || me.defaultworld;
+-		}
+-		urlarg = me.getParameterByName('mapname');
+-		if(urlarg != "") {
+-			me.defaultworld.defaultmap = me.defaultworld.maps[urlarg] || me.defaultworld.defaultmap;
+-		}
+-		urlarg = me.getIntParameterByName('x');
+-		if(urlarg != null)
+-			me.defaultworld.center.x = urlarg;
+-		urlarg = me.getIntParameterByName('y');
+-		if(urlarg != null)
+-			me.defaultworld.center.y = urlarg;
+-		urlarg = me.getIntParameterByName('z');
+-		if(urlarg != null)
+-			me.defaultworld.center.z = urlarg;
+-		urlarg = me.getParameterByName('nogui');
+-		if(urlarg != "") {
+-			me.nogui = (urlarg == 'true');
+-		}
+-		urlarg = me.getParameterByName('nocompass');
+-		if(urlarg != "") {
+-			me.nocompass = (urlarg == 'true');
+-		}
++
++		const parts = location.hash.slice(2).split(",");
++		const zoom = parseFloat(parts[0]);
++		const x = parseFloat(parts[1]);
++		const z = parseFloat(parts[2]);
++
++		if (isNaN(zoom) || isNaN(x) || isNaN(z)) return;
++
++		let world = parts[3];
++
++		if (world !== "world_nether" && world !== "world_the_end") world = "world";
++
++		me.defaultworld.defaultmap = me.defaultworld.maps[world] || me.defaultworld.defaultmap
++		me.defaultworld.center.x = x;
++		me.defaultworld.center.z = z;
++
++		me.options.defaultzoom = zoom;
+ 	},
+ 	initialize: function() {
+ 		var me = this;
+@@ -647,7 +637,6 @@ DynMap.prototype = {
  					me.lasttimestamp = update.timestamp;
  				}
  				if(me.options.confighash != update.confighash) {
