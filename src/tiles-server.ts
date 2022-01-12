@@ -14,6 +14,8 @@ import * as api from "./auth/auth-api";
 
 import redis from "./redis";
 
+const TILE_FORMATS = ["image/png", "image/jpeg", "image/webp"];
+
 const mapCache: LRUCache<string, DmMap> = new LRUCache({
     maxAge: 1000 * 60 * 60 * 2,
 });
@@ -62,7 +64,7 @@ export const tileServer = async (ctx: Koa.Context): Promise<void> => {
 
     const roundedDate = new Date(Math.floor(tile.lastUpdate.getTime() / 1000) * 1000);
 
-    ctx.type = "image/png";
+    ctx.type = TILE_FORMATS[tile.format] || "image/png";
     ctx.lastModified = roundedDate;
     ctx.set("Cache-Control", "private, must-revalidate, max-age=0");
 
