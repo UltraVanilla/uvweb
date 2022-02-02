@@ -1,0 +1,239 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>UltraVanilla Staff Applications</title>
+        <link href="/assets/ultravanilla.css" rel="stylesheet">
+        <style>
+            body, html {
+                margin: 0;
+                padding: 0;
+            }
+            body > * {
+                padding-left: 5%;
+                padding-right: 5%
+            }
+            .width-background {
+                background-color: #1c1c1c;
+            }
+            .width-background img {
+                margin-left: auto;
+                margin-right: auto;
+                display: block;
+                max-width: 100%;
+            }
+            body {
+                font-size: 1.25em;
+            }
+            .logo {
+                background-color: #1c1c1c;
+            }
+            .logo img {
+                width: 8%;
+                background-color: #1c1c1c;
+                display: block;
+                max-width: 100%;
+            }
+            input, textarea {
+                font-size: 1.0em;
+            }
+            .option {
+                background-color: #efefef;
+                padding: 10px;
+                margin-top: 15px;
+                margin-bottom: 15px;
+            }
+            input[type="checkbox"], input[type="radio"] {
+                width: 1.0em;
+                height: 1.0em;
+            }
+
+            ul.no-bullet li {
+                list-style-type: none;
+            }
+            .times-list {
+                display: inline-block;
+                vertical-align: top;
+            }
+            h2, h3, h4, h5, h6, ul {
+                margin-top: 4px;
+                margin-bottom: 4px;
+            }
+        </style>
+        <meta property="og:image" content="/assets/416.png">
+        <script type="text/javascript" src="/js/jquery-3.5.1.js"></script>
+    </head>
+    <body>
+        <div class="logo"><img src="/assets/416.png"></div>
+        <h1>UltraVanilla staff applications</h1>
+        <form action="/survey-submit/2022-staff-applications" method="post" name="staff-apps">
+            <p>UltraVanilla is a server that relies on an active staff team to enforce rules in a three year old world with no claims or block protection. We're looking for serious people who take the responsibilities seriously, but who are also participants in the community the way normal players are.</p>
+
+            <p>Do not ask staff to read your application. There are typically 20-40 people who apply &mdash; and we get around to reading every one of them.</p>
+
+            <p><label for="form-username">In-game username:</label>
+            <input type="text" id="form-username" name="username" placeholder="Herobrine" required></p>
+            <p><label><input type="checkbox" name="has-account" class="prerequisite" required> I have a stable &amp; secure Minecraft account only accessible by me.</label></p>
+            <p><label><input type="checkbox" name="will-secure-account" class="prerequisite" required> I'm willing to set up <a href="https://support.discord.com/hc/en-us/articles/219576828-Setting-up-Two-Factor-Authentication">2-factor authentication on Discord</a>, and <a href="https://www.minnesota.edu/about/policies-and-procedures/employee-computer-data-protectionscreen-locking-procedure-protecting">enable automatic screen locking on my PC</a> (if applicable.)</label></p>
+            <p><label><input type="checkbox" name="is-adult" class="prerequisite" required> I am 16 years or older</label></p>
+            <p><label><input type="checkbox" name="is-idiot" class="not-prerequisite"> I am looking to join staff to enhance my gameplay, for example to be able to easily teleport to my friends, or spawning in thousands of creepers and calling it a "gunpowder farm".</label></p>
+            
+            <p>Which position are you applying for?</p>
+
+            <p><label><input type="radio" name="which-position" value="moderator"> Moderator</label><br/>
+            <label><input type="radio" name="which-position" value="admin"> Admin</label><br/>
+            <label><input type="radio" name="which-position" value="dev"> Dev</label></p>
+
+            <div id="requirements-not-met" style="display: none;">
+                <h3>Sorry, you do not meet the requirements. Please review the above checkboxes.</h3>
+            </div>
+            <div id="admin-only" style="display: none;">
+                <h3>Sorry, we don't recruit for upper staff roles via this form. If you have special skills, contact lordpipe or Beeper, or consider contributing to our code repositories via GitHub.</h3>
+            </div>
+            <div id="moderator-only" style="display: none;">
+                <p>Why this server?</p>
+                <textarea rows="4" cols="80" name="why-this-server" required></textarea>
+
+
+                <p>What do you see yourself doing as moderator?</p>
+                <textarea rows="4" cols="80" name="what-do-you-see-yourself-doing" required></textarea>
+
+                <p>Optional: Have you moderated another internet community before? What was that like?</p>
+                <textarea rows="4" cols="80" name="community-moderation-experience" required></textarea>
+
+                <p>Optional: What do you think of staff? Is there anything about the way we do things that you wish to campaign to change or tweak?</p>
+                <textarea rows="4" cols="80" name="suggestions"></textarea>
+
+                <p>Do you have experience with the following? <em>Note: You will be given a chance to learn these things if you are recruited, and not all of these are things you will actually use &mdash; some are just nice to have.</em></p>
+                <p>
+        
+                    <ul class="no-bullet">
+                        <li><label><input type="checkbox" name="experience[]" value="commands-basic"> Basic vanilla commands like <code>/sethome</code>, <code>/tp</code>, <code>/msg</code>, etc.</label></li>
+                        <li><label><input type="checkbox" name="experience[]" value="commands-intermediate"> Intermediate vanilla commands like <code>/kill</code>, <code>/gamerule</code>, <code>/summon</code>, etc.</label></li>
+                        <li><label><input type="checkbox" name="experience[]" value="commands-advanced"> Advanced vanilla commands like <code>/tellraw</code>, <code>/clone</code>, etc.</label></li>
+                        <li><label><input type="checkbox" name="experience[]" value="commands-coreprotect"> I have used CoreProtect or Prism</label></li>
+                        <li><label><input type="checkbox" name="experience[]" value="commands-timings"> I have used PaperMC Timings to lag-hunt on a server</label></li>
+                        <li><label><input type="checkbox" name="experience[]" value="commands-configuration"> I have configured Spigot plugins for a server</label></li>
+                        <li><label><input type="checkbox" name="experience[]" value="commands-configuration"> I know my way around configuring Brewery recipes</label></li>
+                    </ul>
+                </p>
+
+                <p><strong>There are no right or wrong answers to these scenario questions &mdash; give your best guess or gut instinct.</strong></p>
+                <p>Hint: Include your thoughts on how you would investigate the situation and collect details.</p>
+                <p>SCENARIO 1: You see that somebody joins and they immediately start breaking signs and burning the maps. wat do?</p>
+                <textarea rows="4" cols="80" name="scenario-1" required></textarea>
+                <p>SCENARIO 2: You notice that the shopping district has been STOLEN from, some guy took like 50 diamonds from a bunch of shops. This person has been playing for a couple days now and doesn't seem to be malicious (such as also griefing etc). What do you do?</p>
+                <textarea rows="4" cols="80" name="scenario-2" required></textarea>
+                <p>SCENARIO 3: You notice that the shopping district has been STOLEN from, some guy took like 50 diamonds from a bunch of shops. You witness the person start flyhacking away. wyd?</p>
+                <textarea rows="4" cols="80" name="scenario-3" required></textarea>
+                <p>SCENARIO 4: Someone messages you that their crops or flowers were griefed or raided. What do you say to the player who messaged you, and what would you do to the person that messed with the flowers or crops?</p>
+                <textarea rows="4" cols="80" name="scenario-4" required></textarea>
+                <p>SCENARIO 5: What do you do in a scenario where a player (or group of players) are communicating in a way that may be inappropriate or might make others feel uncomfortable?</p>
+                <textarea rows="4" cols="80" name="scenario-5" required></textarea>
+                <p>SCENARIO 6: What if there is some banter going on between two individuals and they happen to say something very insulting or offensive to each other. Neither of them are actually upset about it though. What would you do?</p>
+                <textarea rows="4" cols="80" name="scenario-6" required></textarea>
+                <p>SCENARIO 7: The admins are being too strict, or too laid back. Or you have a problem with another staff member doing something disagreeable. How do you address this?</p>
+                <textarea rows="4" cols="80" name="scenario-7" required></textarea>
+
+                <p>What are your expected active hours? <br/> Doesn't need to be exact, just a general idea. Un-check any weekdays you will rarely be online.</p>
+                <p>
+                    <ul class="times-list no-bullet">
+                        <li><label><input checked type="checkbox" name="weekdays[]" value="Monday"> Monday</label></li>
+                        <li><label><input checked type="checkbox" name="weekdays[]" value="Tuesday"> Tuesday</label></li>
+                        <li><label><input checked type="checkbox" name="weekdays[]" value="Wednesday"> Wednesday</label></li>
+                        <li><label><input checked type="checkbox" name="weekdays[]" value="Thursday"> Thursday</label></li>
+                        <li><label><input checked type="checkbox" name="weekdays[]" value="Friday"> Friday</label></li>
+                        <li><label><input checked type="checkbox" name="weekdays[]" value="Saturday"> Saturday</label></li>
+                        <li><label><input checked type="checkbox" name="weekdays[]" value="Sunday"> Sunday</label></li>
+                    </ul>
+                    <ul class="times-list hours-list no-bullet">
+                        <li><label><input type="checkbox" name="times[]" value="0"></label></li>
+                        <li><label><input type="checkbox" name="times[]" value="1"></label></li>
+                        <li><label><input type="checkbox" name="times[]" value="2"></label></li>
+                        <li><label><input type="checkbox" name="times[]" value="3"></label></li>
+                        <li><label><input type="checkbox" name="times[]" value="4"></label></li>
+                        <li><label><input type="checkbox" name="times[]" value="5"></label></li>
+                        <li><label><input type="checkbox" name="times[]" value="6"></label></li>
+                        <li><label><input type="checkbox" name="times[]" value="7"></label></li>
+                        <li><label><input type="checkbox" name="times[]" value="8"></label></li>
+                        <li><label><input type="checkbox" name="times[]" value="9"></label></li>
+                        <li><label><input type="checkbox" name="times[]" value="10"></label></li>
+                        <li><label><input type="checkbox" name="times[]" value="11"></label></li>
+                        <li><label><input type="checkbox" name="times[]" value="12"></label></li>
+                        <li><label><input type="checkbox" name="times[]" value="13"></label></li>
+                        <li><label><input type="checkbox" name="times[]" value="14"></label></li>
+                        <li><label><input type="checkbox" name="times[]" value="15"></label></li>
+                        <li><label><input type="checkbox" name="times[]" value="16"></label></li>
+                        <li><label><input type="checkbox" name="times[]" value="17"></label></li>
+                        <li><label><input type="checkbox" name="times[]" value="18"></label></li>
+                        <li><label><input type="checkbox" name="times[]" value="19"></label></li>
+                        <li><label><input type="checkbox" name="times[]" value="20"></label></li>
+                        <li><label><input type="checkbox" name="times[]" value="21"></label></li>
+                        <li><label><input type="checkbox" name="times[]" value="22"></label></li>
+                        <li><label><input type="checkbox" name="times[]" value="23"></label></li>
+                    </ul>
+                </p>
+                <p>Other info about what times you can be online (optional): <input type="text" name="times-misc"></p>
+
+                <p><input type="submit" value="Submit"></p>
+                <p>You may use /token and resubmit this form with the same username to update your response.</p>
+            </div>
+        </form>
+<script>
+
+const adminOnly = document.getElementById("admin-only");
+const moderatorOnly = document.getElementById("moderator-only");
+const requirementsNotMet = document.getElementById("requirements-not-met");
+
+function update() {
+    const positionRadio = document.querySelector("input[name='which-position']:checked");
+    const position = positionRadio != null ? positionRadio.value : null;
+
+    const meetsRequirements = document.querySelectorAll(".prerequisite:checked").length === 3
+        && document.querySelectorAll(".not-prerequisite:checked").length === 0;
+
+    adminOnly.style.display = "none";
+    moderatorOnly.style.display = "none";
+    requirementsNotMet.style.display = "none";
+
+    if (!meetsRequirements && position === "moderator") {
+        requirementsNotMet.style.display = "block";
+        return;
+    }
+
+    if (position === "admin" || position === "dev") {
+        adminOnly.style.display = "block";
+    } else if (position === "moderator") {
+        moderatorOnly.style.display = "block";
+    }
+}
+
+update();
+
+document["staff-apps"]["which-position"].forEach(radio => {
+    radio.addEventListener("change", update);
+});
+document.querySelectorAll(".prerequisite, .not-prerequisite").forEach(checkbox => {
+    checkbox.addEventListener("change", update);
+});
+
+document.querySelectorAll(".hours-list label").forEach(label => {
+    const utcHour = label.firstChild.value;
+    const date = new Date();
+    date.setUTCHours(utcHour);
+    date.setUTCMinutes(0);
+    date.setUTCSeconds(0);
+    date.setUTCMilliseconds(0);
+    
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone.replace(/.*\//, "").replaceAll("_", " ");
+    let hours = date.getHours();
+    const ampm = hours >= 12 ? "pm" : "am";
+    hours %= 12;
+    hours = hours ? hours : 12
+
+    label.appendChild(document.createTextNode(` ${hours}${ampm} in ${timezone}`));
+});
+</script>
+    </body>
+</html>
