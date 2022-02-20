@@ -17,10 +17,10 @@ client.once("ready", async () => {
     let fetched;
     do {
         fetched = await activityChannel.messages.fetch({ limit: 100 });
-        try {
-            activityChannel.bulkDelete(fetched);
-        } catch (err) {}
-    } while (fetched.size >= 2);
+        for (const message of fetched) {
+            await message[1].delete();
+        }
+    } while (fetched.size > 0);
 
     const alreadyInChannel = new Map();
 
@@ -54,7 +54,7 @@ client.once("ready", async () => {
 
 async function getLatestSessions() {
     const sessions = await CoreProtectSession.query()
-        .where("time", ">", (Date.now() - 1000 * 60 * 60 * 24 * 7) / 1000)
+        .where("time", ">", (Date.now() - 1000 * 60 * 60 * 24 * 30) / 1000)
         .orderBy("rowid", "desc")
         .withGraphFetched("userAccount");
 
