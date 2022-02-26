@@ -5,14 +5,109 @@ import schedule from "node-schedule";
 
 dotenv.config();
 
+const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
+const ACTIVITY_CHANNEL = process.env.ACTIVITY_CHANNEL;
+const ALERTS_ROLE = process.env.ALERTS_ROLE;
+
+const detectionCategories = [
+    {
+        name: "Racism",
+        matches: [
+            /\b(s[a4]nd)?n[il41]g{1,2}(l[e3]t|[e3]r|[a4]|n[o0]g)?s?\b/,
+            /\bbeaners?\b/,
+            /\bc[o0]{2}ns?\b/,
+            /\bch[i1l]nks?\b/,
+            /\bnegro[id]{0,2}s?\b/,
+        ],
+    },
+    {
+        name: "Homophobia",
+        matches: [/f[a@4](g{1,2}|qq)([e3il1o0]t{1,2}(ry|r[i1l]e)?)?s?\b/, /\bcock ?suckers?\b/, /\bdykes?\b/],
+    },
+    {
+        name: "Transphobia",
+        matches: [/\btr[a4]n{1,2}([i1l][e3]|y|[e3]r)s?\b/, /\bshemales?\b/],
+    },
+    {
+        name: "Mysogyny",
+        matches: [/\bslut\w*\b/, /\bwhore\w*\b/],
+    },
+    {
+        name: "Ableism",
+        matches: [/\bretards?\b/],
+    },
+    {
+        name: "Religious Bigotry",
+        matches: [
+            /\bk[il1y]k[e3](ry|rie)?s?\b/,
+            /\bjew(boy|let|bacca)s?\b/,
+            /\b(rag|towel)heads?\b/,
+            /\bgoat ?fuckers?\b/,
+            /\bsodomites?\b/,
+        ],
+    },
+];
+
 const client = new discord.Client({
     intents: [discord.Intents.FLAGS.GUILDS, discord.Intents.FLAGS.GUILD_MESSAGES],
 });
 
-client.login(process.env.DISCORD_TOKEN);
+client.login(DISCORD_TOKEN);
 
 client.once("ready", async () => {
-    const activityChannel = client.channels.cache.get(process.env.ACTIVITY_CHANNEL as string) as discord.TextChannel;
+    const activityChannel = client.channels.cache.get(ACTIVITY_CHANNEL as string) as discord.TextChannel;
+
+    client.on("messageCreate", async (message) => {
+        if (message.author.id === client.user?.id) return;
+
+        console.log(message);
+
+        for (const category of detectionCategories) {
+            for (const regex of category.matches) {
+                const content = message.content
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .replace(/[\uff01-\uff5e]/g, (ch) => String.fromCharCode(ch.charCodeAt(0) - 0xfee0));
+
+                const match = content.match(regex);
+                if (match == null) continue;
+
+                const rawTimestamp = message.createdTimestamp;
+                const timestamp = Math.floor(rawTimestamp / 1000);
+
+                const contentHighlighted = content.replace(match[0], `**${match[0]}**`);
+
+                const contentsQuoted = contentHighlighted
+                    .replaceAll("http", "hxxp")
+                    .replaceAll(".", " . ")
+                    .split("\n")
+                    .map((contents) => `> "${contents}"`)
+                    .join("\n");
+
+                const lineNumber = content.slice(0, match.index).match(/\n/g)?.length || 0;
+                const actualLine = content.split("\n")[lineNumber];
+
+                const commandIssuer = actualLine.match(/ ([^ ]+) issued server command/)?.[1];
+                const consoleUsername = actualLine.match(/\[.+\] <([^ ]+)>/)?.[1];
+                const chatUsername = actualLine.match(/([^ ]+) »/)?.[1];
+
+                const trueUsername = commandIssuer || consoleUsername || chatUsername;
+
+                await activityChannel.send(
+                    `<@&${ALERTS_ROLE}>` +
+                        `\n**Type:** Message detection (5c381b3d)` +
+                        `\n**Detection category:** ${category.name}` +
+                        `\n**Sender:** <@${message.author.id}> / ${message.author.username}#${message.author.discriminator}` +
+                        (trueUsername != null ? `\n**Possible true username:** ${trueUsername}` : "") +
+                        `\n**Timestamp:** <t:${timestamp}> / <t:${timestamp}:R> / ${rawTimestamp}` +
+                        `\n**Channel:** <#${message.channelId}>` +
+                        `\n**Contents:** (canonicalized to remove links and special characters)` +
+                        `\n${contentsQuoted}` +
+                        `\n**Permalink:** https://discord.com/channels/${message.guildId}/${message.channelId}/${message.id}`,
+                );
+            }
+        }
+    });
 
     let fetched;
     do {
@@ -41,7 +136,8 @@ client.once("ready", async () => {
             const timestamp = session.time.getTime() / 1000;
 
             const message = await activityChannel.send(
-                `**${session.username}** <t:${timestamp}> (<t:${timestamp}:R>)` +
+                `**Type:** Player leave or join (3e3817dc)` +
+                    `\n**${session.username}** <t:${timestamp}> (<t:${timestamp}:R>)` +
                     ` \`\`\`/co l time:7d user:${session.username} action:container\n/co l time:7d user:${session.username} action:block\`\`\``,
             );
             alreadyInChannel.set(session.username, { session, message });
@@ -49,7 +145,7 @@ client.once("ready", async () => {
     }
 
     schedule.scheduleJob("*/5 * * * *", job);
-    await job();
+    job();
 });
 
 async function getLatestSessions() {
