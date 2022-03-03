@@ -16,6 +16,7 @@ export default class DmTile extends Model {
         lastUpdate: "LastUpdate",
         format: "Format",
         image: "Image",
+        newImage: "NewImage",
     });
     static tableName = "dm_Tiles";
     static idColumn = ["MapID", "x", "y", "zoom"];
@@ -28,6 +29,7 @@ export default class DmTile extends Model {
     lastUpdate!: Date;
     format!: number;
     image!: Buffer;
+    newImage!: Buffer;
 
     map!: DmMap;
 
