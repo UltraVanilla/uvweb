@@ -41,7 +41,7 @@ export async function getMap(match: { worldID: string; mapID: string }): Promise
 export const tileServer = async (ctx: Koa.Context): Promise<void> => {
     const { worldID, mapID, coords } = ctx.params;
 
-    const cacheId = `tile:${worldID}:${mapID}:${coords}`;
+    const cacheId = `tile:${worldID}:${coords.match(/[^\.]*/)}`;
 
     let tile = tileCache.get(cacheId);
     if (tile == null) {
@@ -100,7 +100,9 @@ class WorldUpdateCacher extends (EventEmitter as new () => TypedEmitter<WorldUpd
     }
 
     async loop() {
-        while (true) {
+        let last = 0;
+
+        setInterval(async () => {
             let lateby = 1000;
             try {
                 const res = (await (
@@ -108,20 +110,24 @@ class WorldUpdateCacher extends (EventEmitter as new () => TypedEmitter<WorldUpd
                         timeout: 7500,
                     })
                 ).json()) as api.WorldPing;
+
+                if (res.timestamp === last) return;
+                last = res.timestamp;
+
                 this.processUpdates(res.updates);
                 this.emit("update", res);
-
-                lateby = Math.max(0, Date.now() - res.timestamp);
             } catch (err) {
                 // silent fail
             }
-            await sleep(Math.max(1000 - lateby, 200));
-        }
+        }, 500);
     }
 
     processUpdates(updates: api.WorldUpdate[]) {
         for (const update of updates) {
-            if (update.type == "tile") tileCache.del(`/tiles/${this.worldName}/${update.name}`);
+            if (update.type != "tile") continue;
+            const tileCoords = update.name.match(/.*\/.*\/(.*)\..*/)?.[1];
+            const cacheId = `tile:${this.worldName}:${tileCoords}`;
+            tileCache.del(cacheId);
         }
     }
 }

@@ -684,7 +684,9 @@ DynMap.prototype = {
 
 						swtch(update.type, {
 							tile: function() {
-								me.maptype.updateNamedTile(update.name, update.timestamp);
+								setTimeout(() => {
+									me.maptype.updateNamedTile(update.name, update.timestamp);
+								}, 1000);
 							},
 							playerjoin: function() {
 								$(me).trigger('playerjoin', [ update.playerName ]);

@@ -1,5 +1,5 @@
 diff --git a/DynmapCore/src/main/resources/extracted/web/js/chat.js b/DynmapCore/src/main/resources/extracted/web/js/chat.js
-index 14a8501c..60fc95e2 100644
+index e71f03ef..60fc95e2 100644
 --- a/DynmapCore/src/main/resources/extracted/web/js/chat.js
 +++ b/DynmapCore/src/main/resources/extracted/web/js/chat.js
 @@ -4,13 +4,17 @@ componentconstructors['chat'] = function(dynmap, configuration) {
@@ -22,6 +22,15 @@ index 14a8501c..60fc95e2 100644
  			}
  		});
  	});
+@@ -26,7 +30,7 @@ componentconstructors['chat'] = function(dynmap, configuration) {
+ 			var data = '{"name":'+JSON.stringify(pname?pname:"")+',"message":'+JSON.stringify(message)+'}';
+ 			$.ajax({
+ 				type: 'POST',
+-		        contentType: "application/json; charset=utf-8",
++                       contentType: "application/json; charset=utf-8",
+ 				url: config.url.sendmessage,
+ 				data: data,
+ 				dataType: 'json',
 diff --git a/DynmapCore/src/main/resources/extracted/web/js/dynmaputils.js b/DynmapCore/src/main/resources/extracted/web/js/dynmaputils.js
 index 8884a422..f268350f 100644
 --- a/DynmapCore/src/main/resources/extracted/web/js/dynmaputils.js
@@ -47,7 +56,7 @@ index 8884a422..f268350f 100644
  		}
  
 diff --git a/DynmapCore/src/main/resources/extracted/web/js/map.js b/DynmapCore/src/main/resources/extracted/web/js/map.js
-index 0bbcd9f7..a7d37d3b 100644
+index 0bbcd9f7..c824dc3f 100644
 --- a/DynmapCore/src/main/resources/extracted/web/js/map.js
 +++ b/DynmapCore/src/main/resources/extracted/web/js/map.js
 @@ -99,33 +99,23 @@ DynMap.prototype = {
@@ -109,3 +118,14 @@ index 0bbcd9f7..a7d37d3b 100644
  					return;
  				}
  				me.playerfield.text(me.options['msg-players'] + " [" + update.currentcount + "/" + me.options.maxcount + "]");
+@@ -695,7 +684,9 @@ DynMap.prototype = {
+ 
+ 						swtch(update.type, {
+ 							tile: function() {
+-								me.maptype.updateNamedTile(update.name, update.timestamp);
++								setTimeout(() => {
++									me.maptype.updateNamedTile(update.name, update.timestamp);
++								}, 1000);
+ 							},
+ 							playerjoin: function() {
+ 								$(me).trigger('playerjoin', [ update.playerName ]);
