@@ -70,7 +70,8 @@ const router = new Router();
 router.get("/", pageModifier);
 
 router.get("/tiles/:worldID/:mapID/:region/:coords", tileServer);
-router.get("/up/world/:world/:time", worldUpdates);
+//TODO: Cache updates in a way that isn't broken
+// router.get("/up/world/:world/:time", worldUpdates);
 router.get("/account-info", ...auth.accountInfo);
 router.get("/login/:token", ...auth.login);
 router.post("/login/:token", bodyParser(), ...auth.login);
