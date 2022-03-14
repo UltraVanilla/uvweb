@@ -14,8 +14,6 @@ function parseData(data: string): LogEntry[] {
         );
     });
 
-    console.log(uncombinedLogs);
-
     let logs: string[] = [];
 
     let skipped = false;
@@ -38,8 +36,6 @@ function parseData(data: string): LogEntry[] {
 
         logs.push(newLine);
     });
-
-    console.log(logs);
 
     let lastCoords: undefined | string;
     logs = logs.map((line) => {
@@ -105,16 +101,16 @@ function parseData(data: string): LogEntry[] {
 
         const timestamp = new Date(newTime);
 
-        const isRolledBack = text.match(/\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago §f- §m/) != null;
-        console.log(text);
+        const isRolledBack =
+            text.match(/\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago §.. (§f)?§m/) != null;
         const username = text.match(
-            /\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago ?§f ?- (§m)?([^§ ]*):?§f/,
+            /\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago §.. (§m)?([^§ ]*):?(§f)/,
         )![2];
         let action: string;
         try {
             action = text.match(
-                /\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago §f- .*§f(§m)? ?(added|removed|dropped|picked up|placed|broke|clicked|killed)/,
-            )![2];
+                /\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago §.. .*(§f)?(§m)? ?(added|removed|dropped|picked up|placed|broke|clicked|killed)/,
+            )![3];
         } catch (err) {
             // sign has a totally different formatting, too much a pain in the ass to detect
             action = "sign";
@@ -130,15 +126,14 @@ function parseData(data: string): LogEntry[] {
                 direction = "-";
             }
 
-            console.log(text);
             const qty = parseInt(
                 text.match(
-                    /\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago §f- .*§f(§m)? ?(added|removed|dropped|picked up) x(\d+)/,
-                )![3],
+                    /\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago §.. .*(§f)?(§m)? ?(added|removed|dropped|picked up) x(\d+)/,
+                )![4],
             );
             const subject = text.match(
-                /\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago §f- .*§f(§m)? ?(added|removed|dropped|picked up) x\d+ (§m)?(.*)§f/,
-            )![4];
+                /\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago §.. .*(§f)?(§m)? ?(added|removed|dropped|picked up) x\d+ (§m)?(.*)§f/,
+            )![5];
 
             const net = direction === "+" ? qty : -qty;
 
@@ -154,8 +149,8 @@ function parseData(data: string): LogEntry[] {
 
         if (action === "clicked" || action === "broke" || action === "placed") {
             const subject = text.match(
-                /\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago §f- .* §f(§m)?(clicked|broke|placed) (.*)§f/,
-            )![3];
+                /\[.*\] \[Render thread\/INFO\]: \[CHAT\] \d*\.?\d*\/. ago §.. .* (§f)?(§m)?(clicked|broke|placed) (§m)?(.*)§f/,
+            )![5];
 
             let direction: "+" | "-" | undefined = undefined;
             if (action === "placed") {
@@ -169,7 +164,6 @@ function parseData(data: string): LogEntry[] {
         const secondLine = text.match(/.*\n(.*)/);
         let location;
         if (secondLine) {
-            console.log(text);
             const coords = text.match(
                 /\[.*\] \[Render thread\/INFO\]: \[CHAT\] §f        [ ]+  §7.*\(x(-?\d+)\/y(-?\d+)\/z(-?\d+)\/([a-z_]+)\)/,
             )!;
