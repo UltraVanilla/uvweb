@@ -143,23 +143,13 @@ window.addEventListener("load", function () {
                 const contents = $(
                     <div>
                         <p>UltraVanilla extensions for Dynmap made by lordpipe released into public domain</p>
-                        <a
-                            className="link"
-                            href="https://github.com/lordofpipes/uvdynmap"
-                            target="blank"
-                            rel="noreferrer"
-                        >
-                            uvdynmap on GitHub
+                        <a className="link" href="https://github.com/lordofpipes/uvweb" target="blank" rel="noreferrer">
+                            uvweb on GitHub
                         </a>
 
                         <p>Dynmap by Mikeprimm</p>
                         <a className="link" href="https://github.com/webbukkit/dynmap" target="blank" rel="noreferrer">
                             dynmap on GitHub
-                        </a>
-
-                        <p>Other open source dependencies</p>
-                        <a className="link" href="https://paste.rs/bRI" target="blank" rel="noreferrer">
-                            3rd Party Licenses
                         </a>
 
                         <h4>Server Plugins</h4>
@@ -175,9 +165,10 @@ window.addEventListener("load", function () {
                         </a>
 
                         <p>
-                            All plugins we use: Brewery, Chairs, CoreProtect, DiscordSRV, dynmap, Dynmap-WorldGuard,
-                            FoundDiamonds, HeadDatabase, LimitPillagers, LuckPerms, ProtocolLib, SuperVanish,
-                            TimedRestart, UltraVanilla, Vault, WorldEdit, WorldGuard
+                            ArmorStandTools, Brewery, Chairs, ClientDetector, CoreProtect, DiscordSRV, dynmap,
+                            floodgate, FoundDiamonds, Geyser-Spigot, Insights, LessEntropy, LimitPillagers, LuckPerms,
+                            OpenInv, SuperVanish, TimedRestart, UltraBlocks, UltraVanilla, Vault, VaultJwt,
+                            ViaBackwards, ViaVersion, WorldEdit
                         </p>
                     </div>,
                 );
@@ -277,8 +268,68 @@ window.addEventListener("load", function () {
                                         Cancel coreprotect command
                                     </button>
                                 </div>
+                                <div className="link-container">
+                                    <button className="link power-controls">Server power controls</button>
+                                </div>
                             </>,
                         );
+
+                        contents.find(".power-controls").click(async () => {
+                            const contents = $(
+                                <div>
+                                    <h3>Server power controls</h3>
+                                    <div>
+                                        <button className="link" data-signal="start">
+                                            Start
+                                        </button>
+                                        <button className="link" data-signal="restart">
+                                            Restart
+                                        </button>
+                                        <button className="link" data-signal="stop">
+                                            Stop
+                                        </button>
+                                    </div>
+                                    <h4>Do not use Kill unless you have waited 1 minute after Stop!</h4>
+                                    <div className="link-container">
+                                        <button className="link" data-signal="kill">
+                                            Kill
+                                        </button>
+                                    </div>
+                                </div>,
+                            );
+                            jsPanel.create({
+                                content: contents[0],
+                                headerTitle: "Server Power Controls",
+                                position: "center",
+                                panelSize: "440 260",
+                            });
+
+                            contents.find(".link").click(async (evt) => {
+                                const signal = evt.target.dataset["signal"];
+                                const res = await fetch(`/staff/power/${signal}`, {
+                                    method: "POST",
+                                });
+
+                                const pterodactylRes = await res.text();
+                                const panel = jsPanel.create({
+                                    content: (
+                                        <>
+                                            <p>Attempted signal {signal}</p>
+                                            <p>
+                                                <strong>Pterodactyl result:</strong>{" "}
+                                                {pterodactylRes[0] === "2" ? "Success" : "Failure"} ({pterodactylRes})
+                                            </p>
+                                        </>
+                                    ),
+                                    headerTitle: "Server Power Controls",
+                                    position: "center",
+                                    panelSize: "410 150",
+                                });
+                                setTimeout(() => {
+                                    panel.close();
+                                }, 3000);
+                            });
+                        });
 
                         contents.find(".cancel-coreprotect-command").click(async () => {
                             const cancelRes = await fetch("/staff/cancel-coreprotect-command", { method: "POST" });
@@ -330,7 +381,7 @@ window.addEventListener("load", function () {
                     content: contents[0],
                     headerTitle: "Account",
                     position: "center",
-                    panelSize: "430 440",
+                    panelSize: "430 490",
                     onclosed() {
                         panel = null;
                     },

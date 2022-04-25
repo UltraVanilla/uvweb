@@ -1,13 +1,31 @@
 import Router from "koa-router";
+import bodyParser from "koa-bodyparser";
 import cheerio from "cheerio";
 
 import Action from "./model/Action";
 import SurveySubmission from "./model/SurveySubmission";
 import knex from "./knex";
+import fetch from "node-fetch";
 
 import * as api from "./auth/auth-api";
 
 const router = new Router();
+
+router.post("/power/:signal", async (ctx) => {
+    const res = await fetch(`${process.env.PTERODACTYL_SERVER_URL}/power`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.PTERODACTYL_KEY}`,
+        },
+        body: JSON.stringify({
+            signal: ctx.params.signal,
+        }),
+    });
+
+    ctx.body = `${res.status} ${res.statusText}`;
+});
 
 router.get("/actions", async (ctx) => {
     const $ = cheerio.load(`
