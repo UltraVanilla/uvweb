@@ -8,7 +8,7 @@ for (const proposal of proposals) {
 
     const anonymousCheckbox = proposal.getElementsByClassName("anonymous-checkbox")[0];
 
-    function update() {
+    const update = () => {
         if (textarea.value === "") {
             hidden.style.display = "none";
         } else {
@@ -41,7 +41,7 @@ for (const proposal of proposals) {
         inner.innerHTML = marked.parse(textarea.value);
 
         preview.appendChild(inner);
-    }
+    };
 
     proposal.querySelectorAll("input,textarea").forEach((input) => {
         input.addEventListener("change", update);
