@@ -27,7 +27,7 @@ export default [
         if (surveySubmission.id != null && login == null)
             ctx.throw(
                 400,
-                "Response has already been submitted for this username, login with /token to make changes to it",
+                "Response has already been submitted for this username, login with /token to make changes to it. Once you have done this, refresh this page or click the 'back' button in your web browser to resubmit.",
             );
 
         delete form.username;
