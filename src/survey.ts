@@ -34,6 +34,7 @@ export default [
         surveySubmission.coreProtectUser = user;
         surveySubmission.surveyId = surveyId;
         surveySubmission.responses = form;
+        surveySubmission.time = new Date();
 
         await SurveySubmission.query().upsertGraph(surveySubmission, { relate: true });
 
