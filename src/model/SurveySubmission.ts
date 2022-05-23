@@ -5,7 +5,6 @@ import { hasDate, hasEmbeddedJson } from "../util/db";
 import Survey from "./Survey";
 import CoreProtectUser from "./CoreProtectUser";
 
-@hasDate("time")
 @hasEmbeddedJson("responses")
 export default class SurveySubmission extends Model {
     static columnNameMappers = snakeCaseMappers();
