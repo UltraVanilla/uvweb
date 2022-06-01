@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Server power controls</title>
+        <link href="/assets/ultravanilla.css" rel="stylesheet">
+        <style>
+            body, html {
+                margin: 0;
+                padding: 0;
+            }
+            body > * {
+                padding-left: 5%;
+                padding-right: 5%
+            }
+            hr {
+                border: 1px solid #bababa;
+            }
+            .width-background {
+                background-color: #1c1c1c;
+            }
+            .width-background img {
+                margin-left: auto;
+                margin-right: auto;
+                display: block;
+                max-width: 100%;
+            }
+            body {
+                font-size: 1.25em;
+            }
+            .logo {
+                background-color: #1c1c1c;
+            }
+            .logo img {
+                width: 8%;
+                background-color: #1c1c1c;
+                display: block;
+                max-width: 100%;
+            }
+            input, textarea {
+                font-size: 1.0em;
+            }
+            .option {
+                background-color: #efefef;
+                padding: 10px;
+                margin-top: 15px;
+                margin-bottom: 15px;
+            }
+            input[type="checkbox"], input[type="radio"] {
+                width: 1.0em;
+                height: 1.0em;
+            }
+
+            ul.no-bullet li {
+                list-style-type: none;
+            }
+        </style>
+        <meta property="og:image" content="/assets/416.png">
+        <meta property="og:title" content="Server power controls">
+        <meta name="description" content="Restart, stop, kill the server">
+        <meta property="og:description" content="Restart, stop, kill the server">
+        <script type="text/javascript" src="/js/jquery-3.5.1.js"></script>
+    </head>
+    <body>
+        <div class="logo"><img src="/assets/416.png"></div>
+        <h1>Server power controls</h1>
+        <div>
+            <button class="link" data-signal="start">
+                Start
+            </button>
+            <button class="link" data-signal="restart">
+                Restart
+            </button>
+            <button class="link" data-signal="stop">
+                Stop
+            </button>
+        </div>
+        <h4>Do not use Kill unless you have waited 1 minute after Stop!</h4>
+        <div class="link-container">
+            <button class="link" data-signal="kill">
+                Kill
+            </button>
+        </div>
+        <script src="main.js"></script>
+    </body>
+</html>
