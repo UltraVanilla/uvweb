@@ -5,9 +5,10 @@ import schedule from "node-schedule";
 
 dotenv.config();
 
-const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
-const ACTIVITY_CHANNEL = process.env.ACTIVITY_CHANNEL;
-const ALERTS_ROLE = process.env.ALERTS_ROLE;
+const DISCORD_TOKEN = process.env.DISCORD_TOKEN as string;
+const ACTIVITY_CHANNEL = process.env.ACTIVITY_CHANNEL as string;
+const ALERTS_ROLE = process.env.ALERTS_ROLE as string;
+const PING_FORWARD = JSON.parse(process.env.PING_FORWARD!) as { [name: string]: { channels: string[]; text: string } };
 
 const detectionCategories = [
     {
@@ -48,19 +49,49 @@ const detectionCategories = [
     },
 ];
 
+const lastForwardPings: { [id: string]: Date } = {};
+
 const client = new discord.Client({
-    intents: [discord.Intents.FLAGS.GUILDS, discord.Intents.FLAGS.GUILD_MESSAGES],
+    intents: [discord.GatewayIntentBits.Guilds, discord.GatewayIntentBits.GuildMessages],
 });
+
+// const { Client, GatewayIntentBits } = require("discord.js");
+// const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.login(DISCORD_TOKEN);
 
 client.once("ready", async () => {
-    const activityChannel = client.channels.cache.get(ACTIVITY_CHANNEL as string) as discord.TextChannel;
+    const activityChannel = client.channels.cache.get(ACTIVITY_CHANNEL) as discord.TextChannel;
 
     client.on("messageCreate", async (message) => {
         if (message.author.id === client.user?.id) return;
 
-        console.log(message);
+        for (const role of message.mentions.roles.values()) {
+            const pingForwardConfiguration = PING_FORWARD[role.name];
+            if (pingForwardConfiguration != null) {
+                if (!message.author.bot) {
+                    const last = lastForwardPings[message.author.id];
+                    if (last != null && last.getTime() > Date.now() - 3 * 60 * 60 * 1000) {
+                        const guildMember = message.guild!.members.cache.get(message.author.id);
+                        try {
+                            if (guildMember != null) await guildMember.timeout(3 * 60 * 60 * 1000);
+                        } catch (err) {}
+                        message.reply(
+                            "Muted for ping spam. Please do not ping any self-assign roles twice in 3 hours.",
+                        );
+                    }
+                    lastForwardPings[message.author.id] = new Date();
+                }
+
+                const link = `https://discord.com/channels/${message.guildId}/${message.channelId}/${message.id}`;
+                const forwardMessage = `${pingForwardConfiguration.text}, **@${role.name}** has been pinged in <#${message.channelId}>\n${link}`;
+                for (const channelId of pingForwardConfiguration.channels) {
+                    const channel = client.channels.cache.get(channelId) as discord.TextChannel;
+                    if (message.channel.id === channelId) continue;
+                    channel.send(forwardMessage);
+                }
+            }
+        }
 
         for (const category of detectionCategories) {
             for (const regex of category.matches) {
