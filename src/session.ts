@@ -10,12 +10,6 @@ import * as uuid from "uuid";
 
 import * as crypto from "crypto";
 
-declare module "koa-session" {
-    interface opts {
-        autoCommit: boolean;
-    }
-}
-
 export function configureSessions(app: Koa): Koa.Middleware {
     const store = redisStore({
         client: redis,
