@@ -13,7 +13,9 @@
                 "src/types/*"
             ]
         },
-        "lib": ["ES2018", "DOM", "DOM.Iterable"],
+        "lib": ["ES2018", "DOM", "DOM.Iterable", "ES2021.String"],
+
+        "incremental": true,
 
         "noImplicitAny": true,
         "strictNullChecks": true,
