@@ -517,7 +517,9 @@ window.addEventListener("load", function () {
             });
 
             window.addEventListener("hashchange", readUrlCoords);
-            readUrlCoords();
+            setTimeout(() => {
+                readUrlCoords();
+            }, 512);
             function readUrlCoords() {
                 if (avoidUpdating) {
                     avoidUpdating = false;
@@ -548,6 +550,9 @@ window.addEventListener("load", function () {
         {
             $(".coord-control-label").text("Mouse Location:");
             $(".coord-control").attr("data-toggle", "mouse-location");
+            $(".largeclock").attr("data-toggle", "large-clock");
+            $(".leaflet-control-layers").attr("data-toggle", "layers-button");
+            $(".leaflet-control-zoom").attr("data-toggle", "zoom-buttons");
 
             const centerCoords = $(
                 <div className="coord-control coord-control-center leaflet-control" data-toggle="center-coords">
