@@ -21,13 +21,16 @@ const $ = window.$;
 function waitForDynmap() {
     return new Promise((resolve) => {
         // yup
-        const timer = setInterval(() => {
-            if (window.dynmap != null) {
-                clearInterval(timer);
-                dynmap = window.dynmap;
-                resolve(dynmap);
-            }
-        }, 60);
+        const loop = () =>
+            requestAnimationFrame(() => {
+                if (window.dynmap != null) {
+                    dynmap = window.dynmap;
+                    resolve(dynmap);
+                } else {
+                    loop();
+                }
+            });
+        loop();
     });
 }
 
@@ -52,12 +55,23 @@ window.addEventListener("load", function () {
     loadAnimationController.load("firstupdate");
 
     waitForDynmap().then(() => {
-        $(dynmap).one("worldupdating", () => {
+        let loadConditionMarkers = false;
+        let loadConditionUpdated = false;
+        $(dynmap).one("markersupdated", (a) => {
+            loadConditionMarkers = true;
+            if (loadConditionMarkers && loadConditionUpdated) startLoad();
+        });
+        $(dynmap).one("worldupdating", (a) => {
+            loadConditionUpdated = true;
+            if (loadConditionMarkers && loadConditionUpdated) startLoad();
+        });
+
+        function startLoad() {
             map = window.map;
             loadAnimationController.finish("firstupdate");
             // once dynmap starts, we can start our extensions
             loadUltraVanilla();
-        });
+        }
 
         $(dynmap).bind("load-from-center", () => {
             loadAnimationController.load("tiles");
@@ -72,6 +86,10 @@ window.addEventListener("load", function () {
         jsPanel.ziBase = 1000;
 
         const header = document.getElementsByClassName("header")[0];
+
+        if (dynmap.worlds["world_nether"] != null && dynmap.worlds["world_nether"].maps["nether_roof"] != null) {
+            dynmap.worlds["world_nether"].defaultmap = dynmap.worlds["world_nether"].maps["nether_roof"];
+        }
 
         // inject crosshairs
         $(
@@ -517,9 +535,7 @@ window.addEventListener("load", function () {
             });
 
             window.addEventListener("hashchange", readUrlCoords);
-            setTimeout(() => {
-                readUrlCoords();
-            }, 512);
+            readUrlCoords();
             function readUrlCoords() {
                 if (avoidUpdating) {
                     avoidUpdating = false;
