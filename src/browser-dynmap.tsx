@@ -87,8 +87,66 @@ window.addEventListener("load", function () {
 
         const header = document.getElementsByClassName("header")[0];
 
-        if (dynmap.worlds["world_nether"] != null && dynmap.worlds["world_nether"].maps["nether_roof"] != null) {
-            dynmap.worlds["world_nether"].defaultmap = dynmap.worlds["world_nether"].maps["nether_roof"];
+        // nether handling
+        {
+            if (dynmap.worlds["world_nether"] != null && dynmap.worlds["world_nether"].maps["nether_roof"] != null) {
+                dynmap.worlds["world_nether"].defaultmap = dynmap.worlds["world_nether"].maps["nether_roof"];
+            }
+
+            const netherRoof = $(".leaflet-control-layers-overlays")
+                .find("span:contains('NetherRoof')")
+                .parent()
+                .find("input");
+            const netherMidLevel = $(".leaflet-control-layers-overlays")
+                .find("span:contains('Nether Mid Level')")
+                .parent()
+                .find("input");
+            const netherUpperLevel = $(".leaflet-control-layers-overlays")
+                .find("span:contains('Nether Upper Level')")
+                .parent()
+                .find("input");
+            const netherLowerLevel = $(".leaflet-control-layers-overlays")
+                .find("span:contains('Nether Lower Level')")
+                .parent()
+                .find("input");
+
+            if (
+                netherRoof.length != 0 &&
+                netherMidLevel.length != 0 &&
+                netherUpperLevel.length != 0 &&
+                netherLowerLevel.length != 0
+            ) {
+                $(dynmap).on("mapchanged", () => {
+                    const curMap = `${dynmap.world.name}:${dynmap.maptype.options.name}`;
+                    if (curMap === "world_nether:flat") {
+                        if (netherRoof.is(":checked")) {
+                            netherRoof.click();
+                        }
+                        if (!netherMidLevel.is(":checked")) {
+                            netherMidLevel.click();
+                        }
+                        if (!netherUpperLevel.is(":checked")) {
+                            netherUpperLevel.click();
+                        }
+                        if (!netherLowerLevel.is(":checked")) {
+                            netherLowerLevel.click();
+                        }
+                    } else if (curMap === "world_nether:nether_roof") {
+                        if (!netherRoof.is(":checked")) {
+                            netherRoof.click();
+                        }
+                        if (netherMidLevel.is(":checked")) {
+                            netherMidLevel.click();
+                        }
+                        if (netherUpperLevel.is(":checked")) {
+                            netherUpperLevel.click();
+                        }
+                        if (netherLowerLevel.is(":checked")) {
+                            netherLowerLevel.click();
+                        }
+                    }
+                });
+            }
         }
 
         // inject crosshairs
