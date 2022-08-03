@@ -32,7 +32,7 @@ index e71f03ef..60fc95e2 100644
  				data: data,
  				dataType: 'json',
 diff --git a/DynmapCore/src/main/resources/extracted/web/js/dynmaputils.js b/DynmapCore/src/main/resources/extracted/web/js/dynmaputils.js
-index 8884a422..f268350f 100644
+index 936664aa..6af90c12 100644
 --- a/DynmapCore/src/main/resources/extracted/web/js/dynmaputils.js
 +++ b/DynmapCore/src/main/resources/extracted/web/js/dynmaputils.js
 @@ -207,13 +207,18 @@ var DynmapTileLayer = L.TileLayer.extend({
@@ -56,7 +56,7 @@ index 8884a422..f268350f 100644
  		}
  
 diff --git a/DynmapCore/src/main/resources/extracted/web/js/map.js b/DynmapCore/src/main/resources/extracted/web/js/map.js
-index 0bbcd9f7..c824dc3f 100644
+index a0ec24b6..676f9f42 100644
 --- a/DynmapCore/src/main/resources/extracted/web/js/map.js
 +++ b/DynmapCore/src/main/resources/extracted/web/js/map.js
 @@ -99,33 +99,23 @@ DynMap.prototype = {
