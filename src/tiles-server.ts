@@ -41,7 +41,7 @@ export async function getMap(match: { worldID: string; mapID: string }): Promise
 export const tileServer = async (ctx: Koa.Context): Promise<void> => {
     const { worldID, mapID, coords } = ctx.params;
 
-    const cacheId = `tile:${worldID}:${coords.match(/[^\.]*/)}`;
+    const cacheId = `tile:${worldID}:${mapID}:${coords.match(/[^\.]*/)}`;
 
     let tile = tileCache.get(cacheId);
     if (tile == null) {
@@ -126,7 +126,8 @@ class WorldUpdateCacher extends (EventEmitter as new () => TypedEmitter<WorldUpd
         for (const update of updates) {
             if (update.type != "tile") continue;
             const tileCoords = update.name.match(/.*\/.*\/(.*)\..*/)?.[1];
-            const cacheId = `tile:${this.worldName}:${tileCoords}`;
+            const mapID = update.name.match(/([^\/]*)\/*/)?.[1];
+            const cacheId = `tile:${this.worldName}:${mapID}:${tileCoords}`;
             tileCache.del(cacheId);
         }
     }
