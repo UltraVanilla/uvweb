@@ -1,4 +1,6 @@
 import Knex from "knex";
+import dotenv from "dotenv";
+dotenv.config();
 
 const migrations = {
     tableName: "knex_migrations",
@@ -6,38 +8,35 @@ const migrations = {
     loadExtensions: [".js"],
 };
 
-if (process.env.MYSQL_URI != null && !process.env.MYSQL_URI.includes("?charset=utf8mb4"))
-    process.env.MYSQL_URI = `${process.env.MYSQL_URI}?charset=utf8mb4`;
-if (process.env.DYNMAP_MYSQL_URI != null && !process.env.DYNMAP_MYSQL_URI.includes("?charset=utf8mb4"))
-    process.env.DYNMAP_MYSQL_URI = `${process.env.DYNMAP_MYSQL_URI}?charset=utf8mb4`;
+const options = "?supportBigNumbers=true&charset=utf8mb4";
 
 const config: { [env: string]: Knex.Config } = {
     development: {
         client: "mysql",
-        connection: process.env.MYSQL_URI || "mysql://foo:bar@localhost/ultravanilla",
+        connection: (process.env.MYSQL_URI || "mysql://foo:bar@localhost/ultravanilla") + options,
         pool: {
             min: 0,
-            max: 5,
+            max: 10,
         },
         migrations,
     },
 
     production: {
         client: "mysql",
-        connection: process.env.MYSQL_URI || "does not exist",
+        connection: (process.env.MYSQL_URI || "does not exist") + options,
         pool: {
             min: 0,
-            max: 5,
+            max: 10,
         },
         migrations,
     },
 
     dynmap: {
         client: "mysql",
-        connection: process.env.DYNMAP_MYSQL_URI || "does not exist",
+        connection: (process.env.DYNMAP_MYSQL_URI || "does not exist") + options,
         pool: {
             min: 0,
-            max: 5,
+            max: 10,
         },
     },
 };

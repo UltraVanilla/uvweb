@@ -19,11 +19,12 @@ function collectStream(stream: stream.Readable): Promise<Buffer> {
 // original size: 143079.00
 
 async function tileCompress() {
+    const date = Date.now() - 259200000;
     while (true) {
         await DmTile.transaction(async (trx) => {
             const tiles = await DmTile.query()
                 .where("Format", 0)
-                .where("LastUpdate", "<", Date.now() - 2592000000)
+                .where("LastUpdate", "<", date)
                 .limit(96)
                 .transacting(trx);
 
