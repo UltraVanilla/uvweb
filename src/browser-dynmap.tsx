@@ -311,8 +311,9 @@ window.addEventListener("load", function () {
                     const button = $(".tools-account");
 
                     const capitalizedRoleName =
-                        accountInfo.roles[0].charAt(0).toUpperCase() + accountInfo.roles[0].slice(1);
-                    const roleStyle = roleColors[accountInfo.roles[0].toLowerCase()] || {
+                        accountInfo.permissions.primaryGroup.charAt(0).toUpperCase() +
+                        accountInfo.permissions.primaryGroup.slice(1);
+                    const roleStyle = roleColors[accountInfo.permissions.primaryGroup.toLowerCase()] || {
                         color: "#ffffff",
                         name: capitalizedRoleName,
                     };

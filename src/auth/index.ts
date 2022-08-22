@@ -14,6 +14,8 @@ import schemas from "../ajv-schemas";
 import { sessionMiddleware } from "../session";
 import redis from "../redis";
 
+import knex from "../knex";
+
 export let jwtPublicKey = `
 -----BEGIN PUBLIC KEY-----
 MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE2/NW5Jc1zyq+wrLaZ2doJUgS4Utx
@@ -31,7 +33,7 @@ declare module "koa" {
 }
 
 export function ultravanillaSession(
-    filter: (input: { roles?: string[]; uuid?: string }) => boolean,
+    filter: (input: { permissions?: authApi.UserPermissions; uuid?: string }) => boolean,
     errorString = "Error",
 ): Middleware[] {
     return [
@@ -43,12 +45,10 @@ export function ultravanillaSession(
                 allowed = filter({});
                 ctx.session = null;
             } else {
-                const roles = user.userAccount.roles;
-
                 ctx.coreProtectUser = user;
                 ctx.user = user.userAccount;
 
-                allowed = filter({ roles, uuid: ctx.session!.uuid });
+                allowed = filter({ permissions: user.userAccount.permissions, uuid: ctx.session!.uuid });
             }
 
             if (allowed) await next();
@@ -61,11 +61,13 @@ export const accountInfo = [
     ...ultravanillaSession(() => true),
     async (ctx: Koa.Context, _next: Koa.Next): Promise<void> => {
         if (ctx.coreProtectUser != null && ctx.user != null) {
-            ctx.body = {
+            const out: authApi.AccountInfo = {
                 name: ctx.coreProtectUser.user,
                 uuid: ctx.coreProtectUser.uuid,
-                roles: ctx.user.roles,
+                permissions: ctx.user.permissions,
             };
+
+            ctx.body = out;
         }
     },
 ];
@@ -236,8 +238,76 @@ async function getCachedUser(uuid: string): Promise<CoreProtectUser> {
     const cached = userCache.get(uuid);
     if (cached != null) return cached;
     const user = await CoreProtectUser.query().findOne({ uuid }).withGraphFetched("userAccount");
+    await user.userAccount.populatePermissions();
     userCache.set(uuid, user);
     return user;
+}
+
+export async function getUserPermissions(
+    uuid: string,
+    prefix: string = "uvweb.",
+    server: string = "global",
+    world: string = "global",
+): Promise<authApi.UserPermissions> {
+    const allPermissions: Set<string> = new Set();
+    const groups: Set<string> = new Set();
+
+    let player;
+    try {
+        player = await knex("luckperms_players").select("primary_group").where("uuid", uuid);
+    } catch (err) {
+        if (err.code === "ER_NO_SUCH_TABLE") {
+            return authApi.defaultPermissions;
+        } else {
+            throw err;
+        }
+    }
+
+    const userPermissions = await knex("luckperms_user_permissions")
+        .select("permission", "value")
+        .where("uuid", uuid)
+        .where("world", world)
+        .where("server", server);
+
+    userPermissions.push({ permission: "group.default", value: 1 });
+
+    async function processPerms(perms: typeof userPermissions) {
+        for (const permission of perms) {
+            if (permission.value !== 1) continue;
+            const segments = permission.permission.split(".");
+            if (segments[0] !== "group") continue;
+
+            const group = segments[1];
+
+            if (groups.has(group)) continue;
+            groups.add(group);
+
+            const groupPermissions = await knex("luckperms_group_permissions")
+                .select("permission", "value")
+                .where("name", group)
+                .where("world", world)
+                .where("server", server);
+
+            await processPerms(groupPermissions);
+        }
+
+        for (const permission of perms) {
+            if (!permission.permission.startsWith("uvweb.")) continue;
+            if (permission.value === 1) {
+                allPermissions.add(permission.permission);
+            } else {
+                allPermissions.delete(permission.permission);
+            }
+        }
+    }
+
+    await processPerms(userPermissions);
+
+    return {
+        primaryGroup: player[0]?.primary_group == null ? "default" : player[0].primary_group,
+        groups: [...groups],
+        permissions: [...allPermissions],
+    };
 }
 
 export { isStaff } from "./auth-api";

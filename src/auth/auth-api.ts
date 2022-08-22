@@ -13,7 +13,7 @@ export interface RedisUrlToken {
 }
 
 export interface AccountInfo {
-    roles: string[];
+    permissions: UserPermissions;
     name: string;
     uuid: string;
 }
@@ -86,9 +86,19 @@ export const bulkAuthTokenSchema = {
     },
 };
 
-export function isStaff({ roles, uuid }: { roles?: string[]; uuid?: string }): boolean {
-    if (roles == null || uuid == null) return false;
-    return roles.some((role) =>
-        ["intern", "moderator", "mod", "admin", "ceo", "dev", "timelord"].includes(role.toLowerCase()),
-    );
+export function isStaff({ permissions, uuid }: { permissions?: UserPermissions; uuid?: string }): boolean {
+    if (permissions == null || uuid == null) return false;
+    return permissions.permissions.includes("uvweb.staff");
 }
+
+export interface UserPermissions {
+    primaryGroup: string;
+    groups: string[];
+    permissions: string[];
+}
+
+export const defaultPermissions: UserPermissions = {
+    primaryGroup: "default",
+    groups: ["default"],
+    permissions: [],
+};
