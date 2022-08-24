@@ -14,8 +14,8 @@ export default class User extends Model {
     static idColumn = "id";
 
     id!: number;
+    uuid!: string;
     time!: Date;
-    coreprotectUid!: number;
     roles!: string[];
 
     coreProtectUser!: CoreProtectUser;
@@ -27,8 +27,8 @@ export default class User extends Model {
             relation: Model.BelongsToOneRelation,
             modelClass: `${__dirname}/CoreProtectUser`,
             join: {
-                from: "co_user.rowid",
-                to: "users.coreprotect_uid",
+                from: "co_user.uuid",
+                to: "users.uuid",
             },
         },
     };

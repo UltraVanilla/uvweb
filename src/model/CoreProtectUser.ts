@@ -17,8 +17,8 @@ export default class CoreProtectUser extends Model {
             relation: Model.HasOneRelation,
             modelClass: `${__dirname}/User`,
             join: {
-                from: "co_user.rowid",
-                to: "users.coreprotect_uid",
+                from: "co_user.uuid",
+                to: "users.uuid",
             },
         },
         usernameHistory: {
