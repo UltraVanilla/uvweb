@@ -11,9 +11,8 @@ import * as auth from "../auth";
 export default class User extends Model {
     static columnNameMappers = snakeCaseMappers();
     static tableName = "users";
-    static idColumn = "id";
+    static idColumn = "uuid";
 
-    id!: number;
     uuid!: string;
     time!: Date;
     roles!: string[];
