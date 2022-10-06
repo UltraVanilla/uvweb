@@ -12,7 +12,7 @@ async function run() {
     const canonicalUsers: { [uuid: string]: string } = {};
     try {
         const sameUsers: { [uuid: string]: string[] } = JSON.parse(
-            await fs.promises.readFile(process.argv[3], { encoding: "utf8" }),
+            await fs.promises.readFile(process.argv[3] || "null", { encoding: "utf8" }),
         );
 
         for (const [uuid, alts] of Object.entries(sameUsers)) {
@@ -21,6 +21,35 @@ async function run() {
             }
         }
     } catch (err) {
+        // if the file doesn't exist, do without it
+        if (err.code !== "ENOENT") throw err;
+    }
+
+    let timeline: { start: Date; end: Date | null; event: string; category: string }[] = [];
+    try {
+        const timelineStr = await fs.promises.readFile(process.argv[4] || "null", { encoding: "utf8" });
+
+        timeline = timelineStr
+            .trim()
+            .split("\n")
+            .filter((str) => !str.startsWith("|-") && str.startsWith("| "))
+            .map((str) => {
+                const split = str.split("||");
+                const end = split[1].trim();
+                return {
+                    start: new Date(split[0].slice(1).trim()),
+                    end: end === "" ? null : new Date(end),
+                    category: split[2],
+                    event: split[3]
+                        .trim()
+                        .replaceAll(/\[\[([^\]\|]+)\|([^\]\|]+)\]\]/g, "$2")
+                        .replaceAll(/\[\[/g, "")
+                        .replaceAll(/\]\]/g, "")
+                        .replaceAll("''", ""),
+                };
+            });
+    } catch (err) {
+        // if the file doesn't exist, do without it
         if (err.code !== "ENOENT") throw err;
     }
 
@@ -63,7 +92,7 @@ async function run() {
     const yscale = 1;
 
     const gapLeft = 500;
-    const gapRight = 20;
+    const gapRight = 290;
     const gapTop = 50;
     const gapBottom = 10;
 
@@ -73,13 +102,13 @@ async function run() {
 
     const canvas = createCanvas(
         gapLeft + gapRight + xscale * (lastWeek - firstWeek),
-        gapTop + gapBottom + yscale * users.length,
+        gapTop + gapBottom + yscale * users.length + fontSize * 2 * timeline.length,
     );
     const ctx = canvas.getContext("2d");
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.font = `normal ${fontSize}px JuliaMono`;
+    ctx.font = `normal ${fontSize}px "Noto Sans"`;
     for (let year = firstDate.getUTCFullYear(); year <= lastDate.getUTCFullYear(); year++) {
         for (let month = 0; month < 12; month++) {
             const date = new Date(year, month, 1);
@@ -105,8 +134,6 @@ async function run() {
         }
     }
 
-    ctx.font = `normal ${fontSize}px JuliaMono`;
-
     const coreprotectUsers = await coreprotectUsersPromise;
     const uuidUsernameMappings: { [uuid: string]: string } = {};
     for (const coreprotectUser of coreprotectUsers) {
@@ -115,32 +142,79 @@ async function run() {
         }
     }
 
+    let playTimes: { [uuid: string]: number } = {};
+    let maxPlayTime = 1;
+    try {
+        const playTimesString = await fs.promises.readFile(process.argv[5] || "null", { encoding: "utf8" });
+
+        for (const line of playTimesString.trim().split("\n").slice(1)) {
+            const [rank, username, playTime] = line.split("\t");
+            let uuid = Object.keys(uuidUsernameMappings).find((key) => uuidUsernameMappings[key] === username)!;
+            if (canonicalUsers[uuid]) uuid = canonicalUsers[uuid];
+
+            const playTimeInt = parseInt(playTime);
+            playTimes[uuid] = playTimeInt;
+            maxPlayTime = Math.max(maxPlayTime, playTimeInt);
+        }
+    } catch (err) {
+        // if the file doesn't exist, do without it
+        if (err.code !== "ENOENT") throw err;
+    }
+
     const textMetrics = ctx.measureText("0");
     const textHeight = verticalGap + textMetrics.actualBoundingBoxAscent + (textMetrics as any).emHeightDescent;
 
     let shiftedLeft = 0;
+    let shiftedTop = gapTop;
     for (const [id, user] of users.entries()) {
         if (id % textHeight === 0) shiftedLeft = 0;
         let first = true;
+
+        const userJoinWeek = Math.min(...user.weeks);
+        const username = uuidUsernameMappings[user.uuid];
+
+        let plotColor = "white";
+        if (maxPlayTime !== 1) {
+            const playTime = playTimes[user.uuid] || 1;
+            const playIntensity = playTime / (Math.max(...user.weeks) - userJoinWeek + 1);
+
+            plotColor = `hsl(0,0%,${100 * Math.min(1, playIntensity / 252000)}%)`;
+        }
+
+        shiftedTop += yscale;
         for (const week of user.weeks) {
             const xstart = gapLeft + xscale * (week - firstWeek);
-            const ystart = gapTop + yscale * id;
+            const ystart = shiftedTop;
 
-            if (first && user.weeks.size > 8) {
-                const username = uuidUsernameMappings[user.uuid];
+            if (first && user.weeks.size >= 8) {
                 const { width } = ctx.measureText(username);
 
-                ctx.fillStyle = `hsl(${
-                    230 + (-230 * user.weeks.size) / (lastWeek - Math.min(...user.weeks))
-                },100%,64%)`;
+                ctx.fillStyle = `hsl(${230 + (-230 * user.weeks.size) / (lastWeek - userJoinWeek)},100%,64%)`;
 
                 ctx.fillText(username, xstart - shiftedLeft - width - nameGap, ystart);
                 shiftedLeft += width + nameGap;
                 first = false;
-                ctx.fillStyle = "white";
             }
+            if (week >= lastWeek - 3) ctx.fillStyle = "#FF1493";
+            else ctx.fillStyle = plotColor;
+
             ctx.fillRect(xstart, ystart, xscale, yscale);
         }
+
+        const currentTime = getWeekDate(userJoinWeek);
+        const timelineEvents = timeline.filter((event) => event.start <= currentTime);
+
+        for (const event of timelineEvents) {
+            ctx.fillStyle = "#bf8cf7";
+
+            shiftedTop += fontSize * 2;
+            const xstart = gapLeft + xscale * (userJoinWeek - firstWeek);
+            const ystart = shiftedTop - fontSize / 2;
+
+            ctx.fillText(event.event, xstart, ystart);
+        }
+
+        timeline = timeline.filter((event) => event.start > currentTime);
     }
 
     const out = fs.createWriteStream("retention.png");
@@ -152,6 +226,10 @@ async function run() {
 
 function getWeekNumber(date: Date): number {
     return Math.floor(date.getTime() / 604800000);
+}
+
+function getWeekDate(weekNum: number): Date {
+    return new Date(weekNum * 604800000);
 }
 
 run();
