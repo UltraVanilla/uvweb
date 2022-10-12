@@ -48,9 +48,9 @@ app.use(async (ctx, next) => {
 
 const sessionMiddleware = configureSessions(app);
 
-app.use(serve("dynmap"));
-app.use(mount("/assets", serve("assets")));
-app.use(mount("/assets", serve("vendor")));
+app.use(serve("dynmap", { maxage: 1000 * 60 * 60 * 2 }));
+app.use(mount("/assets", serve("assets", { maxage: 1000 * 60 * 60 * 2 })));
+app.use(mount("/assets", serve("vendor", { maxage: 1000 * 60 * 60 * 2 })));
 
 // start of our routes middleware
 

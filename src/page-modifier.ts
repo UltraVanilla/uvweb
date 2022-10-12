@@ -56,7 +56,6 @@ export default async (ctx: Koa.BaseContext): Promise<void> => {
     const $ = cheerio.load(body);
 
     // allow caching
-    /* 
     $("script").each((i, elem) => {
         const src = $(elem).attr("src");
         if (src == null) return;
@@ -67,7 +66,6 @@ export default async (ctx: Koa.BaseContext): Promise<void> => {
         if (href == null) return;
         $(elem).attr("href", href.split("?")[0]);
     });
-    */
 
     const newContainer = $("<div class=box>");
 

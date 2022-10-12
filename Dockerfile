@@ -12,6 +12,7 @@ WORKDIR /app/package
 ENV NODE_ENV production
 
 RUN npm install --ignore-scripts && npm cache clean --force
+RUN cp -rv vendor/* assets/
 
 ARG PORT=8080
 ENV PORT $PORT
