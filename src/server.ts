@@ -73,7 +73,6 @@ router.get("/account-info", ...auth.accountInfo);
 router.get("/login/:token", ...auth.login);
 router.post("/login/:token", bodyParser(), ...auth.login);
 router.get("/logout", ...auth.logout);
-router.get("/redisurl", auth.redisUrl);
 
 router.post("/survey-submit/:survey", bodyParser(), ...surveySubmit);
 
@@ -97,8 +96,9 @@ app.use(
 );
 
 import { dbReady } from "./knex";
+import { version as levelSchemaVersion } from "./leveldb";
 
-dbReady
+Promise.all([dbReady, levelSchemaVersion])
     .catch((err) => {
         console.error(err);
         logger.log("warn", "Database does not exist or could not migrate!");

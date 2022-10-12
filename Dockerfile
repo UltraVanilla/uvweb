@@ -2,7 +2,7 @@ FROM node:18
 
 WORKDIR /app
 
-ADD --chown=node:node uvdynmap-1.0.0.tgz /app
+ADD --chown=node:node uvweb-1.0.0.tgz /app
 
 RUN chown -R node:node /app
 

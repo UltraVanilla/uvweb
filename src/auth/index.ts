@@ -12,7 +12,7 @@ import User from "../model/User";
 import * as authApi from "./auth-api";
 import schemas from "../ajv-schemas";
 import { sessionMiddleware } from "../session";
-import redis from "../redis";
+import level, { levelUtils } from "../leveldb";
 
 import knex from "../knex";
 import LoginToken from "../model/LoginToken";
@@ -176,35 +176,22 @@ export const logout = [
     async (ctx: Koa.Context): Promise<void> => {
         if (ctx.coreProtectUser != null) {
             const activeSessionsKey = `activeSessions:${ctx.coreProtectUser.uuid}`;
-            const sessions = await redis.smembers(activeSessionsKey);
-            await redis.del(sessions);
-            await redis.del(activeSessionsKey);
+
+            const sessions = Object.keys(await levelUtils.getMembers(activeSessionsKey));
+
+            await level.batch(
+                sessions.map((sessionKey) => ({
+                    type: "del",
+                    key: "session:" + sessionKey.split(":").slice(-1)[0],
+                })),
+            );
+            await levelUtils.deleteMembers(activeSessionsKey);
         }
 
         ctx.session = null;
         ctx.redirect("back", "/");
     },
 ];
-
-// give the current redis key to the server plugin
-export const redisUrl = async (ctx: Koa.Context): Promise<void> => {
-    try {
-        const token: authApi.RedisUrlToken = <authApi.RedisUrlToken>(
-            jwt.verify(ctx.get("x-uvdynmap-token"), jwtPublicKey)
-        );
-        if (!token.getRedisLink) throw jwt.JsonWebTokenError;
-
-        ctx.body = process.env.REDIS_URL || "redis://localhost";
-    } catch (err) {
-        if (err instanceof jwt.JsonWebTokenError) {
-            ctx.throw(403, "JSON web token is invalid");
-        } else if (err instanceof jwt.TokenExpiredError) {
-            ctx.throw(403, "JSON web token has expired, generate a new one");
-        } else if (err instanceof jwt.NotBeforeError) {
-            ctx.throw(403, "JSON web token doesn't exist yet");
-        } else throw err;
-    }
-};
 
 const userCache: LRUCache<string, CoreProtectUser> = new LRUCache({
     max: 500,

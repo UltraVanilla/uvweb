@@ -2,7 +2,6 @@ import { EventEmitter, once } from "events";
 import TypedEmitter from "typed-emitter";
 
 import Koa from "koa";
-import { Middleware } from "koa";
 
 import LRUCache from "lru-cache";
 
@@ -11,8 +10,6 @@ import DmMap from "./model/DmMap";
 import DmTile from "./model/DmTile";
 import * as api from "./auth/auth-api";
 
-import redis from "./redis";
-
 const TILE_FORMATS = ["image/png", "image/jpeg", "image/webp"];
 
 const mapCache: LRUCache<string, DmMap> = new LRUCache({
@@ -20,7 +17,7 @@ const mapCache: LRUCache<string, DmMap> = new LRUCache({
 });
 
 const tileCache: LRUCache<string, DmTile> = new LRUCache({
-    max: 18000,
+    max: 8000,
 });
 
 const worldUpdateCachers = new Map();

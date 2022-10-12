@@ -8,10 +8,6 @@ export interface BulkAuthToken {
     players: AuthToken[];
 }
 
-export interface RedisUrlToken {
-    getRedisLink: true;
-}
-
 export interface AccountInfo {
     permissions: UserPermissions;
     name: string;

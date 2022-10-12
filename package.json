@@ -1,5 +1,5 @@
 {
-  "name": "uvdynmap",
+  "name": "uvweb",
   "version": "1.0.0",
   "description": "Dynmap extensions for UltraVanilla",
   "scripts": {
@@ -40,6 +40,8 @@
     "koa-session-memory": "^1.0.4",
     "koa-static": "^5.0.0",
     "lerp-array": "^1.1.1",
+    "level": "^7.0.1",
+    "level-ttl": "^3.1.1",
     "lru-cache": "^7.14.0",
     "mozjpeg": "^8.0.0",
     "mysql": "^2.18.1",
@@ -72,6 +74,8 @@
     "@types/koa-router": "^7.4.4",
     "@types/koa-session": "^5.10.6",
     "@types/koa-static": "^4.0.2",
+    "@types/level": "^6.0.1",
+    "@types/level-ttl": "^3.1.2",
     "@types/lru-cache": "^7.10.9",
     "@types/mozjpeg": "^5.0.0",
     "@types/msgpack-lite": "^0.1.8",
