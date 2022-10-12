@@ -61,7 +61,7 @@ export const authTokenSchema = {
     properties: {
         uuid: {
             type: "string",
-            format: "uuid",
+            //TODO: `format: "uuid"` is no longer supported but may be in the future
         },
         groups: {
             type: "array",
@@ -69,7 +69,6 @@ export const authTokenSchema = {
         },
         disallowAuth: {
             type: "boolean",
-            optional: true,
         },
     },
 };

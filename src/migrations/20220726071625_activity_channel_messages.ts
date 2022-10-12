@@ -1,6 +1,6 @@
 import * as Knex from "knex";
 
-export async function up(knex: Knex): Promise<void> {
+export async function up(knex: Knex.Knex): Promise<void> {
     await knex.schema.createTable("activity_channel_messages", (table) => {
         table.increments("id").primary().notNullable();
         table.timestamp("time", { precision: 3 }).notNullable();
@@ -12,4 +12,4 @@ export async function up(knex: Knex): Promise<void> {
     });
 }
 
-export async function down(knex: Knex): Promise<void> {}
+export async function down(knex: Knex.Knex): Promise<void> {}

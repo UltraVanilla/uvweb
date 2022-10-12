@@ -8,12 +8,9 @@ import Router from "koa-router";
 import bodyParser from "koa-bodyparser";
 
 import winston from "winston";
-import pkgDir from "pkg-dir";
 
 import { configureSessions } from "./session";
 import { tileServer, worldUpdates } from "./tiles-server";
-
-const pkgPath = pkgDir.sync() || process.cwd();
 
 const logger = winston.createLogger({
     format: winston.format.combine(
@@ -51,9 +48,9 @@ app.use(async (ctx, next) => {
 
 const sessionMiddleware = configureSessions(app);
 
-app.use(serve(pkgPath + "/dynmap"));
-app.use(mount("/assets", serve(pkgPath + "/assets")));
-app.use(mount("/assets", serve(pkgPath + "/vendor")));
+app.use(serve("dynmap"));
+app.use(mount("/assets", serve("assets")));
+app.use(mount("/assets", serve("vendor")));
 
 // start of our routes middleware
 
@@ -76,7 +73,6 @@ router.get("/account-info", ...auth.accountInfo);
 router.get("/login/:token", ...auth.login);
 router.post("/login/:token", bodyParser(), ...auth.login);
 router.get("/logout", ...auth.logout);
-router.get("/updateroles/:token", auth.updateRoles);
 router.get("/redisurl", auth.redisUrl);
 
 router.post("/survey-submit/:survey", bodyParser(), ...surveySubmit);

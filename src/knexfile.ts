@@ -1,4 +1,4 @@
-import Knex from "knex";
+import * as Knex from "knex";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -10,7 +10,7 @@ const migrations = {
 
 const options = "?supportBigNumbers=true&charset=utf8mb4";
 
-const config: { [env: string]: Knex.Config } = {
+const config: { [env: string]: Knex.Knex.Config } = {
     development: {
         client: "mysql",
         connection: (process.env.MYSQL_URI || "mysql://foo:bar@localhost/ultravanilla") + options,

@@ -1,8 +1,4 @@
 import { processLogs, FilterOptions } from "./coreprotect-delta";
-import CodeMirror from "codemirror";
-import "codemirror/mode/javascript/javascript";
-import "codemirror/addon/comment/comment";
-
 import React from "jsx-dom";
 
 const optionsTextArea = document.getElementById("coreprotect-delta-options") as HTMLTextAreaElement;
@@ -26,28 +22,12 @@ const defaultOptions = `return {
 
 if (optionsTextArea.value.length === 0) optionsTextArea.value = defaultOptions;
 
-const optionsEditor = CodeMirror.fromTextArea(optionsTextArea, {
-    lineNumbers: true,
-    mode: "javascript",
-    extraKeys: {
-        "Ctrl-/": (cm) => cm.execCommand("toggleComment"),
-    },
-});
-const logEditor = CodeMirror.fromTextArea(logsTextArea, {
-    lineNumbers: true,
-    mode: "null",
-});
-// const outputEditor = CodeMirror.fromTextArea(outputTextArea, {
-//     lineNumbers: true,
-//     mode: { name: "javascript", json: true },
-// });
-
 document.getElementById("coreprotect-delta")!.onsubmit = () => {
     try {
         // eval this shit up
-        const filterOptions = new Function(optionsEditor.getValue())() as FilterOptions;
+        const filterOptions = new Function(optionsTextArea.value)() as FilterOptions;
 
-        const results = processLogs(logEditor.getValue(), filterOptions);
+        const results = processLogs(logsTextArea.value, filterOptions);
         deltaOutput.innerText = JSON.stringify(results, null, 4);
 
         formattedContainer.innerText = "";

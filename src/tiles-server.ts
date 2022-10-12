@@ -4,7 +4,6 @@ import TypedEmitter from "typed-emitter";
 import Koa from "koa";
 import { Middleware } from "koa";
 
-import fetch from "node-fetch";
 import LRUCache from "lru-cache";
 
 import { sleep } from "./util";
@@ -17,7 +16,7 @@ import redis from "./redis";
 const TILE_FORMATS = ["image/png", "image/jpeg", "image/webp"];
 
 const mapCache: LRUCache<string, DmMap> = new LRUCache({
-    maxAge: 1000 * 60 * 60 * 2,
+    ttl: 1000 * 60 * 60 * 2,
 });
 
 const tileCache: LRUCache<string, DmTile> = new LRUCache({
@@ -35,7 +34,7 @@ export async function getMap(match: { worldID: string; mapID: string }): Promise
 
     if (map != null) mapCache.set(cacheKey, map);
 
-    return map;
+    return map!;
 }
 
 export const tileServer = async (ctx: Koa.Context): Promise<void> => {
@@ -85,9 +84,9 @@ export const worldUpdates = async (ctx: Koa.Context): Promise<void> => {
     ctx.body = update;
 };
 
-interface WorldUpdateCacherEvents {
+type WorldUpdateCacherEvents = {
     update: (ping: api.WorldPing) => void;
-}
+};
 
 class WorldUpdateCacher extends (EventEmitter as new () => TypedEmitter<WorldUpdateCacherEvents>) {
     worldName: string;
@@ -105,10 +104,9 @@ class WorldUpdateCacher extends (EventEmitter as new () => TypedEmitter<WorldUpd
         setInterval(async () => {
             let lateby = 1000;
             try {
+                //TODO: Bring back timeout
                 const res = (await (
-                    await fetch(`${process.env.DYNMAP_BACKEND!}up/world/${this.worldName}/1`, {
-                        timeout: 7500,
-                    })
+                    await fetch(`${process.env.DYNMAP_BACKEND!}up/world/${this.worldName}/1`, {})
                 ).json()) as api.WorldPing;
 
                 if (res.timestamp === last) return;
@@ -128,18 +126,15 @@ class WorldUpdateCacher extends (EventEmitter as new () => TypedEmitter<WorldUpd
             const tileCoords = update.name.match(/.*\/.*\/(.*)\..*/)?.[1];
             const mapID = update.name.match(/([^\/]*)\/*/)?.[1];
             const cacheId = `tile:${this.worldName}:${mapID}:${tileCoords}`;
-            tileCache.del(cacheId);
+            tileCache.delete(cacheId);
         }
     }
 }
 
 async function configureWorldUpdateCachers() {
     try {
-        const res = await (
-            await fetch(`${process.env.DYNMAP_BACKEND!}up/configuration`, {
-                timeout: 7500,
-            })
-        ).json();
+        //TODO: bring back timeout
+        const res = (await (await fetch(`${process.env.DYNMAP_BACKEND!}up/configuration`, {})).json()) as any;
 
         for (const world of res.worlds) {
             world.name;

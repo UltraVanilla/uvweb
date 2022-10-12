@@ -15,6 +15,7 @@ import { sessionMiddleware } from "../session";
 import redis from "../redis";
 
 import knex from "../knex";
+import LoginToken from "../model/LoginToken";
 
 export let jwtPublicKey = `
 -----BEGIN PUBLIC KEY-----
@@ -72,71 +73,48 @@ export const accountInfo = [
     },
 ];
 
-export const updateRoles = async (ctx: Koa.Context): Promise<void> => {
-    if (ctx.params == null) throw new TypeError();
-
-    const rawToken = ctx.params.token;
-    let bulkToken: authApi.BulkAuthToken;
-    try {
-        bulkToken = <authApi.BulkAuthToken>jwt.verify(rawToken, jwtPublicKey, {
-            ignoreExpiration: process.env.NODE_ENV !== "production",
-        });
-    } catch (err) {
-        if (err instanceof jwt.JsonWebTokenError) {
-            ctx.throw(403, "JSON web token is invalid");
-        } else if (err instanceof jwt.TokenExpiredError) {
-            ctx.throw(403, "JSON web token has expired, generate a new one");
-        } else if (err instanceof jwt.NotBeforeError) {
-            ctx.throw(403, "JSON web token doesn't exist yet");
-        } else throw err;
-    }
-
-    if (!schemas.validate("bulkAuthToken", bulkToken)) ctx.throw(400, "Malformed token payload");
-
-    await transaction(User, CoreProtectUser, async (User, CoreProtectUser) => {
-        for (const token of bulkToken.players) {
-            const coreProtectUser = await CoreProtectUser.query()
-                .findOne({ uuid: token.uuid })
-                .withGraphFetched("userAccount");
-
-            if (coreProtectUser == null) continue;
-            if (coreProtectUser.userAccount == null) coreProtectUser.userAccount = new User();
-
-            coreProtectUser.userAccount.roles = token.groups;
-
-            const user = await CoreProtectUser.query().upsertGraphAndFetch(coreProtectUser, { relate: true });
-        }
-    });
-    userCache.reset();
-};
-
 export const login = [
     sessionMiddleware,
     async (ctx: Koa.Context): Promise<void> => {
         if (ctx.params == null) throw new TypeError();
 
         const rawToken = ctx.params.token;
-        let token: authApi.AuthToken;
-        try {
-            token = <authApi.AuthToken>jwt.verify(rawToken, jwtPublicKey, {
-                ignoreExpiration: process.env.NODE_ENV !== "production",
-            });
-        } catch (err) {
-            if (err instanceof jwt.JsonWebTokenError) {
-                ctx.throw(403, "JSON web token is invalid");
-            } else if (err instanceof jwt.TokenExpiredError) {
-                ctx.throw(403, "JSON web token has expired, generate a new one");
-            } else if (err instanceof jwt.NotBeforeError) {
-                ctx.throw(403, "JSON web token doesn't exist yet");
-            } else throw err;
-        }
 
-        if (!schemas.validate("authToken", token)) ctx.throw(400, "Malformed token payload");
+        await LoginToken.query().delete().where("expires", "<", new Date());
 
-        await transaction(User, CoreProtectUser, async (User, CoreProtectUser) => {
-            const coreProtectUser = await CoreProtectUser.query()
+        const token = await LoginToken.query().findOne({ token: rawToken }).withGraphFetched("coreProtectUser");
+
+        let coreProtectUser: CoreProtectUser | undefined;
+
+        if (token != null) {
+            coreProtectUser = token.coreProtectUser;
+        } else {
+            let token: authApi.AuthToken;
+            try {
+                token = <authApi.AuthToken>jwt.verify(rawToken, jwtPublicKey, {
+                    ignoreExpiration: process.env.NODE_ENV !== "production",
+                });
+            } catch (err) {
+                if (err instanceof jwt.JsonWebTokenError) {
+                    ctx.throw(403, "JSON web token is invalid");
+                } else if (err instanceof jwt.TokenExpiredError) {
+                    ctx.throw(403, "JSON web token has expired, generate a new one");
+                } else if (err instanceof jwt.NotBeforeError) {
+                    ctx.throw(403, "JSON web token doesn't exist yet");
+                } else throw err;
+            }
+
+            if (!schemas.validate("authToken", token)) ctx.throw(400, "Malformed token payload");
+
+            coreProtectUser = await CoreProtectUser.query()
                 .findOne({ uuid: token.uuid })
                 .withGraphFetched("userAccount");
+        }
+        if (coreProtectUser == null) return ctx.throw(403, "User does not exist");
+
+        await transaction(User, CoreProtectUser, async (User, CoreProtectUser) => {
+            // satisfy the type checker
+            if (coreProtectUser == null) throw new Error("unreachable");
 
             if (ctx.method === "GET") {
                 const $ = cheerio.load(`
@@ -167,8 +145,9 @@ export const login = [
 
                 ctx.body = $.root().html();
             } else if (ctx.method === "POST") {
+                if (ctx.request.body == null) ctx.throw(400);
                 let maxSessionAge = 2592000;
-                if (ctx.request.body.duration !== null) {
+                if (ctx.request.body.duration !== null && typeof ctx.request.body.duration === "string") {
                     maxSessionAge = parseInt(ctx.request.body.duration);
                 }
 
@@ -176,14 +155,12 @@ export const login = [
                     coreProtectUser.userAccount = new User();
                 }
 
-                coreProtectUser.userAccount.roles = token.groups;
-
                 const user = await CoreProtectUser.query().upsertGraphAndFetch(coreProtectUser, { relate: true });
 
-                userCache.del(token.uuid);
+                userCache.delete(coreProtectUser.uuid);
 
                 ctx.session!.maxAge = maxSessionAge;
-                ctx.session!.uuid = token.uuid;
+                ctx.session!.uuid = coreProtectUser.uuid;
 
                 await ctx.session!.manuallyCommit();
 
@@ -231,13 +208,14 @@ export const redisUrl = async (ctx: Koa.Context): Promise<void> => {
 
 const userCache: LRUCache<string, CoreProtectUser> = new LRUCache({
     max: 500,
-    maxAge: 1000 * 60 * 60,
+    ttl: 1000 * 60 * 60,
 });
 
-async function getCachedUser(uuid: string): Promise<CoreProtectUser> {
+async function getCachedUser(uuid: string): Promise<CoreProtectUser | undefined> {
     const cached = userCache.get(uuid);
     if (cached != null) return cached;
     const user = await CoreProtectUser.query().findOne({ uuid }).withGraphFetched("userAccount");
+    if (user == null) return undefined;
     await user.userAccount.populatePermissions();
     userCache.set(uuid, user);
     return user;

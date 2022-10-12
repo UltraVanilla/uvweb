@@ -5,7 +5,6 @@ import cheerio from "cheerio";
 import Action from "./model/Action";
 import SurveySubmission from "./model/SurveySubmission";
 import knex from "./knex";
-import fetch from "node-fetch";
 
 import * as api from "./auth/auth-api";
 
@@ -138,10 +137,10 @@ router.get("/coreprotect-tools", (ctx) => {
             <body class="coreprotect-tools">
                 <form id="coreprotect-delta" class="coreprotect-delta">
                     <div><label for="coreprotect-delta-options">Coreprotect-delta options:</label></div>
-                    <div><textarea id="coreprotect-delta-options"></textarea></div>
+                    <div><textarea rows="20" cols="80" id="coreprotect-delta-options"></textarea></div>
                     <div><label for="coreprotect-delta-logs">Coreprotect logs:</label></div>
                     <p>Place <code>[main/INFO]: [CHAT] ------ Current Lag ------</code> to ignore all of the logs above it (i.e. run <code>/lag</code> ingame before paging). Why <code>/lag</code>? I don't know</p>
-                    <div><textarea id="coreprotect-delta-logs"></textarea></div>
+                    <div><textarea rows="20" cols="80" id="coreprotect-delta-logs"></textarea></div>
                     <div><input type="submit" value="Compute delta" id="coreprotect-delta-submit" /></div>
                     <div><label for="coreprotect-delta-output">Results:</label></div>
                     <div><pre id="coreprotect-delta-output"></pre></div>

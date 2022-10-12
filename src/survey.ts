@@ -33,7 +33,7 @@ export default [
         delete form.username;
         surveySubmission.coreProtectUser = user;
         surveySubmission.surveyId = surveyId;
-        surveySubmission.responses = form;
+        surveySubmission.responses = form as typeof surveySubmission.responses;
         surveySubmission.time = new Date();
 
         await SurveySubmission.query().upsertGraph(surveySubmission, { relate: true });

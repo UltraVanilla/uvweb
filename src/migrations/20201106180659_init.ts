@@ -1,6 +1,6 @@
 import * as Knex from "knex";
 
-export async function up(knex: Knex): Promise<void> {
+export async function up(knex: Knex.Knex): Promise<void> {
     // compatibility with coreprotect
     if (!(await knex.schema.hasTable("co_user"))) {
         await knex.schema.createTable("co_user", (table) => {
@@ -58,7 +58,7 @@ export async function up(knex: Knex): Promise<void> {
     });
 }
 
-export async function down(knex: Knex): Promise<void> {
+export async function down(knex: Knex.Knex): Promise<void> {
     await knex.schema.dropTableIfExists("staff_logs_involvedusers_co_user");
     await knex.schema.dropTableIfExists("staff_logs_involvedstaff_co_user");
     await knex.schema.dropTableIfExists("staff_logs_finishedstaff_co_user");

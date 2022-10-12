@@ -3,7 +3,6 @@ const fs = require("fs");
 const path = require("path");
 const util = require("util");
 const streamPipeline = util.promisify(require("stream").pipeline);
-const fetch = require("node-fetch");
 
 process.on("unhandledRejection", function (err) {
     console.error(err);
@@ -31,7 +30,6 @@ process.on("unhandledRejection", function (err) {
         ]),
 
         fs.promises.copyFile("node_modules/jspanel4/dist/jspanel.min.css", "vendor/jspanel.min.css"),
-        fs.promises.copyFile("node_modules/codemirror/lib/codemirror.css", "vendor/codemirror.css"),
 
         // get windows XP wallpaper
         (async () => {

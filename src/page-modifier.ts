@@ -1,6 +1,5 @@
 import Koa from "koa";
 
-import fetch from "node-fetch";
 import cheerio from "cheerio";
 
 export default async (ctx: Koa.BaseContext): Promise<void> => {
@@ -8,9 +7,8 @@ export default async (ctx: Koa.BaseContext): Promise<void> => {
     let loaded = false;
     let error;
     try {
-        const res = await fetch(process.env.DYNMAP_BACKEND!, {
-            timeout: 7500,
-        });
+        //TODO: reintroduce timeout
+        const res = await fetch(process.env.DYNMAP_BACKEND!, {});
         body = await res.text();
         loaded = true;
     } catch (err) {
