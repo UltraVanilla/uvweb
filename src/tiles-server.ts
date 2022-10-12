@@ -62,7 +62,7 @@ export const tileServer = async (ctx: Koa.Context): Promise<void> => {
 
     ctx.type = TILE_FORMATS[tile.format] || "image/png";
     ctx.lastModified = roundedDate;
-    ctx.set("Cache-Control", "private, must-revalidate, max-age=0");
+    ctx.set("Cache-Control", "public, must-revalidate, max-age=0");
 
     if (ctx.headers["if-modified-since"] != null && new Date(ctx.headers["if-modified-since"]) >= roundedDate) {
         ctx.throw(304);
