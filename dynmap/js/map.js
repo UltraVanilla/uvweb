@@ -1,5 +1,8 @@
 "use strict";
 //if (!console) console = { log: function() {} };
+if (window.dynUpdate == null) window.dynUpdate = function (url, cb) {
+	$.getJSON(url, cb);
+}
 
 var componentconstructors = {};
 var maptypes = {};
@@ -610,7 +613,8 @@ DynMap.prototype = {
 		}
 
 		$(me).trigger('worldupdating');
-		$.getJSON(me.formatUrl('update', { world: me.world.name, timestamp: me.lasttimestamp, reqid: me.reqid }), function(update) {
+
+		window.dynUpdate(me.formatUrl('update', { world: me.world.name, timestamp: me.lasttimestamp, reqid: me.reqid }), function(update) {
 				me.reqid++; // Bump request ID always
 				if (!update) {
 					setTimeout(function() { me.update(); }, me.options.updaterate);

@@ -56,10 +56,19 @@ index 936664aa..6af90c12 100644
  		}
  
 diff --git a/DynmapCore/src/main/resources/extracted/web/js/map.js b/DynmapCore/src/main/resources/extracted/web/js/map.js
-index a0ec24b6..676f9f42 100644
+index a0ec24b6..e76a94b1 100644
 --- a/DynmapCore/src/main/resources/extracted/web/js/map.js
 +++ b/DynmapCore/src/main/resources/extracted/web/js/map.js
-@@ -99,33 +99,23 @@ DynMap.prototype = {
+@@ -1,5 +1,8 @@
+ "use strict";
+ //if (!console) console = { log: function() {} };
++if (window.dynUpdate == null) window.dynUpdate = function (url, cb) {
++	$.getJSON(url, cb);
++}
+ 
+ var componentconstructors = {};
+ var maptypes = {};
+@@ -99,33 +102,23 @@ DynMap.prototype = {
  			});
  			me.defaultworld = me.defaultworld || world;
  		});
@@ -110,7 +119,17 @@ index a0ec24b6..676f9f42 100644
  	},
  	initialize: function() {
  		var me = this;
-@@ -647,7 +637,6 @@ DynMap.prototype = {
+@@ -620,7 +613,8 @@ DynMap.prototype = {
+ 		}
+ 
+ 		$(me).trigger('worldupdating');
+-		$.getJSON(me.formatUrl('update', { world: me.world.name, timestamp: me.lasttimestamp, reqid: me.reqid }), function(update) {
++
++		window.dynUpdate(me.formatUrl('update', { world: me.world.name, timestamp: me.lasttimestamp, reqid: me.reqid }), function(update) {
+ 				me.reqid++; // Bump request ID always
+ 				if (!update) {
+ 					setTimeout(function() { me.update(); }, me.options.updaterate);
+@@ -647,7 +641,6 @@ DynMap.prototype = {
  					me.lasttimestamp = update.timestamp;
  				}
  				if(me.options.confighash != update.confighash) {
@@ -118,7 +137,7 @@ index a0ec24b6..676f9f42 100644
  					return;
  				}
  				me.playerfield.text(me.options['msg-players'] + " [" + update.currentcount + "/" + me.options.maxcount + "]");
-@@ -695,7 +684,9 @@ DynMap.prototype = {
+@@ -695,7 +688,9 @@ DynMap.prototype = {
  
  						swtch(update.type, {
  							tile: function() {
