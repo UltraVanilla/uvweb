@@ -3,7 +3,9 @@ import jQueryType from "jquery";
 import React from "jsx-dom";
 
 import roleColors from "./role-colors";
-import { AccountInfo, CancelCoreprotectCommandResult, isStaff } from "./auth/auth-api";
+import { DynmapPing, AccountInfo, CancelCoreprotectCommandResult, isStaff } from "./auth/auth-api";
+
+import { decode } from "./codecs/dynmap-update-ping";
 
 declare global {
     interface Window {
@@ -33,6 +35,15 @@ function waitForDynmap() {
         loop();
     });
 }
+
+(window as any).dynUpdate = function (url: string, cb: (ping: DynmapPing) => void) {
+    fetch(url.replace("up/", "up-binary/"))
+        .then((response) => response.arrayBuffer())
+        .then((bin) => {
+            const ping: DynmapPing = decode(new Uint8Array(bin));
+            cb(ping);
+        });
+};
 
 window.addEventListener("load", function () {
     // a way to handle multiple things loading to indicate it with only one spinner

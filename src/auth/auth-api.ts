@@ -20,35 +20,7 @@ export interface CancelCoreprotectCommandResult {
     state?: string;
 }
 
-export interface WorldPing {
-    currentCount: number;
-    hasStorm: boolean;
-    isThundering: boolean;
-    confighash: number;
-    servertime: number;
-    timestamp: number;
-    updates: WorldUpdate[];
-    players: WorldPingPlayer[];
-}
-
-export interface WorldPingPlayer {
-    world: string;
-    armor: number;
-    name: string;
-    x: number;
-    y: number;
-    z: number;
-    sort: number;
-    health: number;
-    type: string;
-    account: string;
-}
-
-export interface WorldUpdate {
-    type: "tile";
-    name: string;
-    timestamp: number;
-}
+export { DynmapPing, DynmapUpdate } from "../codecs/dynmap-update-ping";
 
 export const authTokenSchema = {
     $id: "ultravanilla#authToken",

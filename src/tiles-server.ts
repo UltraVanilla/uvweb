@@ -10,6 +10,8 @@ import DmMap from "./model/DmMap";
 import DmTile from "./model/DmTile";
 import * as api from "./auth/auth-api";
 
+import { encode } from "./codecs/dynmap-update-ping";
+
 const TILE_FORMATS = ["image/png", "image/jpeg", "image/webp"];
 
 const mapCache: LRUCache<string, DmMap> = new LRUCache({
@@ -72,17 +74,19 @@ export const tileServer = async (ctx: Koa.Context): Promise<void> => {
 };
 
 export const worldUpdates = async (ctx: Koa.Context): Promise<void> => {
-    const { world } = ctx.params;
+    const { world, time } = ctx.params;
 
-    const cacher = worldUpdateCachers.get(world);
-    if (cacher == null) ctx.throw(404);
+    const res = (await (
+        await fetch(`${process.env.DYNMAP_BACKEND!}up/world/${world}/${time}`, {})
+    ).json()) as api.DynmapPing;
 
-    const [update] = await once(cacher, "update");
-    ctx.body = update;
+    const bin = encode(res);
+
+    ctx.body = Buffer.from(bin);
 };
 
 type WorldUpdateCacherEvents = {
-    update: (ping: api.WorldPing) => void;
+    update: (ping: api.DynmapPing) => void;
 };
 
 class WorldUpdateCacher extends (EventEmitter as new () => TypedEmitter<WorldUpdateCacherEvents>) {
@@ -104,7 +108,7 @@ class WorldUpdateCacher extends (EventEmitter as new () => TypedEmitter<WorldUpd
                 //TODO: Bring back timeout
                 const res = (await (
                     await fetch(`${process.env.DYNMAP_BACKEND!}up/world/${this.worldName}/1`, {})
-                ).json()) as api.WorldPing;
+                ).json()) as api.DynmapPing;
 
                 if (res.timestamp === last) return;
                 last = res.timestamp;
@@ -117,7 +121,7 @@ class WorldUpdateCacher extends (EventEmitter as new () => TypedEmitter<WorldUpd
         }, 500);
     }
 
-    processUpdates(updates: api.WorldUpdate[]) {
+    processUpdates(updates: api.DynmapUpdate[]) {
         for (const update of updates) {
             if (update.type != "tile") continue;
             const tileCoords = update.name.match(/.*\/.*\/(.*)\..*/)?.[1];
