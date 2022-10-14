@@ -88,12 +88,9 @@ export interface DynmapUpdatePlayerQuit extends DynmapUpdateBase {
     account: string;
 }
 
-export interface DynmapUpdateComponent extends DynmapUpdateBase {
+export interface DynmapUpdateComponent extends DynmapUpdateBase, HasCoords {
     type: "component";
     msg: string;
-    x: number;
-    y: number;
-    z: number;
     id: string;
     label: string;
     icon: string;
