@@ -1,6 +1,5 @@
 import * as discord from "discord.js";
 import { ButtonBuilder, ActionRowBuilder, ButtonStyle } from "discord.js";
-import fetch from "node-fetch";
 
 import { BotModule, BaseModuleConfiguration } from "../bot-module";
 
