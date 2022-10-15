@@ -5,21 +5,26 @@ import Koa from "koa";
 
 import LRUCache from "lru-cache";
 
+import level, { levelUtils } from "./leveldb";
+
 import { sleep } from "./util";
 import DmMap from "./model/DmMap";
 import DmTile from "./model/DmTile";
 import * as api from "./auth/auth-api";
 
-import { encode } from "./codecs/dynmap-update-ping";
+import { encode, extractStrings } from "./codecs/dynmap-update-ping";
 
 const TILE_FORMATS = ["image/png", "image/jpeg", "image/webp"];
+const ONE_WEEK = 60 * 60 * 24 * 7;
+const ONE_WEEK_MS = ONE_WEEK * 1000;
 
 const mapCache: LRUCache<string, DmMap> = new LRUCache({
     ttl: 1000 * 60 * 60 * 2,
+    max: 1000,
 });
 
 const tileCache: LRUCache<string, DmTile> = new LRUCache({
-    max: 8000,
+    max: 1000,
 });
 
 const worldUpdateCachers = new Map();
@@ -73,16 +78,72 @@ export const tileServer = async (ctx: Koa.Context): Promise<void> => {
     }
 };
 
+let lastDictionaryUpdate = 0;
+
 export const worldUpdates = async (ctx: Koa.Context): Promise<void> => {
     const { world, time } = ctx.params;
 
-    const res = (await (
+    const ping = (await (
         await fetch(`${process.env.DYNMAP_BACKEND!}up/world/${world}/${time}`, {})
     ).json()) as api.DynmapPing;
 
-    const bin = encode(res);
+    let curDate = Date.now();
+    if (curDate - lastDictionaryUpdate > 1000 * 60 * 3) {
+        lastDictionaryUpdate = curDate;
+        process.nextTick(async () => {
+            for (const str of extractStrings(ping)) {
+                let seenCount = 0;
+                try {
+                    seenCount = await level.get(`dictionary-string:${str}`, {
+                        ttl: ONE_WEEK_MS,
+                        valueEncoding: "json",
+                    });
+                } catch (err) {
+                    if (!err.notFound) throw err;
+                }
+                await level.put(`dictionary-string:${str}`, seenCount + 1, { ttl: ONE_WEEK_MS });
+            }
+        });
+    }
+
+    const dictionary = await getDictionary(time);
+
+    const bin = encode(ping, dictionary);
 
     ctx.body = Buffer.from(bin);
+};
+
+let dicts: { [time: number]: string[] } = {};
+async function getDictionary(time: number): Promise<string[]> {
+    // only generate one dictionary per week
+    time = Math.floor(time / ONE_WEEK) * ONE_WEEK;
+
+    if (dicts[time] != null) return dicts[time];
+
+    let dict: string[] = [];
+
+    try {
+        dict = await level.get(`dictionary:${time}`, { valueEncoding: "json" });
+    } catch (err) {
+        if (err.notFound) {
+            dict = Object.entries(await levelUtils.getMembers<number>("dictionary-string", { valueEncoding: "json" }))
+                .sort((a, b) => b[1] - a[1])
+                .map((entry) => entry[0].match(/dictionary-string:(.*)/)![1]);
+            // save for 2 weeks instead of 1 so that old pings can be decoded
+            await level.put(`dictionary:${time}`, dict, { valueEncoding: "json", ttl: ONE_WEEK_MS * 2 });
+        } else throw err;
+    }
+
+    return dict;
+}
+
+export const updateDictionary = async (ctx: Koa.Context): Promise<void> => {
+    const { time: timeStr } = ctx.params;
+    const time = Math.floor(parseInt(timeStr) / ONE_WEEK) * ONE_WEEK;
+
+    const dict = await getDictionary(time);
+
+    ctx.body = dict;
 };
 
 type WorldUpdateCacherEvents = {
@@ -142,7 +203,7 @@ async function configureWorldUpdateCachers() {
             worldUpdateCachers.set(world.name, new WorldUpdateCacher(world.name));
         }
 
-        tileCache.reset();
+        tileCache.clear();
     } catch (err) {
         await sleep(1000);
         configureWorldUpdateCachers();

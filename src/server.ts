@@ -10,7 +10,7 @@ import bodyParser from "koa-bodyparser";
 import winston from "winston";
 
 import { configureSessions } from "./session";
-import { tileServer, worldUpdates } from "./tiles-server";
+import * as tileServer from "./tiles-server";
 
 const logger = winston.createLogger({
     format: winston.format.combine(
@@ -66,8 +66,9 @@ const router = new Router();
 
 router.get("/", pageModifier);
 
-router.get("/tiles/:worldID/:mapID/:region/:coords", tileServer);
-router.get("/up-binary/world/:world/:time", worldUpdates);
+router.get("/tiles/:worldID/:mapID/:region/:coords", tileServer.tileServer);
+router.get("/up-binary/world/:world/:time", tileServer.worldUpdates);
+router.get("/up-dictionary/world/:world/:time", tileServer.updateDictionary);
 router.get("/account-info", ...auth.accountInfo);
 router.get("/login/:token", ...auth.login);
 router.post("/login/:token", bodyParser(), ...auth.login);

@@ -149,9 +149,9 @@ export function encode(update: DynmapPing, knownStrings: string[] = []): Uint8Ar
     buf.fill(0, 0, 1024 * 32);
     let offset = 0;
 
+    ({ offset } = writeUnsigned(update.timestamp, buf, offset));
     ({ offset } = writeSigned(update.confighash, buf, offset));
     ({ offset } = writeUnsigned(update.currentcount, buf, offset));
-    ({ offset } = writeUnsigned(update.timestamp, buf, offset));
     ({ offset } = writeUnsigned(update.servertime, buf, offset));
 
     let bitfield = 0;
@@ -230,17 +230,26 @@ export function encode(update: DynmapPing, knownStrings: string[] = []): Uint8Ar
     return buf.slice(0, offset);
 }
 
+export function decodeJustTimestamp(buf: Uint8Array): number {
+    let offset = 0;
+
+    let timestamp: number;
+    ({ offset, num: timestamp } = readUnsigned(buf, offset));
+
+    return timestamp;
+}
+
 export function decode(buf: Uint8Array, knownStrings: string[] = []): DynmapPing {
     let offset = 0;
+
+    let timestamp: number;
+    ({ offset, num: timestamp } = readUnsigned(buf, offset));
 
     let confighash: number;
     ({ offset, num: confighash } = readSigned(buf, offset));
 
     let currentcount: number;
     ({ offset, num: currentcount } = readUnsigned(buf, offset));
-
-    let timestamp: number;
-    ({ offset, num: timestamp } = readUnsigned(buf, offset));
 
     let servertime: number;
     ({ offset, num: servertime } = readUnsigned(buf, offset));

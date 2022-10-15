@@ -5,7 +5,7 @@ import React from "jsx-dom";
 import roleColors from "./role-colors";
 import { DynmapPing, AccountInfo, CancelCoreprotectCommandResult, isStaff } from "./auth/auth-api";
 
-import { decode } from "./codecs/dynmap-update-ping";
+import { decode, decodeJustTimestamp } from "./codecs/dynmap-update-ping";
 
 declare global {
     interface Window {
@@ -15,6 +15,8 @@ declare global {
         map: any;
     }
 }
+
+const ONE_WEEK = 60 * 60 * 24 * 7;
 
 let dynmap = window.dynmap;
 let map = window.map;
@@ -36,14 +38,35 @@ function waitForDynmap() {
     });
 }
 
-(window as any).dynUpdate = function (url: string, cb: (ping: DynmapPing) => void) {
-    fetch(url.replace("up/", "up-binary/"))
-        .then((response) => response.arrayBuffer())
-        .then((bin) => {
-            const ping: DynmapPing = decode(new Uint8Array(bin));
-            cb(ping);
-        });
+(window as any).dynUpdate = async function dynUpdate(
+    url: string,
+    cb: (ping: DynmapPing) => void = () => {},
+): Promise<DynmapPing> {
+    const res = await fetch(url.replace("up/", "up-binary/"));
+
+    // try again on fail
+    if (!res.ok) return dynUpdate(url, cb);
+
+    const bin = new Uint8Array(await res.arrayBuffer());
+
+    const time = decodeJustTimestamp(bin);
+    const dictionary = await getDictionary(Math.floor(time / ONE_WEEK) * ONE_WEEK);
+
+    const decoded = decode(bin, dictionary);
+    cb(decoded);
+    return decoded;
 };
+
+let dicts: { [time: number]: string[] } = {};
+async function getDictionary(time: number): Promise<string[]> {
+    if (dicts[time] != null) return dicts[time];
+    const res = await fetch(`/up-dictionary/world/world/${time}`);
+
+    if (!res.ok) return getDictionary(time);
+    const dict = await res.json();
+    dicts[time] = dict;
+    return dict;
+}
 
 window.addEventListener("load", function () {
     // a way to handle multiple things loading to indicate it with only one spinner
