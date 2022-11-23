@@ -24,7 +24,7 @@ async function tileCompress() {
         await DmTile.transaction(async (trx) => {
             const tiles = await DmTile.query()
                 .where("Format", 0)
-                .where("LastUpdate", "<", date)
+                // .where("LastUpdate", "<", date)
                 .limit(96)
                 .transacting(trx);
 

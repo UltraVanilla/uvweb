@@ -36,3 +36,14 @@ export function deferredPromise<T>(): {
         promise,
     };
 }
+
+export function merge<T, E>(target: T, source: E): T & E {
+    for (const key of Object.keys(source as any)) {
+        if ((source as any)[key] instanceof Object)
+            Object.assign((source as any)[key], merge((target as any)[key], (source as any)[key]));
+    }
+
+    Object.assign(target || {}, source);
+
+    return target as T & E;
+}

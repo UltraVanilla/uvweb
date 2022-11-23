@@ -30,6 +30,7 @@ process.on("unhandledRejection", function (err) {
         ]),
 
         fs.promises.copyFile("node_modules/jspanel4/dist/jspanel.min.css", "vendor/jspanel.min.css"),
+        fs.promises.copyFile("node_modules/systemjs/dist/s.min.js", "vendor/s.min.js"),
 
         // get windows XP wallpaper
         (async () => {

@@ -123,7 +123,31 @@ export default async (ctx: Koa.BaseContext): Promise<void> => {
                 </div>
             `).appendTo($("body"));
 
-        $("<script>").attr("type", "application/javascript").attr("src", "assets/dynmap.js").appendTo($("head"));
+        $("<script>")
+            .attr("type", "application/javascript")
+            .attr("src", "assets/logger.js")
+            .attr("type", "module")
+            .appendTo($("head"));
+        $("<script>")
+            .attr("type", "application/javascript")
+            .attr("src", "assets/dynmap.js")
+            .attr("type", "module")
+            .appendTo($("head"));
+        $("<script>")
+            .attr("type", "application/javascript")
+            .attr("src", "assets/s.min.js")
+            .attr("nomodule", "")
+            .appendTo($("head"));
+        $("<script>")
+            .attr("type", "application/javascript")
+            .attr("src", "assets/system/logger.js")
+            .attr("nomodule", "")
+            .appendTo($("head"));
+        $("<script>")
+            .attr("type", "application/javascript")
+            .attr("src", "assets/system/dynmap.js")
+            .attr("nomodule", "")
+            .appendTo($("head"));
     } else {
         $(`
             <div class="dynmap-broke">

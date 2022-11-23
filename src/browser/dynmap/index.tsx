@@ -2,10 +2,21 @@ import jsPanel from "jspanel4/dist/jspanel";
 import jQueryType from "jquery";
 import React from "jsx-dom";
 
-import roleColors from "./role-colors";
-import { DynmapPing, AccountInfo, CancelCoreprotectCommandResult, isStaff } from "./auth/auth-api";
+import roleColors from "../../role-colors";
+import { DynmapPing, AccountInfo, CancelCoreprotectCommandResult, isStaff } from "../../auth/auth-api";
 
-import { decode, decodeJustTimestamp } from "./codecs/dynmap-update-ping";
+import { decode, decodeJustTimestamp } from "../../codecs/dynmap-update-ping";
+import { deferredPromise, merge } from "../../util";
+import Module, { BaseModuleConfiguration } from "./Module";
+import { waitForDynmap, getCenterCoords } from "./utils";
+
+interface FrontendConfig {
+    modules: { [name: string]: BaseModuleConfiguration & any };
+}
+
+const globalConfig: FrontendConfig = {
+    modules: {},
+};
 
 declare global {
     interface Window {
@@ -21,22 +32,6 @@ const ONE_WEEK = 60 * 60 * 24 * 7;
 let dynmap = window.dynmap;
 let map = window.map;
 const $ = window.$;
-
-function waitForDynmap() {
-    return new Promise((resolve) => {
-        // yup
-        const loop = () =>
-            requestAnimationFrame(() => {
-                if (window.dynmap != null) {
-                    dynmap = window.dynmap;
-                    resolve(dynmap);
-                } else {
-                    loop();
-                }
-            });
-        loop();
-    });
-}
 
 (window as any).dynUpdate = async function dynUpdate(
     url: string,
@@ -120,6 +115,25 @@ window.addEventListener("load", function () {
         jsPanel.ziBase = 1000;
 
         const header = document.getElementsByClassName("header")[0];
+
+        const modulesArray = [await import("./NetherPortals")];
+        const modules: { [name: string]: Module } = {};
+        const { resolve, promise: modulesPromise } = deferredPromise<typeof modules>();
+
+        for (const { default: Module, defaultConfig } of modulesArray) {
+            const config = globalConfig.modules[Module.name] || {};
+
+            if (config.enabled == null || config.enabled) {
+                globalConfig.modules[Module.name] = merge(defaultConfig, config);
+
+                modules[Module.name] = new Module(modulesPromise, config, {
+                    $,
+                    dynmap,
+                    map,
+                });
+            }
+        }
+        await Promise.all(Object.values(modules).map((module) => module.ready)).then(() => resolve(modules));
 
         // nether handling
         {
@@ -835,22 +849,6 @@ window.addEventListener("load", function () {
         }
 
         // a simple command to go to the same coordinates in the nether/end
-        $(".tools-nether-portal").click(() => {
-            const coords = getCenterCoords();
-
-            if (dynmap.world.name === "world_nether") {
-                coords.world = dynmap.worlds.world;
-                coords.x *= 8;
-                coords.z *= 8;
-            } else {
-                coords.world = dynmap.worlds.world_nether;
-                coords.x /= 8;
-                coords.z /= 8;
-            }
-
-            dynmap.panToLocation(coords);
-        });
-
         $(".tools-jump-to-old-spawn").click(() => {
             dynmap.panToLocation({
                 world: dynmap.worlds.world,

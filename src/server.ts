@@ -83,6 +83,12 @@ router.use(
     staffRouter.allowedMethods(),
 );
 
+router.post("/log", bodyParser(), async (ctx) => {
+    const contents = ctx.request.body;
+    console.log(contents);
+    ctx.body = { success: true };
+});
+
 app.use(router.routes());
 app.use(router.allowedMethods());
 

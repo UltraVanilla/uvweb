@@ -92,7 +92,7 @@ async function run() {
     const yscale = 1;
 
     const gapLeft = 500;
-    const gapRight = 290;
+    const gapRight = 330;
     const gapTop = 50;
     const gapBottom = 10;
 

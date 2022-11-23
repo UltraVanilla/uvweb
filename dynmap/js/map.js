@@ -110,7 +110,7 @@ DynMap.prototype = {
 
 		if (isNaN(zoom) || isNaN(x) || isNaN(z)) return;
 
-		let world = parts[3];
+		var world = parts[3];
 
 		if (world !== "world_nether" && world !== "world_the_end") world = "world";
 
