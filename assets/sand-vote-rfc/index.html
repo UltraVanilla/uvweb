@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Survey</title>
+        <link href="/assets/ultravanilla.css" rel="stylesheet">
+        <style>
+            body, html {
+                margin: 0;
+                padding: 0;
+            }
+            body > * {
+                padding-left: 5%;
+                padding-right: 5%
+            }
+            .width-background {
+                background-color: #1c1c1c;
+            }
+            .width-background img {
+                margin-left: auto;
+                margin-right: auto;
+                display: block;
+                max-width: 100%;
+            }
+            body {
+                font-size: 1.25em;
+            }
+            .logo {
+                background-color: #1c1c1c;
+            }
+            .logo img {
+                width: 8%;
+                background-color: #1c1c1c;
+                display: block;
+                max-width: 100%;
+            }
+            input, textarea {
+                font-size: 1.0em;
+            }
+            .option {
+                background-color: #efefef;
+                padding: 10px;
+                margin-top: 15px;
+                margin-bottom: 15px;
+            }
+            input[type="checkbox"], input[type="radio"] {
+                width: 1.0em;
+                height: 1.0em;
+            }
+
+            ul.no-bullet li {
+                list-style-type: none;
+            }
+            .times-list {
+                display: inline-block;
+                vertical-align: top;
+            }
+            h2, h3, h4, h5, h6, ul {
+                margin-top: 4px;
+                margin-bottom: 4px;
+            }
+            .preview {
+                padding: 15px;
+            }
+            .proposal {
+                margin-top: 40px;
+            }
+        </style>
+        <meta property="og:image" content="/assets/416.png">
+        <meta property="og:title" content="Non-Vanilla Feature Request-for-Comment: Husks Drop Sand">
+        <meta name="description" content="We are considering adding a feature where husks can drop sand. Click here to give your input.">
+        <meta property="og:description" content="We are considering adding a feature where husks can drop sand. Click here to give your input.">
+        <script type="text/javascript" src="/js/jquery-3.5.1.js"></script>
+    </head>
+    <body>
+        <div class="logo"><img src="/assets/416.png"></div>
+        <h1>UltraVanilla Non-Vanilla Feature Request-for-Comment</h1>
+        <form action="/survey-submit/sand-vote-rfc" method="post" name="sand-vote-rfc">
+            <p>We are considering adding a feature that deviates from vanilla, that has been requested a lot. Leave your comments below.</p>
+            <p>This is not the final vote, but comments submitted here will be shown alongside the final vote as a way to elevate concerns &amp; strong opinions. Think of it like a voter information booklet or a comments-on-proceedings sort of things. If you already submitted a comment the last time we voted on this, it will be used again.</p>
+
+            <p>Consider also joining the discussion in #suggestions too! Run <code>/discord</code> ingame and click the link to access this chat.</p>
+
+            <p><label for="form-username">In-game username (required):</label>
+            <input type="text" id="form-username" name="username" placeholder="Herobrine" required></p>
+
+            <div class="proposal">
+                <h2>Proposal: Husks hold sand (re-vote)</h2>
+
+                <p>This would make husk zombies occasionally hold sand, so that a mob farm built in a desert can automate the production of sand.</p>
+
+                <p>Because this may impact the economy, we may put a supermajority vote threshold for this suggestion to be implemented.</p>
+
+                <img src="husks.jpg"/>
+
+                <p>Comment: (markdown)</p>
+                <div><textarea rows="4" cols="80" name="proposal-3-comment"></textarea></div>
+
+                <div class="hidden-until-comment">
+                    <p><label><input type="radio" name="proposal-3-leaning" value="yes"> My comment is closer to a "Yes" answer</label><br/>
+                    <label><input type="radio" name="proposal-3-leaning" value="neutral" checked> My comment is neutral, informational, or is just proposing a question that will help others decide</label><br/>
+                    <label><input type="radio" name="proposal-3-leaning" value="no"> My comment is closer to a "No" answer</label></p>
+
+                    <p><label><input type="checkbox" name="proposal-3-anonymous" class="anonymous-checkbox"> For this comment, I would like to remain anonymous.</label></p>
+
+                    <p>Here is how your comment will be shown on the final vote:</p>
+
+                    <div class="preview"></div>
+                </div>
+            </div>
+
+            <p><label for="form-build-competition-themes">Psst... Which themes should we do for upcoming build competitions? (comma separated)</label>
+            <input type="text" id="form-build-competition-themes" name="build-competition-themes"></p>
+
+            <p><input type="submit" value="Submit"></p>
+            <p>You may use /token and resubmit this form with the same username to update your response.</p>
+        </form>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.15/marked.min.js" integrity="sha512-VPdTATEqYWxDgVwJtoSSA/OSa0RReaQexL/3d8WX3CAV4xu83OjMmfI++NMA/cUhx+WC3dth10CJcBDxPX8Shg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="main.js"></script>
+    </body>
+</html>
