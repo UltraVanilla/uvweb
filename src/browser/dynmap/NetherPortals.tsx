@@ -1,5 +1,4 @@
 import Module, { BaseModuleConfiguration } from "./Module";
-import {BaseManager} from "discord.js";
 import jsPanel from "jspanel4/dist/jspanel";
 
 import jQueryType from "jquery";
