@@ -3,7 +3,12 @@ import storage from "local-storage-fallback";
 const nav: any = {};
 for (var i in navigator) nav[i] = (navigator as any)[i];
 
+let count = 0;
+
 function publish(type: string, args: any, trace?: string) {
+    count++;
+    // do not send more than 100 telemetry packets
+    if (count > 100) return;
     fetch("/log", {
         method: "POST",
         headers: {

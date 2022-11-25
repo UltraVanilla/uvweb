@@ -92,12 +92,13 @@ window.addEventListener("load", function () {
         console.log("Detected dynmap load");
         let loadConditionMarkers = false;
         let loadConditionUpdated = false;
-        $(dynmap).one("markersupdated", (a) => {
+
+        $(window.dynmap).one("markersupdated", (a) => {
             console.log("Detected first markers update");
             loadConditionMarkers = true;
             if (loadConditionMarkers && loadConditionUpdated) startLoad();
         });
-        $(dynmap).one("worldupdating", (a) => {
+        $(window.dynmap).one("worldupdating", (a) => {
             console.log("Detected first world update");
             loadConditionUpdated = true;
             if (loadConditionMarkers && loadConditionUpdated) startLoad();
@@ -105,6 +106,7 @@ window.addEventListener("load", function () {
 
         function startLoad() {
             map = window.map;
+            dynmap = window.dynmap;
             loadAnimationController.finish("firstupdate");
             // once dynmap starts, we can start our extensions
             loadUltraVanilla();
