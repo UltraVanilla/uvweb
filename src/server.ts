@@ -85,7 +85,7 @@ router.use(
 
 router.post("/log", bodyParser(), async (ctx) => {
     const contents = ctx.request.body;
-    console.log(contents);
+    logger.log("info", `telemetry: ${JSON.stringify(contents)}`);
     ctx.body = { success: true };
 });
 

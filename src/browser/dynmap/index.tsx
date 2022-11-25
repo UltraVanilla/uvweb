@@ -1,3 +1,5 @@
+console.log("Loaded main script");
+
 import jsPanel from "jspanel4/dist/jspanel";
 import jQueryType from "jquery";
 import React from "jsx-dom";
@@ -33,6 +35,8 @@ let dynmap = window.dynmap;
 let map = window.map;
 const $ = window.$;
 
+console.log("Hooked to Dynmap objects");
+
 (window as any).dynUpdate = async function dynUpdate(
     url: string,
     cb: (ping: DynmapPing) => void = () => {},
@@ -64,6 +68,7 @@ async function getDictionary(time: number): Promise<string[]> {
 }
 
 window.addEventListener("load", function () {
+    console.log("Detected window load");
     // a way to handle multiple things loading to indicate it with only one spinner
     const loadAnimationController = {
         thingsLoading: new Set(),
@@ -84,13 +89,16 @@ window.addEventListener("load", function () {
     loadAnimationController.load("firstupdate");
 
     waitForDynmap().then(() => {
+        console.log("Detected dynmap load");
         let loadConditionMarkers = false;
         let loadConditionUpdated = false;
         $(dynmap).one("markersupdated", (a) => {
+            console.log("Detected first markers update");
             loadConditionMarkers = true;
             if (loadConditionMarkers && loadConditionUpdated) startLoad();
         });
         $(dynmap).one("worldupdating", (a) => {
+            console.log("Detected first world update");
             loadConditionUpdated = true;
             if (loadConditionMarkers && loadConditionUpdated) startLoad();
         });
@@ -111,6 +119,7 @@ window.addEventListener("load", function () {
     });
 
     async function loadUltraVanilla() {
+        console.log("Loading extensions...");
         jsPanel.defaults.theme = "dark";
         jsPanel.ziBase = 1000;
 
@@ -1020,6 +1029,7 @@ window.addEventListener("load", function () {
 
             if (localStorage.pinSidebar === "true") $(".dynmap .sidebar").addClass("pinned");
         }
+        console.log("Finished loading extensions");
     }
 
     {

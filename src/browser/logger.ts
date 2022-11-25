@@ -4,23 +4,23 @@ const nav: any = {};
 for (var i in navigator) nav[i] = (navigator as any)[i];
 
 function publish(type: string, args: any, trace?: string) {
-    // fetch("/log", {
-    //     method: "POST",
-    //     headers: {
-    //         Accept: "application/json, text/plain, */*",
-    //         "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //         type,
-    //         message: Array.from(args),
-    //         trace,
-    //         time: Date.now(),
-    //         elapsed: performance != null ? performance.now() : undefined,
-    //         agent: nav,
-    //     }),
-    // }).catch((err) => {
-    //     //ignore
-    // });
+    fetch("/log", {
+        method: "POST",
+        headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            type,
+            message: Array.from(args),
+            trace,
+            time: Date.now(),
+            elapsed: performance != null ? performance.now() : undefined,
+            agent: nav,
+        }),
+    }).catch((err) => {
+        //ignore
+    });
 }
 
 const cl = console.log;
