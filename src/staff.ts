@@ -146,7 +146,7 @@ router.get("/coreprotect-tools", (ctx) => {
                     <div><pre id="coreprotect-delta-output"></pre></div>
                     <div id="coreprotect-formatted"></div>
                 </form>
-                <script type="application/javascript" src="/assets/coreprotect-tools.js"></script>
+                <script type="module" src="/assets/coreprotect-tools.js"></script>
             </body>
         </html>
     `;
