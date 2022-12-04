@@ -102,6 +102,9 @@ window.addEventListener("load", function () {
             console.log("Detected first world update");
             loadConditionUpdated = true;
             if (loadConditionMarkers && loadConditionUpdated) startLoad();
+            setTimeout(() => {
+                startLoad();
+            }, 2000);
         });
 
         function startLoad() {
