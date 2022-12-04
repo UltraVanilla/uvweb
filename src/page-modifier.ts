@@ -94,7 +94,7 @@ export default async (ctx: Koa.BaseContext): Promise<void> => {
         .addClass("header-part server-social server-reddit")
         .appendTo(newHeader);
 
-    $("<a href='https://uv.miraheze.org/wiki/Main_Page' target='blank' rel='noreferrer'>community wiki</a>")
+    $("<a href='https://wiki.ultravanilla.world/wiki/Main_Page' target='blank' rel='noreferrer'>community wiki</a>")
         .addClass("header-part server-social server-wiki")
         .appendTo(newHeader);
 

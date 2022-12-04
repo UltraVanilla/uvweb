@@ -92,6 +92,7 @@ window.addEventListener("load", function () {
         console.log("Detected dynmap load");
         let loadConditionMarkers = false;
         let loadConditionUpdated = false;
+        let loadStarted = false;
 
         $(window.dynmap).one("markersupdated", (a) => {
             console.log("Detected first markers update");
@@ -103,11 +104,12 @@ window.addEventListener("load", function () {
             loadConditionUpdated = true;
             if (loadConditionMarkers && loadConditionUpdated) startLoad();
             setTimeout(() => {
-                startLoad();
+                if (!loadStarted) startLoad();
             }, 2000);
         });
 
         function startLoad() {
+            loadStarted = true;
             map = window.map;
             dynmap = window.dynmap;
             loadAnimationController.finish("firstupdate");
