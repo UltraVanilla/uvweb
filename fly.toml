@@ -12,7 +12,7 @@ processes = []
 
 [mounts]
     source="ultravanilla"
-    destination="/app/data"
+    destination="/app/package/data"
 
 [[services]]
     http_checks = []
