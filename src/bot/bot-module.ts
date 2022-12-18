@@ -6,6 +6,11 @@ import { BotConfig } from "./bot";
 
 export interface BotModule<T extends BaseModuleConfiguration> {
     onMessageCreate?(message: discord.Message): void;
+    onMessageDelete?(message: discord.Message | discord.PartialMessage): void;
+    onMessageUpdate?(
+        oldMessage: discord.Message | discord.PartialMessage,
+        newMessage: discord.Message | discord.PartialMessage,
+    ): void;
     onInteractionCreate?(interaction: discord.Interaction): void;
 }
 
@@ -39,6 +44,20 @@ export abstract class BotModule<T extends BaseModuleConfiguration = BaseModuleCo
             client.on("messageCreate", (message) => {
                 if (this.listenersIgnoreSelf && message.author.id === client.user?.id) return;
                 this.onMessageCreate!(message);
+            });
+
+        if (this.onMessageDelete != null)
+            client.on("messageDelete", (message) => {
+                if (message.author == null) return;
+                if (this.listenersIgnoreSelf && message.author.id === client.user?.id) return;
+                this.onMessageDelete!(message);
+            });
+
+        if (this.onMessageUpdate != null)
+            client.on("messageUpdate", (oldMessage, newMessage) => {
+                if (newMessage.author == null) return;
+                if (this.listenersIgnoreSelf && newMessage.author.id === client.user?.id) return;
+                this.onMessageUpdate!(oldMessage, newMessage);
             });
 
         if (this.onInteractionCreate != null)

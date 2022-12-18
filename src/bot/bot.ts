@@ -21,13 +21,9 @@ import SlurDetector from "./modules/SlurDetector";
 import PingForwarder from "./modules/PingForwarder";
 import ServerStarter from "./modules/ServerStarter";
 import CategoryTimestamp from "./modules/CategoryTimestamp";
+import MirrorForumsToChannel from "./modules/MirrorForumsToChannel";
 
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN as string;
-// const TIMESTAMP_CATEGORIES = JSON.parse(process.env.TIMESTAMP_CATEGORIES!) as {
-//     category: string;
-//     timestamp: number;
-//     text: string;
-// }[];
 
 const logger = winston.createLogger({
     format: winston.format.combine(
@@ -53,7 +49,14 @@ client.login(DISCORD_TOKEN);
 
 client.once("ready", async () => {
     logger.info("successfully authenticated");
-    const moduleClasses = [Activity, SlurDetector, PingForwarder, ServerStarter, CategoryTimestamp];
+    const moduleClasses = [
+        Activity,
+        SlurDetector,
+        PingForwarder,
+        ServerStarter,
+        CategoryTimestamp,
+        MirrorForumsToChannel,
+    ];
 
     const modules: { [name: string]: BotModule } = {};
     const { resolve, promise: modulesPromise } = deferredPromise<typeof modules>();
