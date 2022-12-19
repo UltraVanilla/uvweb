@@ -1,0 +1,200 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Survey</title>
+        <link href="/assets/ultravanilla.css" rel="stylesheet">
+        <style>
+            body, html {
+                margin: 0;
+                padding: 0;
+            }
+            body > * {
+                padding-left: 5%;
+                padding-right: 5%
+            }
+            .width-background {
+                background-color: #1c1c1c;
+            }
+            .width-background img {
+                margin-left: auto;
+                margin-right: auto;
+                display: block;
+                max-width: 100%;
+            }
+            body {
+                font-size: 1.5em;
+            }
+            .logo {
+                background-color: #1c1c1c;
+            }
+            .logo img {
+                width: 8%;
+                background-color: #1c1c1c;
+                display: block;
+                max-width: 100%;
+            }
+            input {
+                font-size: 1.0em;
+            }
+            .option img {
+                width: auto;
+                height: auto;
+            }
+            .option {
+                background-color: #efefef;
+                padding: 10px;
+                margin-top: 15px;
+                margin-bottom: 15px;
+            }
+        </style>
+        <meta property="og:image" content="/assets/416.png">
+        <script type="text/javascript" src="/js/jquery-3.5.1.js"></script>
+    </head>
+    <body>
+        <div class="logo"><img src="/assets/416.png"></div>
+        <h1>UV Awards 2022 - Best Mapart</h1>
+        <form action="/survey-submit/mapart-2022" method="post">
+            <p><label for="form-username">Username:</label>
+            <input type="text" id="form-username" name="username" placeholder="Herobrine" required></p>
+            <p>On 31st December, the second annual UltraVanilla Awards Show will be held at the Outpost Auction House at 20:00 UTC.
+            <p>Pick your favorite entries for the Best Mapart category below.</p>
+            <p>Choose wisely!</p>
+            <div class="options"></div>
+            <p><input type="submit" value="Submit"></p>
+            <p>You may use /token and resubmit this form with the same username to update your response.</p>
+        </form>
+        <script>
+
+
+if (/(iPhone|iPod|iPad).*AppleWebKit/i.test(navigator.userAgent)) {
+    document.body.innerHTML = "";
+    alert("This page does not work on Safari, please try a different browser.");
+}
+
+const options = {
+    1: {
+        title: "416 Animated (1x1)",
+        screenshots: [
+            "416 Animated.gif",
+        ],
+    },
+    2: {
+        title: "Aggies Shock the World (2x1)",
+        screenshots: [
+            "Aggies Shock the World.png",
+        ],
+    },
+    3: {
+        title: "Credit Card Info (2x1)",
+        screenshots: [
+            "Credit Card Info.png",
+        ],
+    },
+    4: {
+        title: "Cyp R Us (2x1)",
+        screenshots: [
+            "Cyp R Us.png",
+        ],
+    },
+    5: {
+        title: "Mariah Carey (1x1)",
+        screenshots: [
+            "Mariah Carey.png",
+        ],
+    },
+    6: {
+        title: "Pentagram (1x1)",
+        screenshots: [
+            "Pentagram.png",
+        ],
+    },
+    7: {
+        title: "Playing Cards (Set of 52)",
+        screenshots: [
+            "Playing Cards.png",
+        ],
+    },
+    8: {
+        title: "Tangled (7x7)",
+        screenshots: [
+            "Tangled.png",
+        ],
+    },
+    9: {
+        title: "Tesco (2x3)",
+        screenshots: [
+            "Tesco.png",
+        ],
+    },
+    10: {
+        title: "The Hollow Knight (2x2)",
+        screenshots: [
+            "The Hollow Knight.png",
+        ],
+    },
+    11: {
+        title: "Vessel - Punish (2x2)",
+        screenshots: [
+            "Vessel - Punish.png",
+        ],
+    },
+    12: {
+        title: "You Dropped This (2x2)",
+        screenshots: [
+            "You Dropped This.png",
+        ],
+    },
+};
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+
+    return array;
+}
+
+
+const optionsContainer = document.getElementsByClassName("options")[0]
+
+for (const [name, option] of shuffleArray(Object.entries(options))) {
+
+    const { screenshots, title } = option;
+
+    const id = `option-${name}`;
+
+    const optionDiv = $("<div/>", { class: "option" });
+
+    optionDiv.append($(`<h2>${title}</h2>`));
+
+    optionDiv.append($("<p>Use the slider below to assign a score for this entry</p>"));
+    optionDiv.append($(`<p>Your rating for <strong>${title}</strong>: <span class='rating'>50</span>/100</p>`));
+    const ratingSlider = $("<input/>", { type: "range", name: id, min: 0, max: 100, value: 50 });
+    optionDiv.append(ratingSlider);
+
+    ratingSlider.on("input", () => {
+        const sliderVal = parseInt(ratingSlider.val())
+        optionDiv.find(".rating").text(sliderVal);
+    })
+
+    for (const screenshot of shuffleArray(screenshots)) {
+        const img = $("<img/>", { src: `option-${name}/${screenshot}` });
+        optionDiv.append(img);
+    }
+
+    $(optionsContainer).append(optionDiv);
+
+    function scale() {
+        const width = $(window).width();
+    }
+
+    window.addEventListener("resize", scale);
+    scale();
+}
+
+        </script>
+    </body>
+</html>

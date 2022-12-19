@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>UltraVanilla Staff Applications</title>
+        <link href="/assets/ultravanilla.css" rel="stylesheet">
+        <style>
+            body, html {
+                margin: 0;
+                padding: 0;
+            }
+            body > * {
+                padding-left: 5%;
+                padding-right: 5%
+            }
+            .width-background {
+                background-color: #1c1c1c;
+            }
+            .width-background img {
+                margin-left: auto;
+                margin-right: auto;
+                display: block;
+                max-width: 100%;
+            }
+            body {
+                font-size: 1.25em;
+            }
+            .logo {
+                background-color: #1c1c1c;
+            }
+            .logo img {
+                width: 8%;
+                background-color: #1c1c1c;
+                display: block;
+                max-width: 100%;
+            }
+            input, textarea {
+                font-size: 1.0em;
+            }
+            .option {
+                background-color: #efefef;
+                padding: 10px;
+                margin-top: 15px;
+                margin-bottom: 15px;
+            }
+            input[type="checkbox"], input[type="radio"] {
+                width: 1.0em;
+                height: 1.0em;
+            }
+
+            ul.no-bullet li {
+                list-style-type: none;
+            }
+            .times-list {
+                display: inline-block;
+                vertical-align: top;
+            }
+            h2, h3, h4, h5, h6, ul {
+                margin-top: 4px;
+                margin-bottom: 4px;
+            }
+        </style>
+        <meta property="og:image" content="/assets/416.png">
+        <script type="text/javascript" src="/js/jquery-3.5.1.js"></script>
+    </head>
+    <body>
+        <div class="logo"><img src="/assets/416.png"></div>
+        <h1>UV Awards 2022 - Lifetime Achievement Award</h1>
+        <form action="/survey-submit/2022-dec-staff-applications" method="post" name="staff-apps">
+            <p><label for="form-username">Username:</label>
+            <input type="text" id="form-username" name="username" placeholder="Herobrine" required></p>
+            <p>On 31st December, the second annual UltraVanilla Awards Show will be held at the Outpost Auction House at 20:00 UTC.
+            <p>The Lifetime Achievement Award is meant to celebrate a player who has contributed a great deal to the server in a positive and community-focussed way.</p>
+            <p>You may nominate up to 5 players for this award.</p>
+            <p>Choose wisely!</p>
+
+                <p>Player 1</p>
+                <textarea rows="1" cols="80" name="user-1" required></textarea>
+                <p>Why they should be nominated</p>
+                <textarea rows="4" cols="80" name="user-1-why" required></textarea>
+                <p>Player 2</p>
+                <textarea rows="1" cols="80" name="user-2" required></textarea>
+                <p>Why they should be nominated</p>
+                <textarea rows="4" cols="80" name="user-2-why" required></textarea>
+                <p>Player 3</p>
+                <textarea rows="1" cols="80" name="user-3" required></textarea>
+                <p>Why they should be nominated</p>
+                <textarea rows="4" cols="80" name="user-3-why" required></textarea>
+                <p>Player 4</p>
+                <textarea rows="1" cols="80" name="user-4" required></textarea>
+                <p>Why they should be nominated</p>
+                <textarea rows="4" cols="80" name="user-4-why" required></textarea>
+                <p>Player 5</p>
+                <textarea rows="1" cols="80" name="user-5" required></textarea>
+                <p>Why they should be nominated</p>
+                <textarea rows="4" cols="80" name="user-5-why" required></textarea>
+
+                <p><input type="submit" value="Submit"></p>
+                <p>You may use /token and resubmit this form with the same username to update your response.</p>
+            </div>
+        </form>
+<script>
+
+const adminOnly = document.getElementById("admin-only");
+const moderatorOnly = document.getElementById("moderator-only");
+const requirementsNotMet = document.getElementById("requirements-not-met");
+
+function update() {
+    const positionRadio = document.querySelector("input[name='which-position']:checked");
+    const position = positionRadio != null ? positionRadio.value : null;
+
+    const meetsRequirements = document.querySelectorAll(".prerequisite:checked").length === 3
+        && document.querySelectorAll(".not-prerequisite:checked").length === 0;
+
+    adminOnly.style.display = "none";
+    moderatorOnly.style.display = "none";
+    requirementsNotMet.style.display = "none";
+
+    if (!meetsRequirements && position === "moderator") {
+        requirementsNotMet.style.display = "block";
+        return;
+    }
+
+    if (position === "admin" || position === "dev") {
+        adminOnly.style.display = "block";
+    } else if (position === "moderator") {
+        moderatorOnly.style.display = "block";
+    }
+}
+
+update();
+
+document["staff-apps"]["which-position"].forEach(radio => {
+    radio.addEventListener("change", update);
+});
+document.querySelectorAll(".prerequisite, .not-prerequisite").forEach(checkbox => {
+    checkbox.addEventListener("change", update);
+});
+
+document.querySelectorAll(".hours-list label").forEach(label => {
+    const utcHour = label.firstChild.value;
+    const date = new Date();
+    date.setUTCHours(utcHour);
+    date.setUTCMinutes(0);
+    date.setUTCSeconds(0);
+    date.setUTCMilliseconds(0);
+    
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone.replace(/.*\//, "").replaceAll("_", " ");
+    let hours = date.getHours();
+    const ampm = hours >= 12 ? "pm" : "am";
+    hours %= 12;
+    hours = hours ? hours : 12
+
+    label.appendChild(document.createTextNode(` ${hours}${ampm} in ${timezone}`));
+});
+</script>
+    </body>
+</html>

@@ -1,0 +1,261 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Survey</title>
+        <link href="/assets/ultravanilla.css" rel="stylesheet">
+        <style>
+            body, html {
+                margin: 0;
+                padding: 0;
+            }
+            body > * {
+                padding-left: 5%;
+                padding-right: 5%
+            }
+            .width-background {
+                background-color: #1c1c1c;
+            }
+            .width-background img {
+                margin-left: auto;
+                margin-right: auto;
+                display: block;
+                max-width: 100%;
+            }
+            body {
+                font-size: 1.5em;
+            }
+            .logo {
+                background-color: #1c1c1c;
+            }
+            .logo img {
+                width: 8%;
+                background-color: #1c1c1c;
+                display: block;
+                max-width: 100%;
+            }
+            input {
+                font-size: 1.0em;
+            }
+            .splide__slide img {
+                width: auto;
+                height: 400px;
+            }
+            .option img {
+                width: 750px;
+                height: auto;
+            }
+            .option {
+                background-color: #efefef;
+                padding: 10px;
+                margin-top: 15px;
+                margin-bottom: 15px;
+            }
+        </style>
+        <meta property="og:image" content="/assets/416.png">
+        <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.3.1/dist/js/splide.min.js" integrity="sha256-U0EYlyQ29ndToXSkVnSaHiJxoqDMLZ4h/ed21cw2Aj4=" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="/js/jquery-3.5.1.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.3.1/dist/css/splide.min.css" integrity="sha256-vnIcA0IxxVO/dQ6l9ZAl6i8HhSMouOB9zG0R+HsQaA4=" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="logo"><img src="/assets/416.png"></div>
+        <h1>UV Awards 2022 - Best Event </h1>
+        <form action="/survey-submit/event-2022" method="post">
+            <p><label for="form-username">Username:</label>
+            <input type="text" id="form-username" name="username" placeholder="Herobrine" required></p>
+            <p>On 30th December, the second annual UltraVanilla Awards Show will be held at the Outpost Auction house at 20:00 UTC.</p>
+            <p>Pick your favorite entries for the Best Event category below. Screenshots courtesy of the UV community!<p>
+            <p>Choose wisely!</p>
+            <div class="options"></div>
+            <p><input type="submit" value="Submit"></p>
+            <p>You may use /token and resubmit this form with the same username to update your response.</p>
+        </form>
+        <script>
+
+
+if (/(iPhone|iPod|iPad).*AppleWebKit/i.test(navigator.userAgent)) {
+    document.body.innerHTML = "";
+    alert("This page does not work on Safari, please try a different browser.");
+}
+
+const options = {
+    1: {
+        title: "NYE Spectacluar 2",
+        screenshots: [
+            "nye1.png",
+            "nye2.png",
+            "nye3.png",
+            "nye4.png",
+            "nye5.png",
+        ],
+    },
+    2: {
+        title: "Steamed Hams Winter Event",
+        screenshots: [
+            "winter1.png",
+            "winter2.png",
+            "winter3.png",
+            "winter4.png",
+            "winter5.png",
+        ],
+    },
+    3: {
+        title: "USUV Town Tours",
+        screenshots: [
+            "tour1.png",
+            "tour2.png",
+            "tour3.png",
+            "tour4.png",
+            "tour5.png",
+        ],
+    },
+    4: {
+        title: "Evergreen Egg Hunt",
+        screenshots: [
+            "egg1.png",
+            "egg2.png",
+            "egg3.png",
+            "egg4.png",
+            "egg5.png",
+        ],
+    },
+    5: {
+        title: "UV Place II",
+        screenshots: [
+            "place1.png",
+            "place2.png",
+            "place3.png",
+            "place4.png",
+            "place5.png",
+        ],
+    },
+    6: {
+        title: "Third UV Olympics",
+        screenshots: [
+            "olympics1.png",
+            "olympics2.png",
+            "olympics3.png",
+            "olympics4.png",
+            "olympics5.png",
+        ],
+    },
+    7: {
+        title: "Ice Hockey Summer Showdown",
+        screenshots: [
+            "hockey1.png",
+            "hockey2.png",
+            "hockey3.png",
+            "hockey4.png",
+            "hockey5.png",
+        ],
+    },
+    8: {
+        title: "Halloween Spooktacular",
+        screenshots: [
+            "halloween1.png",
+            "halloween2.png",
+            "halloween3.png",
+            "halloween4.png",
+            "halloween5.png",
+        ],
+    },
+    9: {
+        title: "Olympics All-Stars",
+        screenshots: [
+            "allstar1.png",
+            "allstar2.png",
+            "allstar3.png",
+            "allstar4.png",
+            "allstar5.png",
+        ],
+    },
+    10: {
+        title: "Christmas Skin Competition",
+        screenshots: [
+            "skin1.png",
+            "skin2.png",
+            "skin3.png",
+            "skin4.png",
+            "skin5.png",
+        ],
+    },
+};
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+
+    return array;
+}
+
+
+const optionsContainer = document.getElementsByClassName("options")[0]
+
+for (const [name, option] of shuffleArray(Object.entries(options))) {
+
+    const { screenshots, title } = option;
+
+    const id = `option-${name}`;
+
+    const optionDiv = $("<div/>", { class: "option" });
+    const splideElem = $("<div/>", { class: "splide", id })
+    const splideTrack = $("<div/>", { class: "splide__track" })
+    const splideList = $("<ul/>", { class: "splide__list" })
+
+    optionDiv.append($(`<h2>${title}</h2>`));
+
+    optionDiv.append($("<p>Use the slider below to assign a score for this entry</p>"));
+    optionDiv.append($(`<p>Your rating for <strong>${title}</strong>: <span class='rating'>50</span>/100</p>`));
+    const ratingSlider = $("<input/>", { type: "range", name: id, min: 0, max: 100, value: 50 });
+    optionDiv.append(ratingSlider);
+    optionDiv.append(splideElem);
+    splideElem.append(splideTrack);
+    splideTrack.append(splideList);
+
+
+    ratingSlider.on("input", () => {
+        const sliderVal = parseInt(ratingSlider.val())
+        optionDiv.find(".rating").text(sliderVal);
+
+    })
+
+    for (const screenshot of shuffleArray(screenshots)) {
+        const img = $("<img/>", { src: `option-${name}/${screenshot}` });
+        const li = $("<li/>", { class: "splide__slide" });
+        li.append(img);
+        splideList.append(li);
+    }
+
+    $(optionsContainer).append(optionDiv);
+
+    const splide = new Splide(`#${id}`, {
+        type: "loop",
+        padding: "5rem",
+        autoplay: true,
+        perPage: 2,
+        pauseOnHover: false,
+        pauseOnFocus: false,
+    });
+
+    splide.mount();
+
+    function scale() {
+        const width = $(window).width();
+
+        if (width < 1200) {
+            splide.options = { perPage: 1 };
+        } else {
+            splide.options = { perPage: 2 };
+        }
+    }
+
+    window.addEventListener("resize", scale);
+    scale();
+}
+
+        </script>
+    </body>
+</html>
