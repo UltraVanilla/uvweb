@@ -1,6 +1,7 @@
 lib/
 vendor/
 assets/*.js*
+assets/min/*.js*
 assets/system/*.js*
 
 # Created by https://www.toptal.com/developers/gitignore/api/vim,linux,windows,macos,node
