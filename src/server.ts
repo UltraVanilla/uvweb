@@ -46,6 +46,21 @@ app.use(async (ctx, next) => {
     }
 });
 
+const WELL_KNOWN_STRING = process.env.WELL_KNOWN_DATA;
+if (WELL_KNOWN_STRING != null) {
+    const WELL_KNOWN_DATA = JSON.parse(WELL_KNOWN_STRING);
+    app.use(async (ctx, next) => {
+        if (ctx.path.startsWith("/.well-known/")) {
+            const path = ctx.path.slice(13);
+            const data = WELL_KNOWN_DATA[path];
+            if (data == null) return await next();
+            ctx.body = data;
+        } else {
+            await next();
+        }
+    });
+}
+
 const sessionMiddleware = configureSessions(app);
 
 app.use(serve("dynmap", { maxage: 1000 * 60 * 60 * 2 }));
