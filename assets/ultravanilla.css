@@ -11,6 +11,10 @@ button {
     font: inherit;
 }
 
+.inline-block {
+    display: inline-block;
+}
+
 .box {
     display: flex;
     flex-flow: column;
@@ -47,18 +51,27 @@ body {
 
 .header-part.server-social {
     padding: 20px;
+}
+.header-part.server-social,
+.header-part.server-social a {
     background-color: #1c1c1c;
     color: #8c94e6;
 }
 
 .header-part.server-social:hover,
-.header-part.server-social:active {
+.header-part.server-social:active,
+.header-part.server-social:hover a,
+.header-part.server-social:active a {
     background-color: #9f9f9f;
     color: #1c1c1c;
 }
 
 .header-part strong {
     font-size: 20px;
+}
+
+.header-separator {
+    display: inline-block;
 }
 
 .uv-logo-name {

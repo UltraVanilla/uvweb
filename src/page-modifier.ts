@@ -80,25 +80,25 @@ export default async (ctx: Koa.BaseContext): Promise<void> => {
             <div class='header-part server-info'>
                 <strong class='server-info-label'>server address: </strong> play.ultravanilla.world</div>
             <div class='header-part server-info server-info-version'>
-                <strong class='server-info-label'>version: </strong> 1.19<span style='color:#979797'>.2</span></div>
+                <strong class='server-info-label'>version: </strong> 1.19<span style='color:#979797'>.3</span></div>
         </span>
     `).appendTo(newHeader);
 
-    $("<span>").addClass("header-separator").appendTo(newHeader);
+    $("<div>").addClass("header-separator").appendTo(newHeader);
 
-    $("<a href='https://discord.gg/kU4dkzk' target='blank' rel='noreferrer'>discord</a>")
+    $("<div><a href='https://discord.gg/kU4dkzk' target='blank' rel='noreferrer'>discord</a>")
         .addClass("header-part server-social server-discord")
         .appendTo(newHeader);
 
-    $("<a href='https://www.reddit.com/r/UltraVanilla/' target='blank' rel='noreferrer'>reddit</a>")
+    $("<div><a href='https://www.reddit.com/r/UltraVanilla/' target='blank' rel='noreferrer'>reddit</a>")
         .addClass("header-part server-social server-reddit")
         .appendTo(newHeader);
 
-    $("<a href='https://wiki.ultravanilla.world/wiki/Main_Page' target='blank' rel='noreferrer'>community wiki</a>")
+    $(
+        "<div><a href='https://wiki.ultravanilla.world/wiki/Main_Page' target='blank' rel='noreferrer'>community wiki</a></div>",
+    )
         .addClass("header-part server-social server-wiki")
         .appendTo(newHeader);
-
-    $("<a href='#'>open source</a>").addClass("header-part server-social server-open-source").appendTo(newHeader);
 
     newContainer.append(newHeader);
 
@@ -165,7 +165,19 @@ export default async (ctx: Koa.BaseContext): Promise<void> => {
 
     $("<link>").attr("href", "assets/jspanel.min.css").attr("rel", "stylesheet").appendTo($("head"));
 
-    $("<link>").attr("href", "assets/fonts.css").attr("rel", "stylesheet").appendTo($("head"));
+    $("title").text("UltraVanilla");
+    $("meta[name='description']").attr(
+        "content",
+        "UltraVanilla is a small-scale LGBT-friendly community Minecraft survival server with minimal enhancements to the core game. 30 player slots is a sweetspot for a server that is not crowded or discouraging production. Community Projects are suggested and discussed on the discord, anyone is free to contribute! The server usually updates fast, and is currently running on Paper 1.19.3. No resets!",
+    );
+    $("meta[name='keywords']").attr(
+        "content",
+        "minecraft, map, vanilla, friendly server, lgbt friendly, no resets, old school, dynmap, brewery",
+    );
+    $("link[rel='shortcut icon']").remove();
+    $("link[rel='mask-icon']").remove();
+    $("meta[name='msapplication-TileColor']").attr("content", "#a6c7d0");
+    $("meta[name='theme-color']").attr("content", "#a6c7d0");
 
     ctx.append("Link", "</account-info>; rel=prefetch; as=fetch; crossorigin=anonymous");
     ctx.append("Link", "</configuration>; rel=prefetch; as=fetch; crossorigin=anonymous");

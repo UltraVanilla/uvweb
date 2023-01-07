@@ -265,63 +265,6 @@ window.addEventListener("load", function () {
             }
         }
 
-        // open source window
-        {
-            let numPressed = 0;
-            $(".server-open-source").click(() => {
-                numPressed++;
-                if (numPressed > 10) {
-                    jsPanel.create({
-                        content: <h1>Stop fucking pressing this button</h1>,
-                        headerTitle: "Wtf?",
-                        position: "center",
-                        panelSize: "560 150",
-                    });
-                    return;
-                }
-
-                const contents = $(
-                    <div>
-                        <p>UltraVanilla extensions for Dynmap made by lordpipe released into public domain</p>
-                        <a className="link" href="https://github.com/lordofpipes/uvweb" target="blank" rel="noreferrer">
-                            uvweb on GitHub
-                        </a>
-
-                        <p>Dynmap by Mikeprimm</p>
-                        <a className="link" href="https://github.com/webbukkit/dynmap" target="blank" rel="noreferrer">
-                            dynmap on GitHub
-                        </a>
-
-                        <h4>Server Plugins</h4>
-
-                        <p>UltraVanilla plugin by lordpipe and Akoot_</p>
-                        <a
-                            className="link"
-                            href="https://github.com/Akoot/UltraVanilla"
-                            target="blank"
-                            rel="noreferrer"
-                        >
-                            UltraVanilla on GitHub
-                        </a>
-
-                        <p>
-                            ArmorStandTools, Brewery, Chairs, ClientDetector, CoreProtect, DiscordSRV, dynmap,
-                            floodgate, FoundDiamonds, Geyser-Spigot, Insights, LessEntropy, LimitPillagers, LuckPerms,
-                            OpenInv, SuperVanish, TimedRestart, UltraBlocks, UltraVanilla, Vault, VaultJwt,
-                            ViaBackwards, ViaVersion, WorldEdit
-                        </p>
-                    </div>,
-                );
-
-                jsPanel.create({
-                    content: contents[0],
-                    headerTitle: "Open Source",
-                    position: "center",
-                    panelSize: "410 560",
-                });
-            });
-        }
-
         // account panel
         {
             let panel: jsPanel.JsPanel | null;
