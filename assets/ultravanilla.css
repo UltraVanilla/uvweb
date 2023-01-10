@@ -74,6 +74,10 @@ body {
     display: inline-block;
 }
 
+.server-description {
+    margin: 10px;
+}
+
 .uv-logo-name {
     font-size: 40px;
 }

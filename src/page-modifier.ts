@@ -69,7 +69,7 @@ export default async (ctx: Koa.BaseContext): Promise<void> => {
 
     const newContainer = $("<div class=box>");
 
-    const newHeader = $("<div>").addClass("header");
+    const newHeader = $("<header>").addClass("header");
 
     $("<div>").text("UltraVanilla").addClass("header-part uv-logo-name").appendTo(newHeader);
 
@@ -98,6 +98,11 @@ export default async (ctx: Koa.BaseContext): Promise<void> => {
         "<div><a href='https://wiki.ultravanilla.world/wiki/Main_Page' target='blank' rel='noreferrer'>community wiki</a></div>",
     )
         .addClass("header-part server-social server-wiki")
+        .appendTo(newHeader);
+    $(
+        "<p>UltraVanilla is a small-scale LGBT-friendly community Minecraft survival server with minimal enhancements to the core game. 30 player slots is a sweetspot for a server that is not crowded or discouraging production. Community Projects are suggested and discussed on the discord, anyone is free to contribute! The server usually updates fast, and is currently running on Paper 1.19.3. No resets!</p>",
+    )
+        .addClass("server-description")
         .appendTo(newHeader);
 
     newContainer.append(newHeader);

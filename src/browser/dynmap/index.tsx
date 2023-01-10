@@ -67,6 +67,18 @@ async function getDictionary(time: number): Promise<string[]> {
     return dict;
 }
 
+const serverDescription = $(".server-description");
+if (localStorage.seenDescription === "true") {
+    serverDescription.hide();
+}
+
+localStorage.seenDescription = true;
+$(".uv-logo-name, .uv-logo").hover(() => {
+    serverDescription.show();
+}, () => {
+    serverDescription.hide();
+})
+
 window.addEventListener("load", function () {
     console.log("Detected window load");
     // a way to handle multiple things loading to indicate it with only one spinner
@@ -233,6 +245,8 @@ window.addEventListener("load", function () {
             if (localStorage.enableCrosshair == null) {
                 localStorage.enableCrosshair = false;
             }
+
+
             headerCheckbox.prop("checked", localStorage.enableHeader === "true");
             crosshairCheckbox.prop("checked", localStorage.enableCrosshair === "true");
 
