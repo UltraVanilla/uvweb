@@ -75,7 +75,19 @@ body {
 }
 
 .server-description {
+    display: flex;
+    align-items: center;
+}
+
+.server-description p {
     margin: 10px;
+}
+
+.server-description div.close {
+    font-size: 26px;
+    cursor: pointer;
+    padding: 0 25px;
+    height: 100%;
 }
 
 .uv-logo-name {
