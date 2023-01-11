@@ -107,6 +107,10 @@ export default async (ctx: Koa.BaseContext): Promise<void> => {
     )
         .addClass("server-description")
         .appendTo(newHeader);
+    
+    $(".server-description div.close").click(function() {
+        $(".server-description").hide();
+    });
 
     newContainer.append(newHeader);
 
