@@ -78,6 +78,9 @@ $(".uv-logo-name, .uv-logo").hover(() => {
 }, () => {
     serverDescription.hide();
 })
+$(".server-description .close").click(function() {
+    serverDescription.hide();
+});
 
 window.addEventListener("load", function () {
     console.log("Detected window load");
