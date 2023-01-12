@@ -153,9 +153,9 @@ export const login = [
 
                 if (coreProtectUser.userAccount == null) {
                     coreProtectUser.userAccount = new User();
+                    coreProtectUser.userAccount.uuid = coreProtectUser.uuid;
+                    coreProtectUser.userAccount = await User.query().insertAndFetch(coreProtectUser.userAccount);
                 }
-
-                const user = await CoreProtectUser.query().upsertGraphAndFetch(coreProtectUser, { relate: true });
 
                 userCache.delete(coreProtectUser.uuid);
 
