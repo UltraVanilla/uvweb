@@ -75,7 +75,19 @@ body {
 }
 
 .server-description {
+    display: flex;
+    align-items: center;
+}
+
+.server-description p {
     margin: 10px;
+}
+
+.server-description div.close {
+    font-size: 26px;
+    cursor: pointer;
+    padding: 0 25px;
+    height: 100%;
 }
 
 .uv-logo-name {
@@ -148,7 +160,7 @@ body {
 }
 
 .tools-buttons {
-    z-index: 500;
+    z-index: 110;
     position: absolute;
     bottom: 5px;
     right: 30px;
