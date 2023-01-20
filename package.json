@@ -16,7 +16,7 @@
     "prepublish": "npm run build"
   },
   "author": "lordpipe",
-  "license": "(CC0-1.0 OR ISC)",
+  "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@babel/preset-env": "^7.19.4",
     "@ltd/j-toml": "^1.35.2",
