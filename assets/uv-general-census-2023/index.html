@@ -61,8 +61,7 @@
                 margin-top: 4px;
                 margin-bottom: 4px;
             }
-            #recommendation-toggle {
-                display: none;
+            .comments {
                 margin-top: 15px;
             }
             .section {
@@ -86,6 +85,10 @@
                     width: 100%;
                 }
             }
+            .selectize-dropdown [data-selectable].option {
+                margin: 3px 0;
+                cursor: pointer;
+            }
         </style>
         <meta property="og:image" content="/assets/416.png">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha512-bnIvzh6FU75ZKxp0GXLH9bewza/OIw6dLVh9ICg0gogclmYGguQJWl8U30WpbsGTqbIiAwxTsbe76DErLq5EDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -98,7 +101,9 @@
         <form action="/survey-submit/uv-general-census-2023" method="post" name="uv-general-census-2023">
             <p><label for="form-username">Username:</label>
             <input type="text" id="form-username" name="username" placeholder="Herobrine" required></p>
-            <p>Lorem ipsum of what this is and that manatee is the greatest :slight_smile:</p>
+            <p>Greetings UVers, it's time for a general survey! We'd like to hear your thoughts on how the server is being run, get your input on some pending suggestions, & more.</p>
+            <p>A summary of the results will be shared once the survey has been closed. Demographics data will be made anonymous & will only be reported as a whole.</p>
+            <p>We appreciate your feedback & look forward to sharing the findings! Please contact staff if you have technical issues or any questions. Thank you!</p>
 
             <div class="section server">
                 <h2>Server Specific</h2>
@@ -106,7 +111,7 @@
                 <div class="question">
                     <p class="title">How long have you been playing on UV?</p>
                     <select name="uv-playtime" required>
-                        <option>Please select</option>
+                        <option disabled selected>Please select</option>
                         <option value="few-weeks">A few weeks</option>
                         <option value="1-3months">1 - 3 Months</option>
                         <option value="3-6months">3 - 6 Months</option>
@@ -124,6 +129,11 @@
                     <label><input type="radio" name="satisfaction" value="high" required> High (Very Satisfied)</label><br>
                     <label><input type="radio" name="satisfaction" value="middle"> Middling or Neutral</label><br>
                     <label><input type="radio" name="satisfaction" value="low"> Low (Dissatisifed)</label>
+
+                    <div class="comments">
+                        <p>Comments (Optional)</p>
+                        <textarea rows="4" cols="80" name="satisfaction-reason"></textarea>
+                    </div>
                 </div>
 
                 <div class="question">
@@ -133,20 +143,53 @@
 
                 <div class="question">
                     <p class="title">What are your <strong>least favorite</strong> aspects of the server and/or community?</p>
-                    <textarea rows="4" cols="80" name="least-favorite-aspects" required></textarea>
+                    <textarea rows="4" cols="80" name="least-favorite-aspects"></textarea>
                 </div>
 
                 <div class="question">
                     <p class="title">Would you recommend UV to a friend?</p>
-                    <p><i>If you have previously, please select yes!</i></p>
+                    <p>If you have previously, please select yes!</p>
                     <label><input type="radio" name="would-recommend" value="yes" required> Yes</label><br>
                     <label><input type="radio" name="would-recommend" value="no"> No (Please explain)</label><br>
                     <label><input type="radio" name="would-recommend" value="maybe"> Maybe</label>
 
-                    <div id="recommendation-toggle">
-                        <p class="title">What makes you not want to recommend UltraVanilla?</p>
+                    <div class="comments">
+                        <p>Comments (Optional)</p>
                         <textarea rows="4" cols="80" name="would-recommend-reason"></textarea>
                     </div>
+                </div>
+
+                <div class="question">
+                    <p class="title">How well has the current staff team managed the server? What could be improved?</p>
+                    <label><input type="radio" name="staff-management" value="well"> Well</label><br>
+                    <label><input type="radio" name="staff-management" value="neutral"> Neutral</label><br>
+                    <label><input type="radio" name="staff-management" value="poor" required> Poor</label>
+
+                    <div class="comments">
+                        <p>Comments (Optional)</p>
+                        <textarea rows="4" cols="80" name="staff-management-reason"></textarea>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <p class="title">
+                        Currently there are no timed roles beyond Eternal (3 years on the server). Should a 4 year role be added, or should it be skipped & a 5 year role created instead?
+                    </p>
+                    <p>A modified Eternal role could include a different color gradient, a symbol added to the role title, etc.</p>
+                    <label><input type="radio" name="4year-role" value="modified-eternal"> Create a modified Eternal role</label><br>
+                    <label><input type="radio" name="4year-role" value="create-unique" required> Create a unique 4 year role</label><br>
+                    <label><input type="radio" name="4year-role" value="no-wait"> No (Wait for 5 years)</label><br>
+                    <label><input type="radio" name="4year-role" value="no-other"> No (Other, please explain)</label>
+
+                    <div class="comments">
+                        <p>Comments (Optional)</p>
+                        <textarea rows="4" cols="80" name="staff-management-reason"></textarea>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <p class="title">Please suggest new timed role titles here (e.g., Grandmaster, Sage, Eternal):</p>
+                    <textarea rows="4" cols="80" name="4year-role-reason" required></textarea>
                 </div>
             </div>
 
@@ -156,8 +199,8 @@
                 <div class="question">
                     <p class="title">Are server competitions & events happening:</p>
                     <label><input type="radio" name="comps-and-events" value="too-often" required> Too often</label><br>
-                    <label><input type="radio" name="comps-and-events" value="just-enough"> Just often enough</label><br>
-                    <label><input type="radio" name="comps-and-events" value="not-enough"> Not often enough</label>
+                    <label><input type="radio" name="comps-and-events" value="not-enough"> Not often enough</label><br>
+                    <label><input type="radio" name="comps-and-events" value="just-enough"> Just often enough</label>
                 </div>
 
                 <div class="question">
@@ -165,6 +208,19 @@
                     <label><input type="radio" name="enough-variety" value="yes" required> Yes</label><br>
                     <label><input type="radio" name="enough-variety" value="neutral"> Neutral</label><br>
                     <label><input type="radio" name="enough-variety" value="no"> No</label>
+
+                    <div class="comments">
+                        <p>Comments (Optional)</p>
+                        <textarea rows="4" cols="80" name="enough-variety-reason"></textarea>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <p class="title">Did you know that player-planned competitions can receive lore prizes for the winner(s)?</p>
+                    <p>Lore prizes are available upon request for events that require a substantial amount of effort & planning. These prizes can include a lore ticket (the player can have a custom format name & description applied to an existing item they own) or a lore head (a custom skin head with a custom format title & description). Just ask staff!</p>
+                    <label><input type="radio" name="player-planned-competitions" value="already-knew" required> Already knew</label><br>
+                    <label><input type="radio" name="player-planned-competitions" value="no"> No (Now you do!)</label><br>
+                    <label><input type="radio" name="player-planned-competitions" value="dont-care"> Don't care</label>
                 </div>
 
                 <div class="question">
@@ -182,6 +238,11 @@
                     <label><input type="radio" name="current-modifications" value="satisfied" required> Satisfied</label><br>
                     <label><input type="radio" name="current-modifications" value="neutral"> Neutral</label><br>
                     <label><input type="radio" name="current-modifications" value="dissatisifed"> Dissatisifed</label>
+
+                    <div class="comments">
+                        <p>Comments (Optional)</p>
+                        <textarea rows="4" cols="80" name="current-modifications-reason"></textarea>
+                    </div>
                 </div>
 
                 <div class="question">
@@ -191,7 +252,7 @@
             </div>
 
             <div class="section demographic">
-                <h2>Demographic</h2>
+                <h2>Demographic & Playstyle</h2>
                 <p>
                     This section is <b>not</b> required. All demographics answers will be made anonymous upon submission, and will be reported separately from the results of the rest of this survey.<br>
                     If you'd prefer not to complete this section, <a href="#end">click here</a> to skip to the end! Otherwise, please complete as many questions as you are comfortable answering.
@@ -200,7 +261,7 @@
                 <div class="question">
                     <p class="title">What is your time zone?</p>
                     <select name="timezone">
-                        <option value="N/A">Please select</option>
+                        <option disabled selected>Please select</option>
                         <option value="Etc/GMT+12">International Date Line West (UTC-12:00)</option>
                         <option value="Etc/GMT+11">Coordinated Universal Time-11 (UTC-11:00)</option>
                         <option value="Pacific/Honolulu">Hawaii (UTC-10:00)</option>
@@ -303,7 +364,7 @@
                 <div class="question">
                     <p class="title">What continent do you live in?</p>
                     <select name="continent">
-                        <option>Please select</option>
+                        <option disabled selected>Please select</option>
                         <option value="Asia">Asia</option>
                         <option value="Africa">Africa</option>
                         <option value="Europe">Europe</option>
@@ -325,7 +386,7 @@
 
                 <div class="question">
                     <p class="title">Are you neurodivergent (diagnosed, self-diagnosed, or suspected)?</p>
-                    <p>Neurodivergent meaning: you may have different thought processes, interests, behaviors, etc. than what would be considered "typical" or "standard". Often used as an umbrella term to include people on the autism spectrum, with learning disabilities, ADD/ADHD, depression or anxiety, dissociative disorders, and more.</p>
+                    <p>Neurodivergent meaning: you may have different thought processes, interests, behaviors, etc. than what would be considered "typical" or "standard". Often used as an umbrella term to include people with a wide variety of mental illnesses & disabilities.</p>
                     <label><input type="radio" name="neurodivergent" value="yes"> Yes</label><br>
                     <label><input type="radio" name="neurodivergent" value="no"> No</label><br>
                     <label><input type="radio" name="neurodivergent" value="Maybe"> Maybe</label>
@@ -342,7 +403,7 @@
                 <div class="question">
                     <p class="title">How long have you been playing Minecraft?</p>
                     <select name="mc-playtime">
-                        <option>Please select</option>
+                        <option disabled selected>Please select</option>
                         <option value="few-weeks">A few weeks</option>
                         <option value="1-6months">1 - 6 Months</option>
                         <option value="6-12months">6 - 12 Months</option>
@@ -351,6 +412,28 @@
                         <option value="6-9years">6 - 9 Years</option>
                         <option value="9-11years">9 - 11+ Years</option>
                     </select>
+                </div>
+
+                <div class="question">
+                    <p class="title">Do you prefer to play:</p>
+                    <label><input type="radio" name="mc-playstyle" value="pure-vanilla"> Pure Vanilla</label><br>
+                    <label><input type="radio" name="mc-playstyle" value="basics-qol"> With basic or quality of life mods</label><br>
+                    <label><input type="radio" name="mc-playstyle" value="modded"> As modded as possible</label>
+                </div>
+
+                <div class="question">
+                    <p class="title">Do you prefer to base alone (build your own house, farms, etc.), team up with a friend or two, or join an existing town?</p>
+                    <label><input type="radio" name="mc-base-with" value="alone"> Alone</label><br>
+                    <label><input type="radio" name="mc-base-with" value="with-friends"> With friends</label><br>
+                    <label><input type="radio" name="mc-base-with" value="join-town"> Join a town</label><br>
+                    <label><input type="radio" name="mc-base-with" value="other"> Other</label>
+                </div>
+
+                <div class="question">
+                    <p class="title">Do you usually participate in server economies? Such as purchasing items with diamonds or selling items in a shop.</p>
+                    <label><input type="radio" name="mc-ecom" value="always"> Always</label><br>
+                    <label><input type="radio" name="mc-ecom" value="never"> Never</label><br>
+                    <label><input type="radio" name="mc-ecom" value="sometimes"> Sometimes</label><br>
                 </div>
             </div>
 
@@ -370,18 +453,6 @@
         </form>
 
         <script>
-            document.querySelectorAll("input[name='would-recommend']").forEach(el => {
-                el.addEventListener("change", toggleReasonForNo, false);
-            });
-
-            function toggleReasonForNo(e) {
-                if(e.srcElement.value == 'no') {
-                    document.getElementById("recommendation-toggle").style.display = 'block';
-                } else {
-                    document.getElementById("recommendation-toggle").style.display = 'none';
-                }
-            }
-
             $(document).ready(function () {
                 $('select[name="timezone"]').selectize({
                     sortField: 'text'
