@@ -80,11 +80,6 @@
             .section .title {
                 font-weight: bold;
             }
-            @media screen and (max-width: 600px) {
-                textarea {
-                    width: 100%;
-                }
-            }
 
             .javascript-notice {
                 display: none;
@@ -98,7 +93,7 @@
 
             .demographic {
                 background-color: #ffffe4;
-                font-size: 0.6em;
+                font-size: 0.7em;
                 padding: 20px;
             }
 
@@ -115,6 +110,20 @@
             }
             input[type=submit] {
                 font-size: 2em;
+            }
+            @media screen and (max-width: 600px) {
+                textarea {
+                    width: 100%;
+                }
+                .two-columns {
+                    display: block;
+                }
+                .times-list {
+                    padding-left: 0;
+                }
+                select {
+                    width: 100%;
+                }
             }
         </style>
         <meta property="og:image" content="/assets/416.png">
