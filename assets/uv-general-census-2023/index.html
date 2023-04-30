@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html class="no-js">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -67,7 +67,7 @@
             .section {
                 margin-bottom: 25px;
             }
-            .section h2 {
+            h2 {
                 background-color: #eee;
                 padding: 5px;
             }
@@ -85,32 +85,67 @@
                     width: 100%;
                 }
             }
-            .selectize-dropdown [data-selectable].option {
-                margin: 3px 0;
-                cursor: pointer;
+
+            .javascript-notice {
+                display: none;
+            }
+            html.no-js .javascript-notice {
+                display: block;
+            }
+            html.no-js form {
+                display: none;
+            }
+
+            .demographic {
+                background-color: #ffffe4;
+                font-size: 0.6em;
+                padding: 20px;
+            }
+
+            .two-columns {
+                display: flex;
+            }
+
+            .two-columns .column {
+                flex: 50%;
+                padding: 10px;
+            }
+            .required-asterisk {
+                color: red;
+            }
+            input[type=submit] {
+                font-size: 2em;
             }
         </style>
         <meta property="og:image" content="/assets/416.png">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha512-bnIvzh6FU75ZKxp0GXLH9bewza/OIw6dLVh9ICg0gogclmYGguQJWl8U30WpbsGTqbIiAwxTsbe76DErLq5EDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/commonmark@0.30.0/dist/commonmark.min.js" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/markdown-toolbar@1.1.0/dist/markdown-toolbar.js" crossorigin="anonymous"></script>
+        <link href="https://unpkg.com/markdown-toolbar@1.1.0/dist/markdown-toolbar.css" rel="stylesheet">
     </head>
     <body>
         <div class="logo"><img src="/assets/416.png"></div>
         <h1>UV General Census 2023</h1>
+
+        <h1 class="javascript-notice">Your browser is too old, Javascript is not enabled, or the page hasn't loaded</h1>
+
         <form action="/survey-submit/uv-general-census-2023" method="post" name="uv-general-census-2023">
-            <p><label for="form-username">Username:</label>
+            <p>Greetings UVers, it's time for a general survey! We'd like to hear your thoughts on how the server is being run, get your input on some pending suggestions, &amp; more.</p>
+            <p>A summary of the results for some questions will be shared once the survey has been closed. We will only report aggregated results as a whole.</p>
+            <p>We appreciate your feedback &amp; look forward to sharing the findings! Please contact staff if you have technical issues or any questions. Thank you!</p>
+
+
+            <p><label for="form-username"><strong>Ingame Username <span class="required-asterisk">*</span></strong></label>
             <input type="text" id="form-username" name="username" placeholder="Herobrine" required></p>
-            <p>Greetings UVers, it's time for a general survey! We'd like to hear your thoughts on how the server is being run, get your input on some pending suggestions, & more.</p>
-            <p>A summary of the results will be shared once the survey has been closed. Demographics data will be made anonymous & will only be reported as a whole.</p>
-            <p>We appreciate your feedback & look forward to sharing the findings! Please contact staff if you have technical issues or any questions. Thank you!</p>
+
+            <p><strong>All questions are optional, take as little or as much time as you wish to fill this out.</strong></p>
 
             <div class="section server">
-                <h2>Server Specific</h2>
+                <h2>UltraVanilla Specific</h2>
 
                 <div class="question">
                     <p class="title">How long have you been playing on UV?</p>
-                    <select name="uv-playtime" required>
+                    <select name="uv-playtime">
                         <option disabled selected>Please select</option>
                         <option value="few-weeks">A few weeks</option>
                         <option value="1-3months">1 - 3 Months</option>
@@ -126,19 +161,19 @@
 
                 <div class="question">
                     <p class="title">How would you rate your overall satisfaction with the server?</p>
-                    <label><input type="radio" name="satisfaction" value="high" required> High (Very Satisfied)</label><br>
+                    <label><input type="radio" name="satisfaction" value="high"> High (Very Satisfied)</label><br>
                     <label><input type="radio" name="satisfaction" value="middle"> Middling or Neutral</label><br>
                     <label><input type="radio" name="satisfaction" value="low"> Low (Dissatisifed)</label>
 
                     <div class="comments">
-                        <p>Comments (Optional)</p>
+                        <p>Comments</p>
                         <textarea rows="4" cols="80" name="satisfaction-reason"></textarea>
                     </div>
                 </div>
 
                 <div class="question">
                     <p class="title">What are your <strong>favorite</strong> aspects of the server and/or community?</p>
-                    <textarea rows="4" cols="80" name="favorite-aspects" required></textarea>
+                    <textarea rows="4" cols="80" name="favorite-aspects"></textarea>
                 </div>
 
                 <div class="question">
@@ -149,12 +184,12 @@
                 <div class="question">
                     <p class="title">Would you recommend UV to a friend?</p>
                     <p>If you have previously, please select yes!</p>
-                    <label><input type="radio" name="would-recommend" value="yes" required> Yes</label><br>
+                    <label><input type="radio" name="would-recommend" value="yes"> Yes</label><br>
                     <label><input type="radio" name="would-recommend" value="no"> No (Please explain)</label><br>
                     <label><input type="radio" name="would-recommend" value="maybe"> Maybe</label>
 
                     <div class="comments">
-                        <p>Comments (Optional)</p>
+                        <p>Comments</p>
                         <textarea rows="4" cols="80" name="would-recommend-reason"></textarea>
                     </div>
                 </div>
@@ -163,85 +198,94 @@
                     <p class="title">How well has the current staff team managed the server? What could be improved?</p>
                     <label><input type="radio" name="staff-management" value="well"> Well</label><br>
                     <label><input type="radio" name="staff-management" value="neutral"> Neutral</label><br>
-                    <label><input type="radio" name="staff-management" value="poor" required> Poor</label>
+                    <label><input type="radio" name="staff-management" value="poor"> Poor</label>
 
                     <div class="comments">
-                        <p>Comments (Optional)</p>
-                        <textarea rows="4" cols="80" name="staff-management-reason"></textarea>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <p class="title">
-                        Currently there are no timed roles beyond Eternal (3 years on the server). Should a 4 year role be added, or should it be skipped & a 5 year role created instead?
-                    </p>
-                    <p>A modified Eternal role could include a different color gradient, a symbol added to the role title, etc.</p>
-                    <label><input type="radio" name="4year-role" value="modified-eternal"> Create a modified Eternal role</label><br>
-                    <label><input type="radio" name="4year-role" value="create-unique" required> Create a unique 4 year role</label><br>
-                    <label><input type="radio" name="4year-role" value="no-wait"> No (Wait for 5 years)</label><br>
-                    <label><input type="radio" name="4year-role" value="no-other"> No (Other, please explain)</label>
-
-                    <div class="comments">
-                        <p>Comments (Optional)</p>
+                        <p>Comments</p>
                         <textarea rows="4" cols="80" name="staff-management-reason"></textarea>
                     </div>
                 </div>
 
                 <div class="question">
                     <p class="title">Please suggest new timed role titles here (e.g., Grandmaster, Sage, Eternal):</p>
-                    <textarea rows="4" cols="80" name="4year-role-reason" required></textarea>
+                    <textarea rows="4" cols="80" name="4year-role-reason"></textarea>
+                </div>
+
+                <div class="question">
+                    <p class="title">Do you plan on ever donating to help with the server hosting costs?</p>
+                    <p>When you donate, staff keep none of the profit, it all goes to hosting costs. We stick to a philosophy that is against the pay-to-win mechanics and harmful monetization that is typical of most servers, so that strong community can be prioritized.</p>
+                    <label><input type="radio" name="donator" value="already-has"> Already have</label><br>
+                    <label><input type="radio" name="donator" value="will"> Yes</label><br>
+                    <label><input type="radio" name="donator" value="maybe-will"> Maybe</label><br>
+                    <label><input type="radio" name="donator" value="no"> No</label>
                 </div>
             </div>
 
             <div class="section events">
-                <h2>Competitions & Events</h2>
+                <h2>Competitions &amp; Events</h2>
 
                 <div class="question">
-                    <p class="title">Are server competitions & events happening:</p>
-                    <label><input type="radio" name="comps-and-events" value="too-often" required> Too often</label><br>
-                    <label><input type="radio" name="comps-and-events" value="not-enough"> Not often enough</label><br>
-                    <label><input type="radio" name="comps-and-events" value="just-enough"> Just often enough</label>
+                    <p class="title">Are server competitions &amp; events happening:</p>
+                    <label><input type="radio" name="comps-and-events" value="too-often"> Too often</label><br>
+                    <label><input type="radio" name="comps-and-events" value="just-enough"> Just often enough</label><br>
+                    <label><input type="radio" name="comps-and-events" value="not-enough"> Not often enough</label>
                 </div>
 
                 <div class="question">
-                    <p class="title">Is there enough variety in server competitions & events?</p>
-                    <label><input type="radio" name="enough-variety" value="yes" required> Yes</label><br>
+                    <p class="title">Is there enough variety in server competitions &amp; events?</p>
+                    <label><input type="radio" name="enough-variety" value="yes"> Yes</label><br>
                     <label><input type="radio" name="enough-variety" value="neutral"> Neutral</label><br>
                     <label><input type="radio" name="enough-variety" value="no"> No</label>
 
                     <div class="comments">
-                        <p>Comments (Optional)</p>
+                        <p>Comments</p>
                         <textarea rows="4" cols="80" name="enough-variety-reason"></textarea>
                     </div>
                 </div>
 
                 <div class="question">
                     <p class="title">Did you know that player-planned competitions can receive lore prizes for the winner(s)?</p>
-                    <p>Lore prizes are available upon request for events that require a substantial amount of effort & planning. These prizes can include a lore ticket (the player can have a custom format name & description applied to an existing item they own) or a lore head (a custom skin head with a custom format title & description). Just ask staff!</p>
-                    <label><input type="radio" name="player-planned-competitions" value="already-knew" required> Already knew</label><br>
+                    <p>Lore prizes are available upon request for events that require a substantial amount of effort &amp; planning. These prizes can include a lore ticket (the player can have a custom format name &amp; description applied to an existing item they own) or a lore head (a custom skin head with a custom format title &amp; description). Just ask staff!</p>
+                    <label><input type="radio" name="player-planned-competitions" value="already-knew"> Already knew</label><br>
                     <label><input type="radio" name="player-planned-competitions" value="no"> No (Now you do!)</label><br>
                     <label><input type="radio" name="player-planned-competitions" value="dont-care"> Don't care</label>
                 </div>
 
                 <div class="question">
-                    <p class="title">Please suggest themes for future build & screenshot competitions here:</p>
+                    <p class="title">Please suggest themes for future build &amp; screenshot competitions here:</p>
                     <textarea rows="4" cols="80" name="future-build-screenshots"></textarea>
                 </div>
             </div>
 
             <div class="section mechanics">
-                <h2>Mechanics & Mods</h2>
+                <h2>Mechanics &amp; Mods</h2>
 
                 <div class="question">
                     <p class="title">How satisfied are you with the current modifications to the vanilla game on UV?</p>
                     <p>For example: brewery plugin, phantoms, keepinv toggle, warps, etc.</p>
-                    <label><input type="radio" name="current-modifications" value="satisfied" required> Satisfied</label><br>
+                    <label><input type="radio" name="current-modifications" value="satisfied"> Satisfied</label><br>
                     <label><input type="radio" name="current-modifications" value="neutral"> Neutral</label><br>
                     <label><input type="radio" name="current-modifications" value="dissatisifed"> Dissatisifed</label>
 
                     <div class="comments">
-                        <p>Comments (Optional)</p>
+                        <p>Comments</p>
                         <textarea rows="4" cols="80" name="current-modifications-reason"></textarea>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <p class="title">
+                        Currently there are no timed roles beyond Eternal (3 years on the server). Should a 4 year role be added, or should it be skipped &amp; a 5 year role created instead?
+                    </p>
+                    <p>A modified Eternal role could include multiple different options for role color gradient, the ability to add an emoji around your nick, etc.</p>
+                    <label><input type="radio" name="4year-role" value="modified-eternal"> Create a modified Eternal role</label><br>
+                    <label><input type="radio" name="4year-role" value="create-unique"> Create a unique 4 year role</label><br>
+                    <label><input type="radio" name="4year-role" value="no-wait"> No (Wait to create a 5 years role)</label><br>
+                    <label><input type="radio" name="4year-role" value="no-other"> No (Other, please explain)</label>
+
+                    <div class="comments">
+                        <p>Comments</p>
+                        <textarea rows="4" cols="80" name="staff-management-reason"></textarea>
                     </div>
                 </div>
 
@@ -251,174 +295,45 @@
                 </div>
             </div>
 
-            <div class="section demographic">
-                <h2>Demographic & Playstyle</h2>
-                <p>
-                    This section is <b>not</b> required. All demographics answers will be made anonymous upon submission, and will be reported separately from the results of the rest of this survey.<br>
-                    If you'd prefer not to complete this section, <a href="#end">click here</a> to skip to the end! Otherwise, please complete as many questions as you are comfortable answering.
-                </p>
-
+            <div class="section">
+                <h2>Minecraft Demographics</h2>
                 <div class="question">
-                    <p class="title">What is your time zone?</p>
-                    <select name="timezone">
-                        <option disabled selected>Please select</option>
-                        <option value="Etc/GMT+12">International Date Line West (UTC-12:00)</option>
-                        <option value="Etc/GMT+11">Coordinated Universal Time-11 (UTC-11:00)</option>
-                        <option value="Pacific/Honolulu">Hawaii (UTC-10:00)</option>
-                        <option value="America/Anchorage">Alaska (UTC-09:00)</option>
-                        <option value="America/Santa_Isabel">Baja California (UTC-08:00)</option>
-                        <option value="America/Los_Angeles">Pacific Time (US and Canada) (UTC-08:00)</option>
-                        <option value="America/Chihuahua">Chihuahua, La Paz, Mazatlan (UTC-07:00)</option>
-                        <option value="America/Phoenix">Arizona (UTC-07:00)</option>
-                        <option value="America/Denver">Mountain Time (US and Canada) (UTC-07:00)</option>
-                        <option value="America/Guatemala">Central America (UTC-07:00)</option>
-                        <option value="America/Chicago">Central Time (US and Canada) (UTC-06:00)</option>
-                        <option value="America/Regina">Saskatchewan (UTC-06:00)</option>
-                        <option value="America/Mexico_City">Guadalajara, Mexico City, Monterey (UTC-06:00)</option>
-                        <option value="America/Bogota">Bogota, Lima, Quito (UTC-05:00)</option>
-                        <option value="America/Indiana/Indianapolis">Indiana (East) (UTC-05:00)</option>
-                        <option value="America/New_York">Eastern Time (US and Canada) (UTC-05:00)</option>
-                        <option value="America/Caracas">Caracas (UTC-04:30)</option>
-                        <option value="America/Halifax">Atlantic Time (Canada) (UTC-04:00)</option>
-                        <option value="America/Asuncion">Asuncion (UTC-04:00)</option>
-                        <option value="America/La_Paz">Georgetown, La Paz, Manaus, San Juan (UTC-04:00)</option>
-                        <option value="America/Cuiaba">Cuiaba (UTC-04:00)</option>
-                        <option value="America/Santiago">Santiago (UTC-04:00)</option>
-                        <option value="America/St_Johns">Newfoundland (UTC-03:30)</option>
-                        <option value="America/Sao_Paulo">Brasilia (UTC-03:00)</option>
-                        <option value="America/Godthab">Greenland (UTC-03:00)</option>
-                        <option value="America/Cayenne">Cayenne, Fortaleza (UTC-03:00)</option>
-                        <option value="America/Argentina/Buenos_Aires">Buenos Aires (UTC-03:00)</option>
-                        <option value="America/Montevideo">Montevideo (UTC-03:00)</option>
-                        <option value="Etc/GMT+2">Coordinated Universal Time-2 (UTC-02:00)</option>
-                        <option value="Atlantic/Cape_Verde">Cape Verde (UTC-01:00)</option>
-                        <option value="Atlantic/Azores">Azores (UTC-01:00)</option>
-                        <option value="Africa/Casablanca">Casablanca (UTC+00:00)</option>
-                        <option value="Atlantic/Reykjavik">Monrovia, Reykjavik (UTC+00:00)</option>
-                        <option value="Europe/London">Dublin, Edinburgh, Lisbon, London (UTC+00:00)</option>
-                        <option value="Etc/GMT">Coordinated Universal Time (UTC+00:00)</option>
-                        <option value="Europe/Berlin">Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna (UTC+01:00)</option>
-                        <option value="Europe/Paris">Brussels, Copenhagen, Madrid, Paris (UTC+01:00)</option>
-                        <option value="Africa/Lagos">West Central Africa (UTC+01:00)</option>
-                        <option value="Europe/Budapest">Belgrade, Bratislava, Budapest, Ljubljana, Prague (UTC+01:00)</option>
-                        <option value="Europe/Warsaw">Sarajevo, Skopje, Warsaw, Zagreb (UTC+01:00)</option>
-                        <option value="Africa/Windhoek">Windhoek (UTC+01:00)</option>
-                        <option value="Europe/Istanbul">Athens, Bucharest, Istanbul (UTC+02:00)</option>
-                        <option value="Europe/Kiev">Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius (UTC+02:00)</option>
-                        <option value="Africa/Cairo">Cairo (UTC+02:00)</option>
-                        <option value="Asia/Damascus">Damascus (UTC+02:00)</option>
-                        <option value="Asia/Amman">Amman (UTC+02:00)</option>
-                        <option value="Africa/Johannesburg">Harare, Pretoria (UTC+02:00)</option>
-                        <option value="Asia/Jerusalem">Jerusalem (UTC+02:00)</option>
-                        <option value="Asia/Beirut">Beirut (UTC+02:00)</option>
-                        <option value="Asia/Baghdad">Baghdad (UTC+03:00)</option>
-                        <option value="Europe/Minsk">Minsk (UTC+03:00)</option>
-                        <option value="Asia/Riyadh">Kuwait, Riyadh (UTC+03:00)</option>
-                        <option value="Africa/Nairobi">Nairobi (UTC+03:00)</option>
-                        <option value="Asia/Tehran">Tehran (UTC+03:30)</option>
-                        <option value="Europe/Moscow">Moscow, St. Petersburg, Volgograd (UTC+04:00)</option>
-                        <option value="Asia/Tbilisi">Tbilisi (UTC+04:00)</option>
-                        <option value="Asia/Yerevan">Yerevan (UTC+04:00)</option>
-                        <option value="Asia/Dubai">Abu Dhabi, Muscat (UTC+04:00)</option>
-                        <option value="Asia/Baku">Baku (UTC+04:00)</option>
-                        <option value="Indian/Mauritius">Port Louis (UTC+04:00)</option>
-                        <option value="Asia/Kabul">Kabul (UTC+04:30)</option>
-                        <option value="Asia/Tashkent">Tashkent (UTC+05:00)</option>
-                        <option value="Asia/Karachi">Islamabad, Karachi (UTC+05:00)</option>
-                        <option value="Asia/Colombo">Sri Jayewardenepura Kotte (UTC+05:30)</option>
-                        <option value="Asia/Kolkata">Chennai, Kolkata, Mumbai, New Delhi (UTC+05:30)</option>
-                        <option value="Asia/Kathmandu">Kathmandu (UTC+05:45)</option>
-                        <option value="Asia/Almaty">Astana (UTC+06:00)</option>
-                        <option value="Asia/Dhaka">Dhaka (UTC+06:00)</option>
-                        <option value="Asia/Yekaterinburg">Yekaterinburg (UTC+06:00)</option>
-                        <option value="Asia/Yangon">Yangon (UTC+06:30)</option>
-                        <option value="Asia/Bangkok">Bangkok, Hanoi, Jakarta (UTC+07:00)</option>
-                        <option value="Asia/Novosibirsk">Novosibirsk (UTC+07:00)</option>
-                        <option value="Asia/Krasnoyarsk">Krasnoyarsk (UTC+08:00)</option>
-                        <option value="Asia/Ulaanbaatar">Ulaanbaatar (UTC+08:00)</option>
-                        <option value="Asia/Shanghai">Beijing, Chongqing, Hong Kong, Urumqi (UTC+08:00)</option>
-                        <option value="Australia/Perth">Perth (UTC+08:00)</option>
-                        <option value="Asia/Singapore">Kuala Lumpur, Singapore (UTC+08:00)</option>
-                        <option value="Asia/Taipei">Taipei (UTC+08:00)</option>
-                        <option value="Asia/Irkutsk">Irkutsk (UTC+09:00)</option>
-                        <option value="Asia/Seoul">Seoul (UTC+09:00)</option>
-                        <option value="Asia/Tokyo">Osaka, Sapporo, Tokyo (UTC+09:00)</option>
-                        <option value="Australia/Darwin">Darwin (UTC+09:30)</option>
-                        <option value="Australia/Adelaide">Adelaide (UTC+09:30)</option>
-                        <option value="Australia/Hobart">Hobart (UTC+10:00)</option>
-                        <option value="Asia/Yakutsk">Yakutsk (UTC+10:00)</option>
-                        <option value="Australia/Brisbane">Brisbane (UTC+10:00)</option>
-                        <option value="Pacific/Port_Moresby">Guam, Port Moresby (UTC+10:00)</option>
-                        <option value="Australia/Sydney">Canberra, Melbourne, Sydney (UTC+10:00)</option>
-                        <option value="Asia/Vladivostok">Vladivostok (UTC+11:00)</option>
-                        <option value="Pacific/Guadalcanal">Solomon Islands, New Caledonia (UTC+11:00)</option>
-                        <option value="Etc/GMT-12">Coordinated Universal Time+12 (UTC+12:00)</option>
-                        <option value="Pacific/Fiji">Fiji, Marshall Islands (UTC+12:00)</option>
-                        <option value="Asia/Magadan">Magadan (UTC+12:00)</option>
-                        <option value="Pacific/Auckland">Auckland, Wellington (UTC+12:00)</option>
-                        <option value="Pacific/Tongatapu">Nuku'alofa (UTC+13:00)</option>
-                        <option value="Pacific/Apia">Samoa (UTC+13:00)</option>
-                    </select>
-                </div>
-
-                <div class="question">
-                    <p class="title">What continent do you live in?</p>
-                    <select name="continent">
-                        <option disabled selected>Please select</option>
-                        <option value="Asia">Asia</option>
-                        <option value="Africa">Africa</option>
-                        <option value="Europe">Europe</option>
-                        <option value="North America">North America</option>
-                        <option value="South America">South America</option>
-                        <option value="Australia/Oceania">Australia/Oceania</option>
-                        <option value="Antarctica">Antarctica</option>
-                    </select>
-                </div>
-
-                <div class="question">
-                    <p class="title">What is your age range?</p>
-                    <label><input type="radio" name="age" value="under18"> Under 18</label><br>
-                    <label><input type="radio" name="age" value="18-24"> 18 - 24</label><br>
-                    <label><input type="radio" name="age" value="25-34"> 25 - 34</label><br>
-                    <label><input type="radio" name="age" value="35-44"> 35 - 44</label><br>
-                    <label><input type="radio" name="age" value="45-plus"> 45+</label>
-                </div>
-
-                <div class="question">
-                    <p class="title">Are you neurodivergent (diagnosed, self-diagnosed, or suspected)?</p>
-                    <p>Neurodivergent meaning: you may have different thought processes, interests, behaviors, etc. than what would be considered "typical" or "standard". Often used as an umbrella term to include people with a wide variety of mental illnesses & disabilities.</p>
-                    <label><input type="radio" name="neurodivergent" value="yes"> Yes</label><br>
-                    <label><input type="radio" name="neurodivergent" value="no"> No</label><br>
-                    <label><input type="radio" name="neurodivergent" value="Maybe"> Maybe</label>
-                </div>
-
-                <div class="question">
-                    <p class="title">Are you part of the LGBTQIA+ community?</p>
-                    <p>Lesbian, gay, bisexual, trans, queer or questioning, intersex, asexual, & more.</p>
-                    <label><input type="radio" name="lgbtqia-community" value="yes"> Yes</label><br>
-                    <label><input type="radio" name="lgbtqia-community" value="no"> No</label><br>
-                    <label><input type="radio" name="lgbtqia-community" value="Maybe"> Maybe</label>
-                </div>
-
-                <div class="question">
-                    <p class="title">How long have you been playing Minecraft?</p>
+                    <p class="title">When did you start playing Minecraft?</p>
+                    <p>Approximate if you don't know</p>
                     <select name="mc-playtime">
-                        <option disabled selected>Please select</option>
-                        <option value="few-weeks">A few weeks</option>
-                        <option value="1-6months">1 - 6 Months</option>
-                        <option value="6-12months">6 - 12 Months</option>
-                        <option value="1-3years">1 - 3 Years</option>
-                        <option value="3-6years">3 - 6 Years</option>
-                        <option value="6-9years">6 - 9 Years</option>
-                        <option value="9-11years">9 - 11+ Years</option>
+                        <option selected>Prefer not to answer</option>
+                        <option value="1.19">1.19 The Wild Update (2022-2023)</option>
+                        <option value="1.18">1.18 Caves &amp; Cliffs: Part II (2021-2022)</option>
+                        <option value="1.17">1.17 Caves &amp; Cliffs: Part I (2021)</option>
+                        <option value="1.16">1.16 Nether Update (2020-2021)</option>
+                        <option value="1.15">1.15 Buzzy Bees Update (2019-2020)</option>
+                        <option value="1.14">1.14 Village &amp; Pillage Update (2019)</option>
+                        <option value="1.13">1.13 Aquatic Update (2018)</option>
+                        <option value="1.12">1.12 World of Color Update (2017)</option>
+                        <option value="1.11">1.11 Exploration Update (2016)</option>
+                        <option value="1.10">1.10 Frostburn Update (2016)</option>
+                        <option value="1.9">1.9 Combat Update (2016)</option>
+                        <option value="1.8">1.8 Bountiful Update (2014-2015)</option>
+                        <option value="1.7">1.7 The Update that Changed the World (2013-2014)</option>
+                        <option value="1.6">1.6 Horse Update (2013)</option>
+                        <option value="1.5">1.5 Redstone Update (2013)</option>
+                        <option value="1.4">1.4 Pretty Scary Update (2012-2013) </option>
+                        <option value="1.3">1.3 Jungles Update (2012)</option>
+                        <option value="1.0-1.2">1.0 to 1.2 (2011-2012)</option>
+                        <option value="beta1.5-beta1.8">beta1.5 to beta1.8 (2011)</option>
+                        <option value="beta1.0">beta1.0 to beta1.4 (2010-2011)</option>
+                        <option value="survival_test-to-alpha1.2">SURVIVAL_TEST to alpha1.2 (2009-2010)</option>
+                        <option value="classic">Minecraft Classic Creative (2009)</option>
+                        <option value="infiniminer">I played Infiniminer! (Before it was cool)</option>
                     </select>
                 </div>
 
                 <div class="question">
                     <p class="title">Do you prefer to play:</p>
                     <label><input type="radio" name="mc-playstyle" value="pure-vanilla"> Pure Vanilla</label><br>
-                    <label><input type="radio" name="mc-playstyle" value="basics-qol"> With basic or quality of life mods</label><br>
-                    <label><input type="radio" name="mc-playstyle" value="modded"> As modded as possible</label>
+                    <label><input type="radio" name="mc-playstyle" value="performance-texturepacks"> With only performance mods and/or resource packs</label><br>
+                    <label><input type="radio" name="mc-playstyle" value="qol"> With basic or quality of life mods intended for vanilla servers, like ItemScroller or Litematica</label><br>
+                    <label><input type="radio" name="mc-playstyle" value="modded"> As modded as possible, like FTB</label>
                 </div>
 
                 <div class="question">
@@ -430,10 +345,436 @@
                 </div>
 
                 <div class="question">
-                    <p class="title">Do you usually participate in server economies? Such as purchasing items with diamonds or selling items in a shop.</p>
+                    <p class="title">Do you usually participate in server market economies? Such as purchasing items with diamonds or selling items in a shop.</p>
                     <label><input type="radio" name="mc-ecom" value="always"> Always</label><br>
                     <label><input type="radio" name="mc-ecom" value="never"> Never</label><br>
                     <label><input type="radio" name="mc-ecom" value="sometimes"> Sometimes</label><br>
+                </div>
+            </div>
+
+            <h2>Other Demographics</h2>
+            <div class="section demographic">
+                <h3><a href="#end">Click here to skip this section</a></h3>
+
+                <p><strong>This whole survey is anonymized, and this section is even further anonymized &mdash; each answer is recorded separately and not tied to other answers.</strong></p>
+
+                <p>You are encouraged to skip anything you are not comfortable answering.</p>
+
+                <div class="two-columns">
+                    <div class="column">
+                        <div class="question">
+                            <p class="title">When do you play? (On UltraVanilla, or video games in general)</p>
+
+                            <p>Note: This question is anonymized to UTC offsets, it does not reveal your timezone if you choose to skip the next question. It may help us out with event planning in the future.</p>
+
+                            <label><input checked type="checkbox" id="delete-times"> I prefer not to answer</label>
+
+                            <div id="times" style="color: gray">
+                                <ul class="times-list no-bullet">
+                                    <li><label><input disabled checked type="checkbox" name="anonymized-weekdays[]" value="Monday"> Monday</label></li>
+                                    <li><label><input disabled checked type="checkbox" name="anonymized-weekdays[]" value="Tuesday"> Tuesday</label></li>
+                                    <li><label><input disabled checked type="checkbox" name="anonymized-weekdays[]" value="Wednesday"> Wednesday</label></li>
+                                    <li><label><input disabled checked type="checkbox" name="anonymized-weekdays[]" value="Thursday"> Thursday</label></li>
+                                    <li><label><input disabled checked type="checkbox" name="anonymized-weekdays[]" value="Friday"> Friday</label></li>
+                                    <li><label><input disabled checked type="checkbox" name="anonymized-weekdays[]" value="Saturday"> Saturday</label></li>
+                                    <li><label><input disabled checked type="checkbox" name="anonymized-weekdays[]" value="Sunday"> Sunday</label></li>
+                                </ul>
+                                <ul class="times-list hours-list no-bullet">
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="0"></label></li>
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="1"></label></li>
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="2"></label></li>
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="3"></label></li>
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="4"></label></li>
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="5"></label></li>
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="6"></label></li>
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="7"></label></li>
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="8"></label></li>
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="9"></label></li>
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="10"></label></li>
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="11"></label></li>
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="12"></label></li>
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="13"></label></li>
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="14"></label></li>
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="15"></label></li>
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="16"></label></li>
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="17"></label></li>
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="18"></label></li>
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="19"></label></li>
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="20"></label></li>
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="21"></label></li>
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="22"></label></li>
+                                    <li><label><input disabled type="checkbox" name="anonymized-times[]" value="23"></label></li>
+                                </ul>
+                            </div>
+
+                            <p class="title">What is your time zone?</p>
+                            <p><button id="automatically-detect-timezone">Click here if your timezone is <br/><strong id="detected-timezone">UTC</strong></button></p>
+                            <select name="anonymized-timezone" id="timezone">
+                                <option selected>Prefer not to answer</option>
+                                <option value="Etc/GMT+12">International Date Line West (UTC-12:00)</option>
+                                <option value="Etc/GMT+11">Coordinated Universal Time-11 (UTC-11:00)</option>
+                                <option value="Pacific/Honolulu">Hawaii (UTC-10:00)</option>
+                                <option value="America/Anchorage">Alaska (UTC-09:00)</option>
+                                <option value="America/Santa_Isabel">Baja California (UTC-08:00)</option>
+                                <option value="America/Los_Angeles">Pacific Time (US and Canada) (UTC-08:00)</option>
+                                <option value="America/Chihuahua">Chihuahua, La Paz, Mazatlan (UTC-07:00)</option>
+                                <option value="America/Phoenix">Arizona (UTC-07:00)</option>
+                                <option value="America/Denver">Mountain Time (US and Canada) (UTC-07:00)</option>
+                                <option value="America/Guatemala">Central America (UTC-07:00)</option>
+                                <option value="America/Chicago">Central Time (US and Canada) (UTC-06:00)</option>
+                                <option value="America/Regina">Saskatchewan (UTC-06:00)</option>
+                                <option value="America/Mexico_City">Guadalajara, Mexico City, Monterey (UTC-06:00)</option>
+                                <option value="America/Bogota">Bogota, Lima, Quito (UTC-05:00)</option>
+                                <option value="America/Indiana/Indianapolis">Indiana (East) (UTC-05:00)</option>
+                                <option value="America/New_York">Eastern Time (US and Canada) (UTC-05:00)</option>
+                                <option value="America/Caracas">Caracas (UTC-04:30)</option>
+                                <option value="America/Halifax">Atlantic Time (Canada) (UTC-04:00)</option>
+                                <option value="America/Asuncion">Asuncion (UTC-04:00)</option>
+                                <option value="America/La_Paz">Georgetown, La Paz, Manaus, San Juan (UTC-04:00)</option>
+                                <option value="America/Cuiaba">Cuiaba (UTC-04:00)</option>
+                                <option value="America/Santiago">Santiago (UTC-04:00)</option>
+                                <option value="America/St_Johns">Newfoundland (UTC-03:30)</option>
+                                <option value="America/Sao_Paulo">Brasilia (UTC-03:00)</option>
+                                <option value="America/Godthab">Greenland (UTC-03:00)</option>
+                                <option value="America/Cayenne">Cayenne, Fortaleza (UTC-03:00)</option>
+                                <option value="America/Argentina/Buenos_Aires">Buenos Aires (UTC-03:00)</option>
+                                <option value="America/Montevideo">Montevideo (UTC-03:00)</option>
+                                <option value="Etc/GMT+2">Coordinated Universal Time-2 (UTC-02:00)</option>
+                                <option value="Atlantic/Cape_Verde">Cape Verde (UTC-01:00)</option>
+                                <option value="Atlantic/Azores">Azores (UTC-01:00)</option>
+                                <option value="Africa/Casablanca">Casablanca (UTC+00:00)</option>
+                                <option value="Atlantic/Reykjavik">Monrovia, Reykjavik (UTC+00:00)</option>
+                                <option value="Europe/London">Dublin, Edinburgh, Lisbon, London (UTC+00:00)</option>
+                                <option value="Etc/GMT">Coordinated Universal Time (UTC+00:00)</option>
+                                <option value="Europe/Berlin">Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna (UTC+01:00)</option>
+                                <option value="Europe/Paris">Brussels, Copenhagen, Madrid, Paris (UTC+01:00)</option>
+                                <option value="Africa/Lagos">West Central Africa (UTC+01:00)</option>
+                                <option value="Europe/Budapest">Belgrade, Bratislava, Budapest, Ljubljana, Prague (UTC+01:00)</option>
+                                <option value="Europe/Warsaw">Sarajevo, Skopje, Warsaw, Zagreb (UTC+01:00)</option>
+                                <option value="Africa/Windhoek">Windhoek (UTC+01:00)</option>
+                                <option value="Europe/Istanbul">Athens, Bucharest, Istanbul (UTC+02:00)</option>
+                                <option value="Europe/Kiev">Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius (UTC+02:00)</option>
+                                <option value="Africa/Cairo">Cairo (UTC+02:00)</option>
+                                <option value="Asia/Damascus">Damascus (UTC+02:00)</option>
+                                <option value="Asia/Amman">Amman (UTC+02:00)</option>
+                                <option value="Africa/Johannesburg">Harare, Pretoria (UTC+02:00)</option>
+                                <option value="Asia/Jerusalem">Jerusalem (UTC+02:00)</option>
+                                <option value="Asia/Beirut">Beirut (UTC+02:00)</option>
+                                <option value="Asia/Baghdad">Baghdad (UTC+03:00)</option>
+                                <option value="Europe/Minsk">Minsk (UTC+03:00)</option>
+                                <option value="Asia/Riyadh">Kuwait, Riyadh (UTC+03:00)</option>
+                                <option value="Africa/Nairobi">Nairobi (UTC+03:00)</option>
+                                <option value="Asia/Tehran">Tehran (UTC+03:30)</option>
+                                <option value="Europe/Moscow">Moscow, St. Petersburg, Volgograd (UTC+04:00)</option>
+                                <option value="Asia/Tbilisi">Tbilisi (UTC+04:00)</option>
+                                <option value="Asia/Yerevan">Yerevan (UTC+04:00)</option>
+                                <option value="Asia/Dubai">Abu Dhabi, Muscat (UTC+04:00)</option>
+                                <option value="Asia/Baku">Baku (UTC+04:00)</option>
+                                <option value="Indian/Mauritius">Port Louis (UTC+04:00)</option>
+                                <option value="Asia/Kabul">Kabul (UTC+04:30)</option>
+                                <option value="Asia/Tashkent">Tashkent (UTC+05:00)</option>
+                                <option value="Asia/Karachi">Islamabad, Karachi (UTC+05:00)</option>
+                                <option value="Asia/Colombo">Sri Jayewardenepura Kotte (UTC+05:30)</option>
+                                <option value="Asia/Kolkata">Chennai, Kolkata, Mumbai, New Delhi (UTC+05:30)</option>
+                                <option value="Asia/Kathmandu">Kathmandu (UTC+05:45)</option>
+                                <option value="Asia/Almaty">Astana (UTC+06:00)</option>
+                                <option value="Asia/Dhaka">Dhaka (UTC+06:00)</option>
+                                <option value="Asia/Yekaterinburg">Yekaterinburg (UTC+06:00)</option>
+                                <option value="Asia/Yangon">Yangon (UTC+06:30)</option>
+                                <option value="Asia/Bangkok">Bangkok, Hanoi, Jakarta (UTC+07:00)</option>
+                                <option value="Asia/Novosibirsk">Novosibirsk (UTC+07:00)</option>
+                                <option value="Asia/Krasnoyarsk">Krasnoyarsk (UTC+08:00)</option>
+                                <option value="Asia/Ulaanbaatar">Ulaanbaatar (UTC+08:00)</option>
+                                <option value="Asia/Shanghai">Beijing, Chongqing, Hong Kong, Urumqi (UTC+08:00)</option>
+                                <option value="Australia/Perth">Perth (UTC+08:00)</option>
+                                <option value="Asia/Singapore">Kuala Lumpur, Singapore (UTC+08:00)</option>
+                                <option value="Asia/Taipei">Taipei (UTC+08:00)</option>
+                                <option value="Asia/Irkutsk">Irkutsk (UTC+09:00)</option>
+                                <option value="Asia/Seoul">Seoul (UTC+09:00)</option>
+                                <option value="Asia/Tokyo">Osaka, Sapporo, Tokyo (UTC+09:00)</option>
+                                <option value="Australia/Darwin">Darwin (UTC+09:30)</option>
+                                <option value="Australia/Adelaide">Adelaide (UTC+09:30)</option>
+                                <option value="Australia/Hobart">Hobart (UTC+10:00)</option>
+                                <option value="Asia/Yakutsk">Yakutsk (UTC+10:00)</option>
+                                <option value="Australia/Brisbane">Brisbane (UTC+10:00)</option>
+                                <option value="Pacific/Port_Moresby">Guam, Port Moresby (UTC+10:00)</option>
+                                <option value="Australia/Sydney">Canberra, Melbourne, Sydney (UTC+10:00)</option>
+                                <option value="Asia/Vladivostok">Vladivostok (UTC+11:00)</option>
+                                <option value="Pacific/Guadalcanal">Solomon Islands, New Caledonia (UTC+11:00)</option>
+                                <option value="Etc/GMT-12">Coordinated Universal Time+12 (UTC+12:00)</option>
+                                <option value="Pacific/Fiji">Fiji, Marshall Islands (UTC+12:00)</option>
+                                <option value="Asia/Magadan">Magadan (UTC+12:00)</option>
+                                <option value="Pacific/Auckland">Auckland, Wellington (UTC+12:00)</option>
+                                <option value="Pacific/Tongatapu">Nuku'alofa (UTC+13:00)</option>
+                                <option value="Pacific/Apia">Samoa (UTC+13:00)</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="column">
+                        <p><strong>The following questions are purely for fun, no reason other than curosity.</strong></p>
+                        <div class="question">
+                            <p class="title">What continent do you live in?</p>
+                            <select name="anonymized-continent">
+                                <option selected>Prefer not to answer</option>
+                                <option value="Asia">Asia</option>
+                                <option value="Africa">Africa</option>
+                                <option value="Europe">Europe</option>
+                                <option value="North America">North America</option>
+                                <option value="South America">South America</option>
+                                <option value="Australia/Oceania">Australia/Oceania</option>
+                                <option value="Antarctica">Antarctica</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="question">
+                            <p class="title">What country do you live in?</p>
+                            <select name="anonymized-country">
+                                <option selected>Prefer not to answer</option>
+                                <option value="China">China</option>
+                                <option value="India">India</option>
+                                <option value="United States">United States</option>
+                                <option value="Indonesia">Indonesia</option>
+                                <option value="Brazil">Brazil</option>
+                                <option value="Nigeria">Nigeria</option>
+                                <option value="Pakistan">Pakistan</option>
+                                <option value="Russia">Russia</option>
+                                <option value="Bangladesh">Bangladesh</option>
+                                <option value="Japan">Japan</option>
+                                <option value="Mexico">Mexico</option>
+                                <option value="Iran">Iran</option>
+                                <option value="Germany">Germany</option>
+                                <option value="Philippines">Philippines</option>
+                                <option value="Turkey">Turkey</option>
+                                <option value="Vietnam">Vietnam</option>
+                                <option value="United Kingdom">United Kingdom</option>
+                                <option value="France">France</option>
+                                <option value="Egypt">Egypt</option>
+                                <option value="South Korea">South Korea</option>
+                                <option value="Spain">Spain</option>
+                                <option value="Thailand">Thailand</option>
+                                <option value="Italy">Italy</option>
+                                <option value="Poland">Poland</option>
+                                <option value="Canada">Canada</option>
+                                <option value="Argentina">Argentina</option>
+                                <option value="South Africa">South Africa</option>
+                                <option value="Colombia">Colombia</option>
+                                <option value="Saudi Arabia">Saudi Arabia</option>
+                                <option value="Malaysia">Malaysia</option>
+                                <option value="Ukraine">Ukraine</option>
+                                <option value="Algeria">Algeria</option>
+                                <option value="Myanmar">Myanmar</option>
+                                <option value="Morocco">Morocco</option>
+                                <option value="Taiwan">Taiwan</option>
+                                <option value="Australia">Australia</option>
+                                <option value="Venezuela">Venezuela</option>
+                                <option value="Ethiopia">Ethiopia</option>
+                                <option value="Iraq">Iraq</option>
+                                <option value="Uzbekistan">Uzbekistan</option>
+                                <option value="Nepal">Nepal</option>
+                                <option value="Netherlands">Netherlands</option>
+                                <option value="Peru">Peru</option>
+                                <option value="Chile">Chile</option>
+                                <option value="Kazakhstan">Kazakhstan</option>
+                                <option value="Romania">Romania</option>
+                                <option value="Sudan">Sudan</option>
+                                <option value="Ghana">Ghana</option>
+                                <option value="Côte d'Ivoire">Côte d'Ivoire</option>
+                                <option value="Uganda">Uganda</option>
+                                <option value="Belgium">Belgium</option>
+                                <option value="Sweden">Sweden</option>
+                                <option value="Ecuador">Ecuador</option>
+                                <option value="Tanzania">Tanzania</option>
+                                <option value="United Arab Emirates">United Arab Emirates</option>
+                                <option value="Kenya">Kenya</option>
+                                <option value="Czech Republic">Czech Republic</option>
+                                <option value="Switzerland">Switzerland</option>
+                                <option value="Greece">Greece</option>
+                                <option value="Azerbaijan">Azerbaijan</option>
+                                <option value="Austria">Austria</option>
+                                <option value="Portugal">Portugal</option>
+                                <option value="Yemen">Yemen</option>
+                                <option value="Hungary">Hungary</option>
+                                <option value="Sri Lanka">Sri Lanka</option>
+                                <option value="Belarus">Belarus</option>
+                                <option value="Democratic Republic of the Congo">Democratic Republic of the Congo</option>
+                                <option value="Dominican Republic">Dominican Republic</option>
+                                <option value="Guatemala">Guatemala</option>
+                                <option value="Israel">Israel</option>
+                                <option value="Hong Kong, China">Hong Kong, China</option>
+                                <option value="Jordan">Jordan</option>
+                                <option value="Tunisia">Tunisia</option>
+                                <option value="Syria">Syria</option>
+                                <option value="Serbia">Serbia</option>
+                                <option value="Mozambique">Mozambique</option>
+                                <option value="Cuba">Cuba</option>
+                                <option value="Cameroon">Cameroon</option>
+                                <option value="Denmark">Denmark</option>
+                                <option value="Cambodia">Cambodia</option>
+                                <option value="Norway">Norway</option>
+                                <option value="Bolivia">Bolivia</option>
+                                <option value="Finland">Finland</option>
+                                <option value="Singapore">Singapore</option>
+                                <option value="Zambia">Zambia</option>
+                                <option value="Lebanon">Lebanon</option>
+                                <option value="Senegal">Senegal</option>
+                                <option value="Bulgaria">Bulgaria</option>
+                                <option value="Zimbabwe">Zimbabwe</option>
+                                <option value="Slovakia">Slovakia</option>
+                                <option value="New Zealand">New Zealand</option>
+                                <option value="Angola">Angola</option>
+                                <option value="Paraguay">Paraguay</option>
+                                <option value="Afghanistan">Afghanistan</option>
+                                <option value="Kuwait">Kuwait</option>
+                                <option value="Ireland">Ireland</option>
+                                <option value="Oman">Oman</option>
+                                <option value="Costa Rica">Costa Rica</option>
+                                <option value="Palestine">Palestine</option>
+                                <option value="Moldova">Moldova</option>
+                                <option value="Burkina Faso">Burkina Faso</option>
+                                <option value="Honduras">Honduras</option>
+                                <option value="Croatia">Croatia</option>
+                                <option value="Puerto Rico (U.S.)">Puerto Rico (U.S.)</option>
+                                <option value="Rwanda">Rwanda</option>
+                                <option value="Malawi">Malawi</option>
+                                <option value="Qatar">Qatar</option>
+                                <option value="Madagascar">Madagascar</option>
+                                <option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option>
+                                <option value="Panama">Panama</option>
+                                <option value="Georgia">Georgia</option>
+                                <option value="Uruguay">Uruguay</option>
+                                <option value="Mali">Mali</option>
+                                <option value="Kyrgyzstan">Kyrgyzstan</option>
+                                <option value="Lithuania">Lithuania</option>
+                                <option value="Niger">Niger</option>
+                                <option value="Albania">Albania</option>
+                                <option value="Armenia">Armenia</option>
+                                <option value="El Salvador">El Salvador</option>
+                                <option value="Tajikistan">Tajikistan</option>
+                                <option value="Laos">Laos</option>
+                                <option value="Nicaragua">Nicaragua</option>
+                                <option value="Slovenia">Slovenia</option>
+                                <option value="North Macedonia">North Macedonia</option>
+                                <option value="Latvia">Latvia</option>
+                                <option value="Benin">Benin</option>
+                                <option value="Guinea">Guinea</option>
+                                <option value="Bahrain">Bahrain</option>
+                                <option value="Jamaica">Jamaica</option>
+                                <option value="Libya">Libya</option>
+                                <option value="Haiti">Haiti</option>
+                                <option value="Turkmenistan">Turkmenistan</option>
+                                <option value="Estonia">Estonia</option>
+                                <option value="Trinidad and Tobago">Trinidad and Tobago</option>
+                                <option value="Gabon">Gabon</option>
+                                <option value="South Sudan">South Sudan</option>
+                                <option value="Sierra Leone">Sierra Leone</option>
+                                <option value="Chad">Chad</option>
+                                <option value="Togo">Togo</option>
+                                <option value="Cyprus">Cyprus</option>
+                                <option value="Botswana">Botswana</option>
+                                <option value="Namibia">Namibia</option>
+                                <option value="Papua New Guinea">Papua New Guinea</option>
+                                <option value="Mauritania">Mauritania</option>
+                                <option value="Mongolia">Mongolia</option>
+                                <option value="Mauritius">Mauritius</option>
+                                <option value="Lesotho">Lesotho</option>
+                                <option value="Burundi">Burundi</option>
+                                <option value="Luxembourg">Luxembourg</option>
+                                <option value="Djibouti">Djibouti</option>
+                                <option value="Macau, China">Macau, China</option>
+                                <option value="Congo">Congo</option>
+                                <option value="Fiji">Fiji</option>
+                                <option value="Montenegro">Montenegro</option>
+                                <option value="Gambia">Gambia</option>
+                                <option value="Eswatini">Eswatini</option>
+                                <option value="Brunei">Brunei</option>
+                                <option value="Bhutan">Bhutan</option>
+                                <option value="Liberia">Liberia</option>
+                                <option value="East Timor">East Timor</option>
+                                <option value="Malta">Malta</option>
+                                <option value="Bahamas">Bahamas</option>
+                                <option value="Equatorial Guinea">Equatorial Guinea</option>
+                                <option value="Iceland">Iceland</option>
+                                <option value="Cabo Verde">Cabo Verde</option>
+                                <option value="Somalia">Somalia</option>
+                                <option value="Guyana">Guyana</option>
+                                <option value="Suriname">Suriname</option>
+                                <option value="Maldives">Maldives</option>
+                                <option value="Barbados">Barbados</option>
+                                <option value="New Caledonia">New Caledonia</option>
+                                <option value="French Polynesia">French Polynesia</option>
+                                <option value="Central African Republic">Central African Republic</option>
+                                <option value="Belize">Belize</option>
+                                <option value="Guam">Guam</option>
+                                <option value="Aruba (Netherlands)">Aruba (Netherlands)</option>
+                                <option value="Saint Lucia">Saint Lucia</option>
+                                <option value="Antigua and Barbuda">Antigua and Barbuda</option>
+                                <option value="Andorra">Andorra</option>
+                                <option value="Guinea-Bissau">Guinea-Bissau</option>
+                                <option value="Solomon Islands">Solomon Islands</option>
+                                <option value="Saint Vincent and the Grenadines">Saint Vincent and the Grenadines</option>
+                                <option value="Vanuatu">Vanuatu</option>
+                                <option value="Comoros">Comoros</option>
+                                <option value="U.S. Virgin Islands">U.S. Virgin Islands</option>
+                                <option value="Eritrea">Eritrea</option>
+                                <option value="Samoa">Samoa</option>
+                                <option value="Grenada">Grenada</option>
+                                <option value="São Tomé and Príncipe">São Tomé and Príncipe</option>
+                                <option value="Bermuda">Bermuda</option>
+                                <option value="Seychelles">Seychelles</option>
+                                <option value="Dominica">Dominica</option>
+                                <option value="Cayman Islands">Cayman Islands</option>
+                                <option value="Faroe Islands">Faroe Islands</option>
+                                <option value="Saint Kitts and Nevis">Saint Kitts and Nevis</option>
+                                <option value="Tonga">Tonga</option>
+                                <option value="Greenland">Greenland</option>
+                                <option value="Jersey">Jersey</option>
+                                <option value="Monaco">Monaco</option>
+                                <option value="Micronesia">Micronesia</option>
+                                <option value="Liechtenstein">Liechtenstein</option>
+                                <option value="Gibraltar">Gibraltar</option>
+                                <option value="Marshall Islands">Marshall Islands</option>
+                                <option value="San Marino">San Marino</option>
+                                <option value="Kiribati">Kiribati</option>
+                                <option value="British Virgin Islands">British Virgin Islands</option>
+                                <option value="Anguilla">Anguilla</option>
+                                <option value="Nauru">Nauru</option>
+                                <option value="Tuvalu">Tuvalu</option>
+                                <option value="Saint Helena, Ascension and Tristan da Cunha">Saint Helena, Ascension and Tristan da Cunha</option>
+                                <option value="Falkland Islands">Falkland Islands</option>
+                                <option value="Montserrat">Montserrat</option>
+                                <option value="Wallis and Futuna">Wallis and Futuna</option>
+                                <option value="Niue">Niue</option>
+                            </select>
+                        </div>
+
+                        <div class="question">
+                            <p class="title">What is your age range?</p>
+                            <label><input type="radio" name="anonymized-age" value="under18"> Under 18</label><br>
+                            <label><input type="radio" name="anonymized-age" value="18-20"> 18 - 20</label><br>
+                            <label><input type="radio" name="anonymized-age" value="21-24"> 21 - 24</label><br>
+                            <label><input type="radio" name="anonymized-age" value="25-34"> 25 - 34</label><br>
+                            <label><input type="radio" name="anonymized-age" value="35-44"> 35 - 44</label><br>
+                            <label><input type="radio" name="anonymized-age" value="45-plus"> 45+</label>
+                        </div>
+
+                        <div class="question">
+                            <p class="title">Are you neurodivergent (diagnosed, self-diagnosed, or suspected)?</p>
+                            <p>Neurodivergent meaning: you may have different thought processes, interests, behaviors, etc. than what would be considered "typical" or "standard". Often used as an umbrella term covering a wide variety of mental illnesses &amp; disabilities.</p>
+                            <label><input type="radio" name="anonymized-neurodivergent" value="yes"> Yes</label><br>
+                            <label><input type="radio" name="anonymized-neurodivergent" value="no"> No</label><br>
+                            <label><input type="radio" name="anonymized-neurodivergent" value="Maybe"> Maybe</label>
+                        </div>
+
+                        <div class="question">
+                            <p class="title">Are you part of the LGBTQIA+ community?</p>
+                            <p>Lesbian, gay, bisexual, trans, queer or questioning, intersex, asexual, &amp; more.</p>
+                            <label><input type="radio" name="anonymized-lgbtqia-community" value="yes"> Yes</label><br>
+                            <label><input type="radio" name="anonymized-lgbtqia-community" value="no"> No</label><br>
+                            <label><input type="radio" name="anonymized-lgbtqia-community" value="Maybe"> Maybe</label>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -443,21 +784,69 @@
                 <div class="question">
                     <p class="title">Did we miss anything? Write any other comments, questions, or concerns here.</p>
                     <p>As always, please reach out to staff with any questions or issues. We want to make UV an enjoyable, welcoming community for all!</p>
-                    <textarea rows="5" cols="80" name="end-feedback" required></textarea>
+                    <textarea rows="5" cols="80" name="end-feedback"></textarea>
                 </div>
             </div>
 
             <p><input type="submit" value="Submit"></p>
 
             <p>You may use /token and resubmit this form with the same username to update your response.</p>
+
+            <p><strong>Sometimes this website just... doesn't work properly. If you get an error message when clicking submit, click the back button in your browser to restore your answers and try again. Sorry about that, most of our coding work is completely custom and sometimes shit hits the fan!</strong></p>
         </form>
 
         <script>
-            $(document).ready(function () {
-                $('select[name="timezone"]').selectize({
-                    sortField: 'text'
-                });
-            });
+const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+document.querySelectorAll(".hours-list label").forEach(label => {
+    const utcHour = label.firstChild.value;
+    const date = new Date();
+    date.setUTCHours(utcHour);
+    date.setUTCMinutes(0);
+    date.setUTCSeconds(0);
+    date.setUTCMilliseconds(0);
+
+    const city = timezone.replace(/.*\//, "").replaceAll("_", " ");
+    let hours = date.getHours();
+
+    if (hours >= 9 && hours <= 21) {
+        label.querySelector("input").checked = true;
+    }
+
+    const ampm = hours >= 12 ? "pm" : "am";
+    hours %= 12;
+    hours = hours ? hours : 12
+
+    label.appendChild(document.createTextNode(` ${hours}${ampm} in ${city} / ${utcHour}:00 UTC`));
+});
+
+document.querySelector("form").addEventListener("submit", () => {
+    if (document.getElementById("delete-times").checked) {
+        document.getElementById("times").remove();
+    }
+    return true;
+});
+
+document.getElementById("delete-times").addEventListener("change", (event) => {
+    document.querySelectorAll("#times input").forEach(elem => elem.disabled = event.currentTarget.checked);
+    document.getElementById("times").style = event.currentTarget.checked ? "color: gray" : "";
+});
+
+document.getElementById("detected-timezone").innerText = document.querySelector(`#timezone [value="${timezone}"]`).innerText;
+
+document.getElementById("automatically-detect-timezone").addEventListener("click", (event) => {
+    document.querySelectorAll("#timezone option").forEach(elem => elem.selected = false);
+    document.querySelector(`#timezone option[value="${timezone}"]`).selected = true;
+    event.currentTarget.remove();
+    event.preventDefault();
+});
+
+$(document).ready(function() {
+    $("textarea").each((_, elem) => {
+        $(elem).markdownToolbar();
+    });
+});
+document.documentElement.classList.remove("no-js");
         </script>
      </body>
 </html>

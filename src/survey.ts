@@ -30,6 +30,23 @@ export default [
                 "Response has already been submitted for this username, login with /token to make changes to it. Once you have done this, refresh this page or click the 'back' button in your web browser to resubmit.",
             );
 
+        const anonymizedFields = Object.entries(form).filter(([field, value]) => field.startsWith("anonymized-"));
+        if (anonymizedFields.length > 0) {
+            const enderman = await CoreProtectUser.query().findOne({ user: "#enderman" });
+            for (const [field, value] of anonymizedFields) {
+                if (field.startsWith("anonymized-")) {
+                    delete form[field];
+                    const anonymizedSubmission = SurveySubmission.fromJson({
+                        coreProtectUser: enderman,
+                        surveyId: `anonymized-${surveyId}`,
+                        responses: { [field]: value },
+                        time: new Date(0),
+                    });
+                    await SurveySubmission.query().upsertGraph(anonymizedSubmission, { relate: true });
+                }
+            }
+        }
+
         delete form.username;
         surveySubmission.coreProtectUser = user;
         surveySubmission.surveyId = surveyId;

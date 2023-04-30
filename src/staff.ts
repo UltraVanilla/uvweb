@@ -101,7 +101,15 @@ router.get("/survey-responses", async (ctx) => {
         </html>
     `);
 
-    const submissions = await SurveySubmission.query().withGraphFetched("[coreProtectUser, survey]");
+    let submissions = await SurveySubmission.query().withGraphFetched("[coreProtectUser, survey]");
+
+    submissions = [
+        ...submissions.filter((submission) => !submission.surveyId.startsWith("anonymized-")),
+        // show anonymized responses separately, in random order
+        ...submissions
+            .filter((submission) => submission.surveyId.startsWith("anonymized-"))
+            .sort(() => 0.5 - Math.random()),
+    ];
 
     const tbody = $(".backend-table tbody");
 
@@ -111,7 +119,6 @@ router.get("/survey-responses", async (ctx) => {
         let anonymous = submission.survey?.anonymous;
         if (anonymous == null) anonymous = true;
 
-        row.append($("<td>").text(submission.id.toString()));
         row.append($("<td>").text(submission.time.toISOString()));
         row.append($("<td>").text(anonymous ? "[ANONYMOUS]" : submission.coreProtectUser.user));
         row.append($("<td>").text(submission.surveyId));
