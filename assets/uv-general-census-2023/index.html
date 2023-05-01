@@ -804,11 +804,18 @@
             <p><strong>Sometimes this website just... doesn't work properly. If you get an error message when clicking submit, click the back button in your browser to restore your answers and try again. Sorry about that, most of our coding work is completely custom and sometimes shit hits the fan!</strong></p>
         </form>
 
+        <script src="timezones.js"></script>
         <script>
-let timezone = "UTC";
-if (window.Intl != null && Intl.DateTimeFormat() != null && Intl.DateTimeFormat().resolvedOptions() != null && Intl.DateTimeFormat().resolvedOptions().timeZone != null) {
-    timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+function getCanonical(tzdata) {
+    for (const timezone of timezones) {
+        if (timezone.utc.includes(tzdata))
+            return timezone;
+    }
 }
+
+const canonicalTimezone = getCanonical(timezone);
 
 document.querySelectorAll(".hours-list label").forEach(label => {
     const utcHour = label.firstChild.value;
@@ -844,13 +851,18 @@ document.getElementById("delete-times").addEventListener("change", (event) => {
     document.getElementById("times").style = event.currentTarget.checked ? "color: gray" : "";
 });
 
-document.getElementById("detected-timezone").innerText = document.querySelector(`#timezone [value="${timezone}"]`).innerText;
+
+document.getElementById("detected-timezone").innerText = canonicalTimezone.text;
 
 document.getElementById("automatically-detect-timezone").addEventListener("click", (event) => {
     document.querySelectorAll("#timezone option").forEach(elem => elem.selected = false);
-    document.querySelector(`#timezone option[value="${timezone}"]`).selected = true;
+    for (const tzdata of canonicalTimezone.utc) {
+        const elem = document.querySelector(`#timezone option[value="${tzdata}"]`);
+        if (elem) elem.selected = true;
+    }
     event.currentTarget.remove();
     event.preventDefault();
+    return false;
 });
 
 $(document).ready(function() {
