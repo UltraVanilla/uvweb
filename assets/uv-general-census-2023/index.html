@@ -805,7 +805,10 @@
         </form>
 
         <script>
-const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+let timezone = "UTC";
+if (window.Intl != null && Intl.DateTimeFormat() != null && Intl.DateTimeFormat().resolvedOptions() != null && Intl.DateTimeFormat().resolvedOptions().timeZone != null) {
+    timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+}
 
 document.querySelectorAll(".hours-list label").forEach(label => {
     const utcHour = label.firstChild.value;
