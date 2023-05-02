@@ -108,7 +108,7 @@ router.get("/survey-responses", async (ctx) => {
         // show anonymized responses separately, in random order
         ...submissions
             .filter((submission) => submission.surveyId.startsWith("anonymized-"))
-            .sort(() => 0.5 - Math.random()),
+            .sort((a, b) => JSON.stringify(a.responses).localeCompare(JSON.stringify(b.responses))),
     ];
 
     const tbody = $(".backend-table tbody");
