@@ -119,6 +119,11 @@
 <canvas id="uv-events-variety"></canvas>
 </div>
 </div>
+<div class="result">
+<div class="chart-container">
+<canvas id="uv-satisfaction"></canvas>
+</div>
+</div>
 </div>
 <h2>Minecraft Demographics</h2>
 <div class="results three">
@@ -1015,6 +1020,57 @@
                         borderWidth: 0,
                         hoverBackgroundColor: [hexToRgb(colorGreen), hexToRgb(colorRed), hexToRgb(colorBlue)],
                         data: [22, 1, 12],
+                    }]
+                }
+            });
+            new Chart('uv-satisfaction', {
+                type: 'doughnut',
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Overall satisfaction with server (n=36)',
+                            font: {
+                                size: 24
+                            },
+                        },
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                usePointStyle: true,
+                                boxWidth: 20,
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => {
+                                    const label = context.label || '';
+                                    const value = context.parsed || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+                                    return `${label}: ${percentage}%`;
+                                }
+                            }
+                        },
+                    },
+                    layout: {
+                        padding: {
+                            top: 20,
+                            left: 30,
+                            right: 30,
+                            bottom: 20
+                        }
+                    },
+                },
+                data: {
+                    labels: ['High (Satisfied)','Middling or Neutral','Low (Dissatisifed)'],
+                    datasets: [{
+                        backgroundColor: [colorGreen, colorBlue, colorRed],
+                        borderWidth: 0,
+                        hoverBackgroundColor: [hexToRgb(colorGreen), hexToRgb(colorBlue), hexToRgb(colorRed)],
+                        data: [33, 3, 0],
                     }]
                 }
             });
