@@ -251,7 +251,7 @@ body {
         font-weight: bold;
     }
 }
-@media screen and (max-width: 845px) {
+@media screen and (max-width: 870px) {
     .header-part.uv-logo-name {
         display: none;
     }
@@ -289,7 +289,7 @@ body {
     }
 }
 
-@media screen and (min-width: 845px) and (max-width: 1316px) {
+@media screen and (min-width: 870px) and (max-width: 1316px) {
     .header-separator {
         display: block;
     }

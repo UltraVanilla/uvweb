@@ -80,7 +80,7 @@ export default async (ctx: Koa.BaseContext): Promise<void> => {
             <div class='header-part server-info'>
                 <strong class='server-info-label'>server address: </strong> play.ultravanilla.world</div>
             <div class='header-part server-info server-info-version'>
-                <strong class='server-info-label'>version: </strong> 1.19<span style='color:#979797'>.3</span></div>
+                <strong class='server-info-label'>version: </strong> 1.19<span style='color:#979797'>.4</span></div>
         </span>
     `).appendTo(newHeader);
 
@@ -90,8 +90,8 @@ export default async (ctx: Koa.BaseContext): Promise<void> => {
         .addClass("header-part server-social server-discord")
         .appendTo(newHeader);
 
-    $("<div><a href='https://www.reddit.com/r/UltraVanilla/' target='blank' rel='noreferrer'>reddit</a>")
-        .addClass("header-part server-social server-reddit")
+    $("<div><a href='https://wiki.ultravanilla.world/wiki/Donate' target='blank' rel='noreferrer'>donate</a>")
+        .addClass("header-part server-social server-donate")
         .appendTo(newHeader);
 
     $(
