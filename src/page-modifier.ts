@@ -80,7 +80,7 @@ export default async (ctx: Koa.BaseContext): Promise<void> => {
             <div class='header-part server-info'>
                 <strong class='server-info-label'>server address: </strong> play.ultravanilla.world</div>
             <div class='header-part server-info server-info-version'>
-                <strong class='server-info-label'>version: </strong> 1.19<span style='color:#979797'>.4</span></div>
+                <strong class='server-info-label'>version: </strong> 1.20<span style='color:#979797'>.1</span></div>
         </span>
     `).appendTo(newHeader);
 
