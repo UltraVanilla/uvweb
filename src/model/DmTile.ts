@@ -8,6 +8,7 @@ import DmMap from "./DmMap";
 @hasDate("lastUpdate", 1)
 export default class DmTile extends Model {
     static columnNameMappers = simpleColumnMapper({
+        id: "id",
         mapID: "MapID",
         x: "x",
         y: "y",
@@ -20,6 +21,9 @@ export default class DmTile extends Model {
     });
     static tableName = "dm_Tiles";
     static idColumn = ["MapID", "x", "y", "zoom"];
+
+    // second incrementing key
+    id!: number;
 
     mapID!: number;
     x!: number;
