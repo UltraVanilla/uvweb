@@ -49,8 +49,12 @@ body {
     margin: 0px 12px;
 }
 
+.header-part.server-info {
+    color: #b0b0b0;
+}
+
 .header-part.server-social {
-    padding: 20px;
+    padding: 14px;
 }
 .header-part.server-social,
 .header-part.server-social a {
@@ -91,10 +95,12 @@ body {
 }
 
 .uv-logo-name {
-    font-size: 40px;
+    font-size: 25px;
+    font-weight: 700;
+    margin-left: 0px;
 }
 .uv-logo {
-    height: 60px;
+    height: 57.5px;
     border-left: 10px solid #191919;
     border-right: 10px solid #191919;
 }
@@ -251,7 +257,7 @@ body {
         font-weight: bold;
     }
 }
-@media screen and (max-width: 870px) {
+@media screen and (max-width: 800px) {
     .header-part.uv-logo-name {
         display: none;
     }
@@ -289,7 +295,7 @@ body {
     }
 }
 
-@media screen and (min-width: 870px) and (max-width: 1316px) {
+@media screen and (min-width: 800px) and (max-width: 1210px) {
     .header-separator {
         display: block;
     }

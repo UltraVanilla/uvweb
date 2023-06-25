@@ -71,9 +71,9 @@ export default async (ctx: Koa.BaseContext): Promise<void> => {
 
     const newHeader = $("<header>").addClass("header");
 
-    $("<div>").text("UltraVanilla").addClass("header-part uv-logo-name").appendTo(newHeader);
-
     $("<img>").attr("src", "assets/416.png").addClass("header-part uv-logo").appendTo(newHeader);
+
+    $("<div>").text("UltraVanilla").addClass("header-part uv-logo-name").appendTo(newHeader);
 
     $(`
         <span class='header-info-container'>
