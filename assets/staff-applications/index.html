@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html class="no-js">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,7 +35,7 @@
                 display: block;
                 max-width: 100%;
             }
-            input, textarea {
+            input, textarea, select {
                 font-size: 1.0em;
             }
             .option {
@@ -60,6 +60,15 @@
                 margin-top: 4px;
                 margin-bottom: 4px;
             }
+            .javascript-notice {
+                display: none;
+            }
+            html.no-js .javascript-notice {
+                display: block;
+            }
+            html.no-js form {
+                display: none;
+            }
         </style>
         <meta property="og:image" content="/assets/416.png">
         <script type="text/javascript" src="/js/jquery-3.5.1.js"></script>
@@ -67,6 +76,9 @@
     <body>
         <div class="logo"><img src="/assets/416.png"></div>
         <h1>UltraVanilla staff applications</h1>
+
+        <h1 class="javascript-notice">Your browser is too old, Javascript is not enabled, or the page hasn't loaded</h1>
+
         <form action="/survey-submit/2023-aug-staff-applications" method="post" name="staff-apps">
             <p>UltraVanilla is a server that relies on an active staff team to enforce rules in a four year old world with no claims or block protection. We're looking for serious people who take the responsibilities seriously, but who are also participants in the community the way normal players are.</p>
 
@@ -194,14 +206,119 @@
                         <li><label><input type="checkbox" name="times[]" value="23"></label></li>
                     </ul>
                 </p>
+
+                
+                <p class="title">What is your time zone?</p>
+                <p><button id="automatically-detect-timezone">Click here if your timezone is <br/><strong id="detected-timezone">UTC</strong></button></p>
+                <select name="anonymized-timezone" id="timezone" required>
+                    <option selected value="">Select a timezone</option>
+                    <option value="Etc/GMT+12">International Date Line West (UTC-12:00)</option>
+                    <option value="Etc/GMT+11">Coordinated Universal Time-11 (UTC-11:00)</option>
+                    <option value="Pacific/Honolulu">Hawaii (UTC-10:00)</option>
+                    <option value="America/Anchorage">Alaska (UTC-09:00)</option>
+                    <option value="America/Santa_Isabel">Baja California (UTC-08:00)</option>
+                    <option value="America/Los_Angeles">Pacific Time (US and Canada) (UTC-08:00)</option>
+                    <option value="America/Chihuahua">Chihuahua, La Paz, Mazatlan (UTC-07:00)</option>
+                    <option value="America/Phoenix">Arizona (UTC-07:00)</option>
+                    <option value="America/Denver">Mountain Time (US and Canada) (UTC-07:00)</option>
+                    <option value="America/Guatemala">Central America (UTC-07:00)</option>
+                    <option value="America/Chicago">Central Time (US and Canada) (UTC-06:00)</option>
+                    <option value="America/Regina">Saskatchewan (UTC-06:00)</option>
+                    <option value="America/Mexico_City">Guadalajara, Mexico City, Monterey (UTC-06:00)</option>
+                    <option value="America/Bogota">Bogota, Lima, Quito (UTC-05:00)</option>
+                    <option value="America/Indiana/Indianapolis">Indiana (East) (UTC-05:00)</option>
+                    <option value="America/New_York">Eastern Time (US and Canada) (UTC-05:00)</option>
+                    <option value="America/Caracas">Caracas (UTC-04:30)</option>
+                    <option value="America/Halifax">Atlantic Time (Canada) (UTC-04:00)</option>
+                    <option value="America/Asuncion">Asuncion (UTC-04:00)</option>
+                    <option value="America/La_Paz">Georgetown, La Paz, Manaus, San Juan (UTC-04:00)</option>
+                    <option value="America/Cuiaba">Cuiaba (UTC-04:00)</option>
+                    <option value="America/Santiago">Santiago (UTC-04:00)</option>
+                    <option value="America/St_Johns">Newfoundland (UTC-03:30)</option>
+                    <option value="America/Sao_Paulo">Brasilia (UTC-03:00)</option>
+                    <option value="America/Godthab">Greenland (UTC-03:00)</option>
+                    <option value="America/Cayenne">Cayenne, Fortaleza (UTC-03:00)</option>
+                    <option value="America/Argentina/Buenos_Aires">Buenos Aires (UTC-03:00)</option>
+                    <option value="America/Montevideo">Montevideo (UTC-03:00)</option>
+                    <option value="Etc/GMT+2">Coordinated Universal Time-2 (UTC-02:00)</option>
+                    <option value="Atlantic/Cape_Verde">Cape Verde (UTC-01:00)</option>
+                    <option value="Atlantic/Azores">Azores (UTC-01:00)</option>
+                    <option value="Africa/Casablanca">Casablanca (UTC+00:00)</option>
+                    <option value="Atlantic/Reykjavik">Monrovia, Reykjavik (UTC+00:00)</option>
+                    <option value="Europe/London">Dublin, Edinburgh, Lisbon, London (UTC+00:00)</option>
+                    <option value="Etc/GMT">Coordinated Universal Time (UTC+00:00)</option>
+                    <option value="Europe/Berlin">Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna (UTC+01:00)</option>
+                    <option value="Europe/Paris">Brussels, Copenhagen, Madrid, Paris (UTC+01:00)</option>
+                    <option value="Africa/Lagos">West Central Africa (UTC+01:00)</option>
+                    <option value="Europe/Budapest">Belgrade, Bratislava, Budapest, Ljubljana, Prague (UTC+01:00)</option>
+                    <option value="Europe/Warsaw">Sarajevo, Skopje, Warsaw, Zagreb (UTC+01:00)</option>
+                    <option value="Africa/Windhoek">Windhoek (UTC+01:00)</option>
+                    <option value="Europe/Istanbul">Athens, Bucharest, Istanbul (UTC+02:00)</option>
+                    <option value="Europe/Kiev">Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius (UTC+02:00)</option>
+                    <option value="Africa/Cairo">Cairo (UTC+02:00)</option>
+                    <option value="Asia/Damascus">Damascus (UTC+02:00)</option>
+                    <option value="Asia/Amman">Amman (UTC+02:00)</option>
+                    <option value="Africa/Johannesburg">Harare, Pretoria (UTC+02:00)</option>
+                    <option value="Asia/Jerusalem">Jerusalem (UTC+02:00)</option>
+                    <option value="Asia/Beirut">Beirut (UTC+02:00)</option>
+                    <option value="Asia/Baghdad">Baghdad (UTC+03:00)</option>
+                    <option value="Europe/Minsk">Minsk (UTC+03:00)</option>
+                    <option value="Asia/Riyadh">Kuwait, Riyadh (UTC+03:00)</option>
+                    <option value="Africa/Nairobi">Nairobi (UTC+03:00)</option>
+                    <option value="Asia/Tehran">Tehran (UTC+03:30)</option>
+                    <option value="Europe/Moscow">Moscow, St. Petersburg, Volgograd (UTC+04:00)</option>
+                    <option value="Asia/Tbilisi">Tbilisi (UTC+04:00)</option>
+                    <option value="Asia/Yerevan">Yerevan (UTC+04:00)</option>
+                    <option value="Asia/Dubai">Abu Dhabi, Muscat (UTC+04:00)</option>
+                    <option value="Asia/Baku">Baku (UTC+04:00)</option>
+                    <option value="Indian/Mauritius">Port Louis (UTC+04:00)</option>
+                    <option value="Asia/Kabul">Kabul (UTC+04:30)</option>
+                    <option value="Asia/Tashkent">Tashkent (UTC+05:00)</option>
+                    <option value="Asia/Karachi">Islamabad, Karachi (UTC+05:00)</option>
+                    <option value="Asia/Colombo">Sri Jayewardenepura Kotte (UTC+05:30)</option>
+                    <option value="Asia/Kolkata">Chennai, Kolkata, Mumbai, New Delhi (UTC+05:30)</option>
+                    <option value="Asia/Kathmandu">Kathmandu (UTC+05:45)</option>
+                    <option value="Asia/Almaty">Astana (UTC+06:00)</option>
+                    <option value="Asia/Dhaka">Dhaka (UTC+06:00)</option>
+                    <option value="Asia/Yekaterinburg">Yekaterinburg (UTC+06:00)</option>
+                    <option value="Asia/Yangon">Yangon (UTC+06:30)</option>
+                    <option value="Asia/Bangkok">Bangkok, Hanoi, Jakarta (UTC+07:00)</option>
+                    <option value="Asia/Novosibirsk">Novosibirsk (UTC+07:00)</option>
+                    <option value="Asia/Krasnoyarsk">Krasnoyarsk (UTC+08:00)</option>
+                    <option value="Asia/Ulaanbaatar">Ulaanbaatar (UTC+08:00)</option>
+                    <option value="Asia/Shanghai">Beijing, Chongqing, Hong Kong, Urumqi (UTC+08:00)</option>
+                    <option value="Australia/Perth">Perth (UTC+08:00)</option>
+                    <option value="Asia/Singapore">Kuala Lumpur, Singapore (UTC+08:00)</option>
+                    <option value="Asia/Taipei">Taipei (UTC+08:00)</option>
+                    <option value="Asia/Irkutsk">Irkutsk (UTC+09:00)</option>
+                    <option value="Asia/Seoul">Seoul (UTC+09:00)</option>
+                    <option value="Asia/Tokyo">Osaka, Sapporo, Tokyo (UTC+09:00)</option>
+                    <option value="Australia/Darwin">Darwin (UTC+09:30)</option>
+                    <option value="Australia/Adelaide">Adelaide (UTC+09:30)</option>
+                    <option value="Australia/Hobart">Hobart (UTC+10:00)</option>
+                    <option value="Asia/Yakutsk">Yakutsk (UTC+10:00)</option>
+                    <option value="Australia/Brisbane">Brisbane (UTC+10:00)</option>
+                    <option value="Pacific/Port_Moresby">Guam, Port Moresby (UTC+10:00)</option>
+                    <option value="Australia/Sydney">Canberra, Melbourne, Sydney (UTC+10:00)</option>
+                    <option value="Asia/Vladivostok">Vladivostok (UTC+11:00)</option>
+                    <option value="Pacific/Guadalcanal">Solomon Islands, New Caledonia (UTC+11:00)</option>
+                    <option value="Etc/GMT-12">Coordinated Universal Time+12 (UTC+12:00)</option>
+                    <option value="Pacific/Fiji">Fiji, Marshall Islands (UTC+12:00)</option>
+                    <option value="Asia/Magadan">Magadan (UTC+12:00)</option>
+                    <option value="Pacific/Auckland">Auckland, Wellington (UTC+12:00)</option>
+                    <option value="Pacific/Tongatapu">Nuku'alofa (UTC+13:00)</option>
+                    <option value="Pacific/Apia">Samoa (UTC+13:00)</option>
+                </select>
+
                 <p>Other info about what times you can be online (optional): <input type="text" name="times-misc"></p>
+
+                <p><strong>If you get an error message when clicking submit, click the back button in your browser to restore your answers and try again.</strong></p>
 
                 <p><input type="submit" value="Submit"></p>
                 <p>You may use /token and resubmit this form with the same username to update your response.</p>
-
-                <p><strong>If you get an error message when clicking submit, click the back button in your browser to restore your answers and try again.</strong></p>
             </div>
         </form>
+        <script src="timezones.js"></script>
 <script>
 
 const adminOnly = document.getElementById("admin-only");
@@ -240,6 +357,18 @@ document.querySelectorAll(".prerequisite, .not-prerequisite").forEach(checkbox =
     checkbox.addEventListener("change", update);
 });
 
+
+const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+function getCanonical(tzdata) {
+    for (const timezone of timezones) {
+        if (timezone.utc.includes(tzdata))
+            return timezone;
+    }
+}
+
+const canonicalTimezone = getCanonical(timezone);
+
 document.querySelectorAll(".hours-list label").forEach(label => {
     const utcHour = label.firstChild.value;
     const date = new Date();
@@ -247,14 +376,19 @@ document.querySelectorAll(".hours-list label").forEach(label => {
     date.setUTCMinutes(0);
     date.setUTCSeconds(0);
     date.setUTCMilliseconds(0);
-    
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone.replace(/.*\//, "").replaceAll("_", " ");
+
+    const city = timezone.replace(/.*\//, "").replaceAll("_", " ");
     let hours = date.getHours();
+
+    if (hours >= 9 && hours <= 21) {
+        label.querySelector("input").checked = true;
+    }
+
     const ampm = hours >= 12 ? "pm" : "am";
     hours %= 12;
     hours = hours ? hours : 12
 
-    label.appendChild(document.createTextNode(` ${hours}${ampm} in ${timezone}`));
+    label.appendChild(document.createTextNode(` ${hours}${ampm} in ${city} / ${utcHour}:00 UTC`));
 });
 
 const age16Plus = document.querySelector("input[name=is-16plus]");
@@ -273,6 +407,21 @@ document.querySelector("input[name=is-18plus]").addEventListener("change", (even
 });
 
 updateAgeCheckbox(document.querySelector("input[name=is-18plus]").checked);
+
+document.getElementById("detected-timezone").innerText = canonicalTimezone.text;
+
+document.getElementById("automatically-detect-timezone").addEventListener("click", (event) => {
+    document.querySelectorAll("#timezone option").forEach(elem => elem.selected = false);
+    for (const tzdata of canonicalTimezone.utc) {
+        const elem = document.querySelector(`#timezone option[value="${tzdata}"]`);
+        if (elem) elem.selected = true;
+    }
+    event.currentTarget.remove();
+    event.preventDefault();
+    return false;
+});
+
+document.documentElement.classList.remove("no-js");
 </script>
     </body>
 </html>
