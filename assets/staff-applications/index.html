@@ -67,16 +67,18 @@
     <body>
         <div class="logo"><img src="/assets/416.png"></div>
         <h1>UltraVanilla staff applications</h1>
-        <form action="/survey-submit/2022-dec-staff-applications" method="post" name="staff-apps">
-            <p>UltraVanilla is a server that relies on an active staff team to enforce rules in a three year old world with no claims or block protection. We're looking for serious people who take the responsibilities seriously, but who are also participants in the community the way normal players are.</p>
+        <form action="/survey-submit/2023-aug-staff-applications" method="post" name="staff-apps">
+            <p>UltraVanilla is a server that relies on an active staff team to enforce rules in a four year old world with no claims or block protection. We're looking for serious people who take the responsibilities seriously, but who are also participants in the community the way normal players are.</p>
 
-            <p>Do not ask staff to read your application. There are typically 20-40 people who apply &mdash; and we get around to reading every one of them.</p>
+            <p>Do not ask staff to read your application. There are typically 10-20 people who apply &mdash; and we get around to reading every one of them.</p>
 
             <p><label for="form-username">In-game username:</label>
             <input type="text" id="form-username" name="username" placeholder="Herobrine" required></p>
-            <p><label><input type="checkbox" name="has-account" class="prerequisite" required> I have a stable &amp; secure Minecraft account only accessible by me.</label></p>
-            <p><label><input type="checkbox" name="will-secure-account" class="prerequisite" required> I'm willing to set up <a href="https://lordofpipes.github.io/obscure-tutorials/docs/security-tips/discord-2fa/">2-factor authentication on Discord</a>, and <a href="https://lordofpipes.github.io/obscure-tutorials/docs/security-tips/auto-screen-lock/">enable automatic screen locking on my PC</a> (if applicable.)</label></p>
-            <p><label><input type="checkbox" name="is-adult" class="prerequisite" required> I am 16 years or older</label></p>
+            <p><label><input type="checkbox" name="has-microsoft-account" class="prerequisite" required> I have a stable, secure, and <a href="https://help.minecraft.net/hc/en-us/articles/4403181904525-How-to-Migrate-Your-Mojang-Account-to-a-Microsoft-Account" target="_blank" rel="noopener noreferrer nofollow">migrated</a> Minecraft account only accessible by me.</label></p>
+            <p><label><input type="checkbox" name="has-discord-account" class="prerequisite" required> I have a stable and secure Discord account only accessible by me.</label></p>
+            <p><label><input type="checkbox" name="will-secure-account" class="prerequisite" required> I'm willing to set up <a href="https://lordofpipes.github.io/obscure-tutorials/docs/security-tips/discord-2fa/">2-factor authentication on Discord</a>, and <a href="https://lordofpipes.github.io/obscure-tutorials/docs/security-tips/auto-screen-lock/" target="_blank" rel="noopener noreferrer nofollow">enable automatic screen locking on my PC</a> (if applicable.)</label></p>
+            <p><label><input type="checkbox" name="is-16plus" class="prerequisite" required> I am 16 years or older</label></p>
+            <p><label><input type="checkbox" name="is-18plus"> I am 18 years or older</label></p>
             <p><label><input type="checkbox" name="is-idiot" class="not-prerequisite"> I am looking to join staff to enhance my gameplay, for example to be able to easily teleport to my friends, or spawning in thousands of creepers and calling it a "gunpowder farm".</label></p>
             
             <p>Which position are you applying for?</p>
@@ -89,52 +91,70 @@
                 <h3>Sorry, you do not meet the requirements. Please review the above checkboxes.</h3>
             </div>
             <div id="admin-only" style="display: none;">
-                <h3>Sorry, we don't recruit for upper staff roles via this form. If you have special skills, contact lordpipe or Beeper, or consider contributing to our code repositories via GitHub.</h3>
+                <h3>Sorry, we don't recruit for upper staff roles via this form. If you have special skills, contact lordpipe or pintsizedrogue, or consider contributing to our code repositories via GitHub.</h3>
             </div>
             <div id="moderator-only" style="display: none;">
                 <p>Why this server?</p>
                 <textarea rows="4" cols="80" name="why-this-server" required></textarea>
 
-
                 <p>What do you see yourself doing as moderator?</p>
-                <textarea rows="4" cols="80" name="what-do-you-see-yourself-doing" required></textarea>
+                <textarea rows="5" cols="80" name="what-do-you-see-yourself-doing" required></textarea>
 
                 <p>Optional: Have you moderated another internet community before? What was that like?</p>
-                <textarea rows="4" cols="80" name="community-moderation-experience" required></textarea>
+                <textarea rows="5" cols="80" name="community-moderation-experience" required></textarea>
 
                 <p>Optional: What do you think of staff? Is there anything about the way we do things that you wish to campaign to change or tweak?</p>
-                <textarea rows="4" cols="80" name="suggestions"></textarea>
+                <textarea rows="5" cols="80" name="suggestions"></textarea>
 
                 <p>Do you have experience with the following? <em>Note: You will be given a chance to learn these things if you are recruited, and not all of these are things you will actually use &mdash; some are just nice to have.</em></p>
                 <p>
         
                     <ul class="no-bullet">
-                        <li><label><input type="checkbox" name="experience[]" value="commands-basic"> Basic vanilla commands like <code>/sethome</code>, <code>/tp</code>, <code>/msg</code>, etc.</label></li>
-                        <li><label><input type="checkbox" name="experience[]" value="commands-intermediate"> Intermediate vanilla commands like <code>/kill</code>, <code>/gamerule</code>, <code>/summon</code>, etc.</label></li>
-                        <li><label><input type="checkbox" name="experience[]" value="commands-advanced"> Advanced vanilla commands like <code>/tellraw</code>, <code>/clone</code>, etc.</label></li>
+                        <li><label><input type="checkbox" name="experience[]" value="commands-basic"> Basic commands like <code>/sethome</code>, <code>/tp</code>, <code>/msg</code>, etc.</label></li>
+                        <li><label><input type="checkbox" name="experience[]" value="commands-intermediate"> Intermediate commands like <code>/kill</code>, <code>/gamerule</code>, <code>/summon</code>, etc.</label></li>
+                        <li><label><input type="checkbox" name="experience[]" value="commands-advanced"> Advanced commands like <code>/tellraw</code>, <code>/clone</code>, etc.</label></li>
                         <li><label><input type="checkbox" name="experience[]" value="commands-coreprotect"> I have used CoreProtect or Prism</label></li>
-                        <li><label><input type="checkbox" name="experience[]" value="commands-timings"> I have used PaperMC Timings to lag-hunt on a server</label></li>
+                        <li><label><input type="checkbox" name="experience[]" value="commands-timings"> I have used Spark or PaperMC Timings to lag-hunt on a server</label></li>
                         <li><label><input type="checkbox" name="experience[]" value="commands-configuration"> I have configured Spigot plugins for a server</label></li>
                         <li><label><input type="checkbox" name="experience[]" value="commands-configuration"> I know my way around configuring Brewery recipes</label></li>
                     </ul>
                 </p>
 
-                <p><strong>There are no right or wrong answers to these scenario questions &mdash; give your best guess or gut instinct.</strong></p>
-                <p>Hint: Include your thoughts on how you would investigate the situation and collect details.</p>
-                <p>SCENARIO 1: You see that somebody joins and they immediately start breaking signs and burning the maps. wat do?</p>
-                <textarea rows="4" cols="80" name="scenario-1" required></textarea>
-                <p>SCENARIO 2: You notice that the shopping district has been STOLEN from, some guy took like 50 diamonds from a bunch of shops. This person has been playing for a couple days now and doesn't seem to be malicious (such as also griefing etc). What do you do?</p>
-                <textarea rows="4" cols="80" name="scenario-2" required></textarea>
-                <p>SCENARIO 3: You notice that the shopping district has been STOLEN from, some guy took like 50 diamonds from a bunch of shops. You witness the person start flyhacking away. wyd?</p>
-                <textarea rows="4" cols="80" name="scenario-3" required></textarea>
-                <p>SCENARIO 4: Someone messages you that their crops or flowers were griefed or raided. What do you say to the player who messaged you, and what would you do to the person that messed with the flowers or crops?</p>
-                <textarea rows="4" cols="80" name="scenario-4" required></textarea>
-                <p>SCENARIO 5: What do you do in a scenario where a player (or group of players) are communicating in a way that may be inappropriate or might make others feel uncomfortable?</p>
-                <textarea rows="4" cols="80" name="scenario-5" required></textarea>
-                <p>SCENARIO 6: What if there is some banter going on between two individuals and they happen to say something very insulting or offensive to each other. Neither of them are actually upset about it though. What would you do?</p>
-                <textarea rows="4" cols="80" name="scenario-6" required></textarea>
-                <p>SCENARIO 7: The admins are being too strict, or too laid back. Or you have a problem with another staff member doing something disagreeable. How do you address this?</p>
-                <textarea rows="4" cols="80" name="scenario-7" required></textarea>
+                <p><strong>Scenario questions</strong></p>
+                <p>Hint: For each one, we recommend considering the following aspects:</p>
+                <ul>
+                    <li>Is it actionable at all?</li>
+                    <li>How would you go about investigating and collecting more details, if needed? How would you go about documenting and communicating with other staff? Is there any ambiguity?</li>
+                    <li>What is the proper characterization of the actions? (What is it called when someone does this?)</li>
+                    <li>What actions can be done to deal with the behavior? (This may be conditional based on evidence!)</li>
+                </ul>
+
+                <p>SCENARIO 1: Someone starts breaking signs and burning the maps at spawn.</p>
+                <textarea rows="5" cols="80" name="scenario-1" required></textarea>
+
+                <p>SCENARIO 2: Someone who joined yesterday removed some items out of chests in a town.</p>
+                <textarea rows="5" cols="80" name="scenario-2" required></textarea>
+
+                <p>SCENARIO 3: You notice that the shopping district has been stolen from, some guy took like 50 diamonds from two shops. This person has been playing for a couple days now and doesn't seem to be a troll.</p>
+                <textarea rows="5" cols="80" name="scenario-3" required></textarea>
+
+                <p>SCENARIO 4: An owner of a town reports that their friend dug a massive hole in their town. This town owner told their friend they want the hole filled in, but they refused. How might you communicate with the involved parties to resolve this?</p>
+                <textarea rows="5" cols="80" name="scenario-4" required></textarea>
+
+                <p>SCENARIO 5: There is some banter going on between two individuals and they happen to say something very insulting or offensive to each other. Neither of them are actually upset about it though.</p>
+                <textarea rows="5" cols="80" name="scenario-5" required></textarea>
+
+                <p>SCENARIO 6: Someone says "islam is poisoning europe and must be removed from public life, it is incompatible with the west" in a conversation.</p>
+                <textarea rows="5" cols="80" name="scenario-6" required></textarea>
+
+                <p>SCENARIO 7: Someone struggling with blazes says "these MOTHERFUCKING blazes refuse to die".</p>
+                <textarea rows="5" cols="80" name="scenario-7" required></textarea>
+
+                <p>SCENARIO 8: In a conversation about various conspiracy theories and political topics, someone says "the cuban government used a directed acoustic energy weapon against the US embassy in 2016".</p>
+                <textarea rows="5" cols="80" name="scenario-8" required></textarea>
+
+                <p>SCENARIO 9: The admins are being too strict, or too laid back. Or you have a problem with another staff member doing something disagreeable.</p>
+                <textarea rows="5" cols="80" name="scenario-9" required></textarea>
 
                 <p>What are your expected active hours? <br/> Doesn't need to be exact, just a general idea. Un-check any weekdays you will rarely be online.</p>
                 <p>
@@ -178,6 +198,8 @@
 
                 <p><input type="submit" value="Submit"></p>
                 <p>You may use /token and resubmit this form with the same username to update your response.</p>
+
+                <p><strong>If you get an error message when clicking submit, click the back button in your browser to restore your answers and try again.</strong></p>
             </div>
         </form>
 <script>
@@ -190,7 +212,7 @@ function update() {
     const positionRadio = document.querySelector("input[name='which-position']:checked");
     const position = positionRadio != null ? positionRadio.value : null;
 
-    const meetsRequirements = document.querySelectorAll(".prerequisite:checked").length === 3
+    const meetsRequirements = document.querySelectorAll(".prerequisite:checked").length === 4
         && document.querySelectorAll(".not-prerequisite:checked").length === 0;
 
     adminOnly.style.display = "none";
@@ -234,6 +256,23 @@ document.querySelectorAll(".hours-list label").forEach(label => {
 
     label.appendChild(document.createTextNode(` ${hours}${ampm} in ${timezone}`));
 });
+
+const age16Plus = document.querySelector("input[name=is-16plus]");
+function updateAgeCheckbox(checked) {
+    if (checked) {
+        age16Plus.checked = true;
+        age16Plus.disabled = true;
+    } else {
+        age16Plus.disabled = false;
+    }
+
+    update();
+}
+document.querySelector("input[name=is-18plus]").addEventListener("change", (event) => {
+    updateAgeCheckbox(event.currentTarget.checked);
+});
+
+updateAgeCheckbox(document.querySelector("input[name=is-18plus]").checked);
 </script>
     </body>
 </html>
