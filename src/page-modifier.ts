@@ -1,6 +1,6 @@
 import Koa from "koa";
 
-import cheerio from "cheerio";
+import * as cheerio from "cheerio";
 
 export default async (ctx: Koa.BaseContext): Promise<void> => {
     let body;

@@ -16,7 +16,7 @@ const config: { [env: string]: Knex.Knex.Config } = {
         connection: (process.env.MYSQL_URI || "mysql://foo:bar@localhost/ultravanilla") + options,
         pool: {
             min: 0,
-            max: 10,
+            max: 2,
         },
         migrations,
     },
@@ -26,7 +26,7 @@ const config: { [env: string]: Knex.Knex.Config } = {
         connection: (process.env.MYSQL_URI || "does not exist") + options,
         pool: {
             min: 0,
-            max: 10,
+            max: 2,
         },
         migrations,
     },
@@ -36,7 +36,7 @@ const config: { [env: string]: Knex.Knex.Config } = {
         connection: (process.env.DYNMAP_MYSQL_URI || "does not exist") + options,
         pool: {
             min: 0,
-            max: 10,
+            max: 2,
         },
     },
 };
