@@ -1,2 +1,3 @@
 *
 !/uvweb-*.tgz
+!/package-lock.json
