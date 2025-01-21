@@ -80,7 +80,7 @@ export default async (ctx: Koa.BaseContext): Promise<void> => {
             <div class='header-part server-info'>
                 <strong class='server-info-label'>server address: </strong> play.ultravanilla.world</div>
             <div class='header-part server-info server-info-version'>
-                <strong class='server-info-label'>version: </strong> 1.21<span style='color:#979797'>.1</span></div>
+                <strong class='server-info-label'>version: </strong> 1.21<span style='color:#979797'>.4</span></div>
         </span>
     `).appendTo(newHeader);
 
@@ -101,7 +101,7 @@ export default async (ctx: Koa.BaseContext): Promise<void> => {
         .appendTo(newHeader);
     $(
         `<div>
-            <p>UltraVanilla is a small-scale LGBT-friendly community Minecraft survival server with minimal enhancements to the core game. Everything is built in survival. 30 player slots is a sweetspot for a server that is not crowded or discouraging production. Community Projects are suggested and discussed on the discord, anyone is free to contribute! The server usually updates fast, and is currently running on Paper 1.21.1. No resets!</p>
+            <p>UltraVanilla is a small-scale LGBT-friendly community Minecraft survival server with minimal enhancements to the core game. Everything is built in survival. 30 player slots is a sweetspot for a server that is not crowded or discouraging production. Community Projects are suggested and discussed on the discord, anyone is free to contribute! The server usually updates fast, and is currently running on Paper 1.21.4. No resets!</p>
             <div class='close'>x</div>
         </div>`,
     )
@@ -176,7 +176,7 @@ export default async (ctx: Koa.BaseContext): Promise<void> => {
     $("title").text("UltraVanilla");
     $("meta[name='description']").attr(
         "content",
-        "UltraVanilla is a small-scale LGBT-friendly community Minecraft vanilla survival server with minimal enhancements to the core game. Everything is built in survival. 30 player slots is a sweetspot for a server that is not crowded or discouraging production. Community Projects are suggested and discussed on the discord, anyone is free to contribute! The server usually updates fast, and is currently running on Paper 1.21.1. No resets!",
+        "UltraVanilla is a small-scale LGBT-friendly community Minecraft vanilla survival server with minimal enhancements to the core game. Everything is built in survival. 30 player slots is a sweetspot for a server that is not crowded or discouraging production. Community Projects are suggested and discussed on the discord, anyone is free to contribute! The server usually updates fast, and is currently running on Paper 1.21.4. No resets!",
     );
     $("meta[name='keywords']").attr(
         "content",
