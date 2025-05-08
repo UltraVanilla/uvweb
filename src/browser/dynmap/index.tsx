@@ -824,7 +824,6 @@ window.addEventListener("load", function () {
             }
         }
 
-        // a simple command to go to the same coordinates in the nether/end
         $(".tools-jump-to-old-spawn").click(() => {
             dynmap.panToLocation({
                 world: dynmap.worlds.world,
@@ -849,6 +848,15 @@ window.addEventListener("load", function () {
                 x: -1890757,
                 y: 64,
                 z: -1894551,
+            });
+        });
+
+        $(".tools-jump-to-spawn").click(() => {
+            dynmap.panToLocation({
+                world: dynmap.worlds.world,
+                x: 170592,
+                y: 64,
+                z: 65540,
             });
         });
 

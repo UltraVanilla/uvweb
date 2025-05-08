@@ -121,9 +121,10 @@ export default async (ctx: Koa.BaseContext): Promise<void> => {
                     <button class="tools-button tools-account" data-toggle="login">Login</button>
                     <button class="tools-button tools-go-to-coordinates" data-toggle="go-to-coordinates">Go to coordinates</button>
                     <button class="tools-button tools-nether-portal" data-toggle="nether-portal">Go through nether portal</button>
-                    <button class="tools-button tools-jump-to-old-spawn" data-toggle="jump-to-old-spawn">Jump to Old Spawn</button>
-                    <button class="tools-button tools-jump-to-new-spawn" data-toggle="jump-to-new-spawn">Jump to Spawn</button>
-                    <button class="tools-button tools-jump-to-outpost" data-toggle="jump-to-outpost">Jump to 1.18 Outpost</button>
+                    <button class="tools-button tools-jump-to-old-spawn" data-toggle="jump-to-old-spawn">Jump to Season 1 Spawn</button>
+                    <button class="tools-button tools-jump-to-new-spawn" data-toggle="jump-to-new-spawn">Jump to Season 2 Spawn</button>
+                    <button class="tools-button tools-jump-to-outpost" data-toggle="jump-to-outpost">Jump to Season 3 Outpost</button>
+                    <button class="tools-button tools-jump-to-spawn" data-toggle="jump-to-spawn">Jump to Season 4 Spawn</button>
                     <div class="toggles">
                         <div data-toggle="enable-header"><label for='header-checkbox'>Enable header? </label><input type='checkbox' id='header-checkbox' class='header-checkbox' checked></div>
                         <div data-toggle="enable-crosshair"><label for='crosshair-checkbox'>Enable crosshair? </label><input type='checkbox' id='crosshair-checkbox' class='crosshair-checkbox'></div>
